@@ -3,6 +3,7 @@
 
 <template>
   <div>
+    <AppHeader />
     <RouterView />
   </div>
 </template>

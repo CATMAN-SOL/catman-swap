@@ -10,9 +10,12 @@
     "lint:fix": "eslint --fix src --ext vue,ts"
   },
   "dependencies": {
+    "@fontsource/poppins": "^5.0.8",
+    "@fontsource/urbanist": "^5.0.18",
     "@vueuse/core": "^10.7.2",
     "@vueuse/head": "^2.0.0",
     "pinia": "^2.1.7",
+    "vite-tsconfig-paths": "^4.3.1",
     "vue": "^3.3.11",
     "vue-router": "^4.2.5"
   },

@@ -263,6 +263,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fontsource/poppins@npm:^5.0.8":
+  version: 5.0.8
+  resolution: "@fontsource/poppins@npm:5.0.8"
+  checksum: 9ac971aa4bad82e5cf4fe32340cdf832f806231ed3f89a23a569f73b9f879c312f63230a0f3ba0c82ff750931c806102d0b925ff87f3379f52045d3ffaeb8806
+  languageName: node
+  linkType: hard
+
+"@fontsource/urbanist@npm:^5.0.18":
+  version: 5.0.18
+  resolution: "@fontsource/urbanist@npm:5.0.18"
+  checksum: 0555296f078e373f58b6998d17f8a5f6506e490dd07cdc901aa81b9ca0276a8101b324234abc8a94fb8dfd0342c5603081e481a97add6640fe269c665515540a
+  languageName: node
+  linkType: hard
+
 "@humanwhocodes/config-array@npm:^0.11.13":
   version: 0.11.14
   resolution: "@humanwhocodes/config-array@npm:0.11.14"
@@ -1460,6 +1474,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "client@workspace:apps/client"
   dependencies:
+    "@fontsource/poppins": ^5.0.8
+    "@fontsource/urbanist": ^5.0.18
     "@inc-dev/eslint-config": ^1.1.5
     "@inc-dev/eslint-config-vue": ^1.1.1
     "@vitejs/plugin-vue": ^4.5.2
@@ -1476,6 +1492,7 @@ __metadata:
     unplugin-vue-components: ^0.26.0
     vite: ^5.0.8
     vite-plugin-pages: ^0.32.0
+    vite-tsconfig-paths: ^4.3.1
     vue: ^3.3.11
     vue-router: ^4.2.5
     vue-tsc: ^1.8.25
@@ -1567,7 +1584,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debug@npm:4, debug@npm:4.3.4, debug@npm:^4.3.1, debug@npm:^4.3.2, debug@npm:^4.3.4":
+"debug@npm:4, debug@npm:4.3.4, debug@npm:^4.1.1, debug@npm:^4.3.1, debug@npm:^4.3.2, debug@npm:^4.3.4":
   version: 4.3.4
   resolution: "debug@npm:4.3.4"
   dependencies:
@@ -2632,6 +2649,13 @@ __metadata:
     merge2: ^1.4.1
     slash: ^3.0.0
   checksum: b4be8885e0cfa018fc783792942d53926c35c50b3aefd3fdcfb9d22c627639dc26bd2327a40a0b74b074100ce95bb7187bfeae2f236856aa3de183af7a02aea6
+  languageName: node
+  linkType: hard
+
+"globrex@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "globrex@npm:0.1.2"
+  checksum: adca162494a176ce9ecf4dd232f7b802956bb1966b37f60c15e49d2e7d961b66c60826366dc2649093cad5a0d69970cfa8875bd1695b5a1a2f33dcd2aa88da3c
   languageName: node
   linkType: hard
 
@@ -4750,6 +4774,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tsconfck@npm:^3.0.1":
+  version: 3.0.2
+  resolution: "tsconfck@npm:3.0.2"
+  peerDependencies:
+    typescript: ^5.0.0
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  bin:
+    tsconfck: bin/tsconfck.js
+  checksum: bf40e547a01610571a55ff33beb74751942561963f9c5f1152ad415ad4bd27eb90d65e9fb2edbb60ecb9407b115d1d52a633fc1f83cf4ea0424041a10e7eeea3
+  languageName: node
+  linkType: hard
+
 "tsconfig-paths@npm:^3.15.0":
   version: 3.15.0
   resolution: "tsconfig-paths@npm:3.15.0"
@@ -5042,6 +5080,22 @@ __metadata:
     "@vue/compiler-sfc":
       optional: true
   checksum: 6aabcd7db05373a9e4257b60cbc5cdfbb6810272817215905a424ef3939b6b169c5a5b8eb669564b2dcb04289356665818ca08926b9cc3679a317757de043db9
+  languageName: node
+  linkType: hard
+
+"vite-tsconfig-paths@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "vite-tsconfig-paths@npm:4.3.1"
+  dependencies:
+    debug: ^4.1.1
+    globrex: ^0.1.2
+    tsconfck: ^3.0.1
+  peerDependencies:
+    vite: "*"
+  peerDependenciesMeta:
+    vite:
+      optional: true
+  checksum: 2934d5d674e0b6ab8d435d4262ff30143c30512072d71ece5a3859a70a188cbdbcc2b0370277049ab551f7bbb6ffb2be94a0bf30154e5c58d38b32adce9740bd
   languageName: node
   linkType: hard
 
