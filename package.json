@@ -1,0 +1,21 @@
+{
+  "name": "catman-swap",
+  "packageManager": "yarn@3.6.1",
+  "private": true,
+  "prettier": "@inc-dev/prettier-config",
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@inc-dev/eslint-config": "^1.1.5",
+    "@inc-dev/prettier-config": "^1.1.0",
+    "eslint": "^8.56.0",
+    "husky": "^9.0.10",
+    "lint-staged": "^15.2.2",
+    "prettier": "^3.2.5"
+  },
+  "lint-staged": {
+    "*.{ts,vue}": "eslint --fix",
+    "*.{json,yml,md}": "prettier --write"
+  }
+}
