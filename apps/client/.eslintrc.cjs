@@ -7,17 +7,18 @@ module.exports = {
   overrides: [
     {
       files: ['src/**/*.vue'],
-      extends: ['@inc-dev/eslint-config-vue'],
+      extends: ['@inc-dev/eslint-config-vue', 'plugin:tailwindcss/recommended'],
       rules: {
         'prettier/prettier': 'off',
       },
     },
     {
-      files: ['vite.config.ts'],
+      files: ['*.config.ts', '*.config.js'],
       extends: ['@inc-dev'],
       parserOptions: {
         project: require.resolve('./tsconfig.node.json'),
       },
     },
   ],
+  ...require('./.eslintrc-auto-import.json'),
 }
