@@ -15,6 +15,10 @@ export default {
         primary: {
           default: '#E1D33E',
         },
+        'theme-white': {
+          1: '#E2E4E9',
+          2: '#A3A5B6',
+        },
       },
       fontFamily: {
         primary: ['Urbanist', 'system-ui', 'sans-serif', 'serif'],

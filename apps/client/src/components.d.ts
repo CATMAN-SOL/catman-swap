@@ -13,5 +13,6 @@ declare module 'vue' {
     HeaderNavigationItem: typeof import('./components/Header/NavigationItem.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    WalletConnectButton: typeof import('./components/Wallet/ConnectButton.vue')['default']
   }
 }
