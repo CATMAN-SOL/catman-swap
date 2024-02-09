@@ -46,7 +46,7 @@ const logModuleInitialization = (
 }
 
 export const loadInit = async () => {
-  const glob = new Glob(`${path.join(__dirname, 'init')}/*.{ts,js}`, {})
+  const glob = new Glob(`${path.join(__dirname, 'init')}/*.{ts,js,cjs}`, {})
 
   const dependantModules = [] as [string, DependantInitModule][]
   const initializedModules = [] as string[]

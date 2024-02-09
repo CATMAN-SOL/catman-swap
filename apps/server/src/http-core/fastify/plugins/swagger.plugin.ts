@@ -9,7 +9,7 @@ export const swaggerPlugin = fastifyPlugin(async (fastify: FastifyInstance) => {
     transform: jsonSchemaTransform,
     swagger: {
       info: {
-        title: 'Fardigcor Core API',
+        title: 'Catman Swap Core API',
         description: '',
         version: '0.1.0',
       },

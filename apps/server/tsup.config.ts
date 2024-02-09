@@ -5,7 +5,7 @@ export default defineConfig((options) => ({
   sourcemap: true,
   clean: true,
   onSuccess: options.watch
-    ? 'NODE_ENV=dev node --enable-source-maps -r tsconfig-paths/register dist/index.js | pino-pretty'
+    ? 'NODE_ENV=dev node --enable-source-maps -r tsconfig-paths/register dist/index.cjs | pino-pretty'
     : undefined,
   watch: options.watch ? './src/*' : undefined,
   ignoreWatch: './src/types.ts',

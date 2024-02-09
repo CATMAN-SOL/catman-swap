@@ -18,7 +18,9 @@ async function checkIsFileADirectory(path: string): Promise<boolean> {
 }
 
 function parseFileName(fileName: string): { url: string; method: HTTPMethods } {
-  const tokens = fileName.split('.').filter((t) => t !== 'ts' && t !== 'js')
+  const tokens = fileName
+    .split('.')
+    .filter((t) => t !== 'ts' && t !== 'js' && t !== 'cjs' && t !== 'mjs')
   if (tokens.length === 1) {
     const token = tokens[0]
 
@@ -67,7 +69,7 @@ export async function autoRoute(
   const filteredFilePaths = files.filter(
     (relativeFilePath) =>
       !relativeFilePath.endsWith('.d.ts') &&
-      !relativeFilePath.endsWith('.js.map') &&
+      !relativeFilePath.endsWith('.map') &&
       !relativeFilePath.startsWith('_') &&
       !(relativeFilePath === 'index.ts')
   )
