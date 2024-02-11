@@ -11,7 +11,10 @@
         </h1>
         <span class="text-theme-white-2 text-lg font-semibold tracking-[1.2px]">Catman : Swap & DCA – Connect your wallet
           for<br> seamless transactions!</span>
-        <WalletConnectButton :loading="true" />
+        <WalletConnectButton
+          :loading="true"
+          class="w-1/3"
+        />
       </div>
       <div />
     </div>
