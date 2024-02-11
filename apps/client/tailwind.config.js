@@ -8,6 +8,7 @@ export default {
       colors: {
         bg: {
           dark: '#030303',
+          yellow: '#E1D33E',
         },
         navlinks: {
           hover: '#E1D33E',

@@ -18,5 +18,8 @@
   "lint-staged": {
     "*.{ts,vue}": "eslint --fix",
     "*.{json,yml,md}": "prettier --write"
+  },
+  "dependencies": {
+    "three-dots": "^0.3.2"
   }
 }

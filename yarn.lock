@@ -1842,6 +1842,7 @@ __metadata:
     husky: ^9.0.10
     lint-staged: ^15.2.2
     prettier: ^3.2.5
+    three-dots: ^0.3.2
   languageName: unknown
   linkType: soft
 
@@ -6544,6 +6545,13 @@ __metadata:
   dependencies:
     real-require: ^0.2.0
   checksum: 8b28e11eab2f805f963e6b6b23afab5523079575c4fc79c16eb29aa1c13d7931289762ebbc1268b3373d3f35ce795bd291df8e2d51eb45779ecaaecd06873459
+  languageName: node
+  linkType: hard
+
+"three-dots@npm:^0.3.2":
+  version: 0.3.2
+  resolution: "three-dots@npm:0.3.2"
+  checksum: 36f2f319a0325d7a40174e279646b876c2bb90f9178691d4e92c42b64fd52c53aa5ba98dc6fa6a6d0a752228e46d9b27d808a8b4e347347234787d777348521c
   languageName: node
   linkType: hard
 
