@@ -1,5 +1,5 @@
 import { TokenRaw } from '~models/token-raw.model'
-import { desc, inArray } from 'drizzle-orm'
+import { desc, eq, inArray } from 'drizzle-orm'
 import { tokenListRevalidations, tokens } from '~db/schema'
 import { Token, TokenInsert } from '~db/types'
 import chunk from 'lodash/chunk'
@@ -10,6 +10,12 @@ const TOKEN_LIST_URL = 'https://token.jup.ag/all'
 const REVALIDATION_INTERVAL = 1000 * 60 * 60 * 6
 
 let isTokenListRevalidating = false
+
+export const findTokenByAddress = async (address: string) => {
+  return await dbClient.query.tokens.findFirst({
+    where: eq(tokens.address, address),
+  })
+}
 
 export const getTokensList = async ({
   skip,
@@ -32,7 +38,9 @@ export const getTokensList = async ({
 const revalidateTokenListIfRequired = async () => {
   const needsRevalidation = await getTokenListNeedsRevalidation()
 
-  if (needsRevalidation) await revalidateTokenList()
+  if (needsRevalidation) {
+    await revalidateTokenList()
+  }
 }
 
 const revalidateTokenList = async () => {
@@ -68,7 +76,9 @@ const revalidateTokenList = async () => {
 }
 
 const removeTokensByInstances = async (tokensInstances: Token[]) => {
-  if (tokensInstances.length === 0) return
+  if (tokensInstances.length === 0) {
+    return
+  }
 
   const tokensAddresses = tokensInstances.map((val) => val.address)
   await dbClient
@@ -160,7 +170,9 @@ const getLastTokenListRevalidatedAt = async () => {
     .orderBy(desc(tokenListRevalidations.createdAt))
     .limit(1)
 
-  if (result.length === 0) return new Date(0)
+  if (result.length === 0) {
+    return new Date(0)
+  }
 
   return result[0].revalidatedAt
 }

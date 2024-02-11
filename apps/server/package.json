@@ -12,6 +12,7 @@
   "dependencies": {
     "@fastify/swagger": "^8.14.0",
     "@fastify/swagger-ui": "^2.1.0",
+    "decimal.js": "^10.4.3",
     "dotenv": "^16.4.1",
     "fastify": "^4.26.0",
     "fastify-plugin": "^4.5.1",

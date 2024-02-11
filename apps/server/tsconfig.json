@@ -35,6 +35,7 @@
       "~services/*": ["src/services/*"],
       "~models/*": ["src/models/*"],
       "~db/*": ["src/db/*"],
+      "~utils/*": ["src/utils/*"],
       "~db": ["src/db"],
       "~config": ["src/config"]
     } /* Specify a set of entries that re-map imports to additional lookup locations. */,
