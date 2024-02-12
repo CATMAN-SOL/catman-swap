@@ -1,5 +1,5 @@
 import { TokenRaw } from '~models/token-raw.model'
-import { desc, eq, inArray } from 'drizzle-orm'
+import { desc, eq, inArray, sql } from 'drizzle-orm'
 import { tokenListRevalidations, tokens } from '~db/schema'
 import { Token, TokenInsert } from '~db/types'
 import chunk from 'lodash/chunk'
@@ -20,11 +20,16 @@ export const findTokenByAddress = async (address: string) => {
 export const getTokensList = async ({
   skip,
   limit,
+  searchQuery,
 }: {
   skip: number
   limit: number
+  searchQuery: string
 }) => {
-  const tokens = await dbClient.query.tokens.findMany({
+  const searchSqlQuery = `%${searchQuery}%`
+
+  const tokensList = await dbClient.query.tokens.findMany({
+    where: sql`CONCAT(${tokens.name}, ${tokens.symbol}) LIKE ${searchSqlQuery}`,
     limit,
     offset: skip,
   })
@@ -32,7 +37,7 @@ export const getTokensList = async ({
   // Starts in parallel so it doesn't block users's tokens request
   revalidateTokenListIfRequired()
 
-  return tokens
+  return tokensList
 }
 
 const revalidateTokenListIfRequired = async () => {
