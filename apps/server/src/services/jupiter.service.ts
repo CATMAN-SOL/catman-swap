@@ -1,6 +1,6 @@
 import { SwapQuote } from '~models/swap-quote.model'
 
-const JUPITER_API_BASE_URL = 'https://quote-api.jup.ag'
+const JUPITER_QUOTE_API_BASE_URL = 'https://quote-api.jup.ag'
 
 // https://station.jup.ag/docs/apis/swap-api#4-get-the-route-for-a-swap
 export type FetchSwapRouteOptions = {
@@ -15,13 +15,46 @@ export type FetchSwapRouteOptions = {
   maxAccounts?: number
 }
 
+export type CreateSerializedTransactionOptions = {
+  quoteResponse: object
+  userPublicKey: string
+  wrapAndUnwrapSol: boolean
+  feeAccount?: string
+}
+
+type CreateSerializedTransactionResponse = {
+  swapTransaction: string
+}
+
 type PlainObject = {
   [key: string]: string | number | boolean | undefined
 }
 
+export const createSerializedSwapTransaction = async (
+  options: CreateSerializedTransactionOptions
+) => {
+  const url = new URL('/v6/swap', JUPITER_QUOTE_API_BASE_URL)
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(options),
+  })
+
+  const responseBody =
+    (await response.json()) as CreateSerializedTransactionResponse
+
+  return responseBody.swapTransaction
+}
+
 export const fetchSwapRouteQuote = async (options: FetchSwapRouteOptions) => {
   const urlSearchParams = createUrlSearchParamsFromPlainObject(options)
-  const url = new URL(`/v6/quote?${urlSearchParams}`, JUPITER_API_BASE_URL)
+  const url = new URL(
+    `/v6/quote?${urlSearchParams}`,
+    JUPITER_QUOTE_API_BASE_URL
+  )
 
   const response = await fetch(url)
   const responseBody = await response.json()

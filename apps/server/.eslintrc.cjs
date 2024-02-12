@@ -11,5 +11,6 @@ module.exports = {
   globals: {
     logger: true,
     dbClient: true,
+    rpcConnection: true,
   },
 }
