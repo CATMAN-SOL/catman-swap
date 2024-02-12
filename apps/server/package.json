@@ -12,6 +12,8 @@
   "dependencies": {
     "@fastify/swagger": "^8.14.0",
     "@fastify/swagger-ui": "^2.1.0",
+    "@solana/web3.js": "^1.90.0",
+    "bs58": "^5.0.0",
     "decimal.js": "^10.4.3",
     "dotenv": "^16.4.1",
     "fastify": "^4.26.0",
