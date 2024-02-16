@@ -1,6 +1,11 @@
 <script lang="ts" setup>
+const displayConnectWalletDialog = ref(false)
+
 const loading = ref(false)
+
 const connectWallet = () => {
+  displayConnectWalletDialog.value = true
+
   loading.value = true
   setTimeout(() => {
     loading.value = false
@@ -10,6 +15,11 @@ const connectWallet = () => {
 
 <template>
   <div class="container">
+    <AppDialog
+      v-model="displayConnectWalletDialog"
+      title="Transaction Priority"
+      text="The priority fee is remitted to the Solana network, enhancing transaction prioritization for expedited execution and improved transaction processing times."
+    />
     <div class="grid grid-cols-2 pt-16">
       <div class="flex flex-col items-stretch gap-8">
         <h1 class="text-theme-white-1 text-8xl font-semibold tracking-[-4px]">
