@@ -21,7 +21,9 @@ export default {
           2: '#A3A5B6',
         },
         'theme-dark-gray': {
+          3: '#16191D',
           4: '#21262C',
+          5: '#2D353F',
         },
       },
       fontFamily: {

@@ -23,5 +23,6 @@ declare module 'vue' {
     SwapNavButton: typeof import('./components/Swap/NavButton.vue')['default']
     SwapSelect: typeof import('./components/SwapSelect.vue')['default']
     WalletConnectButton: typeof import('./components/Wallet/ConnectButton.vue')['default']
+    WalletConnectDialog: typeof import('./components/Wallet/ConnectDialog.vue')['default']
   }
 }

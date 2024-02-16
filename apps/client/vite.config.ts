@@ -19,7 +19,17 @@ export default defineConfig({
     }),
     AutoImport({
       dts: 'src/auto-import.d.ts',
-      imports: ['vue', '@vueuse/head', '@vueuse/core', 'vue-router', 'pinia'],
+      imports: [
+        'vue',
+        '@vueuse/head',
+        '@vueuse/core',
+        'vue-router',
+        'pinia',
+        {
+          from: 'solana-wallets-vue',
+          imports: ['useWallet'],
+        },
+      ],
       dirs: ['./src/composables/*', './src/store/*', './src/api/*'],
       eslintrc: {
         enabled: true,
