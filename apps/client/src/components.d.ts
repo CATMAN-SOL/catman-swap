@@ -10,6 +10,7 @@ declare module 'vue' {
     AppDialog: typeof import('./components/AppDialog.vue')['default']
     AppHeader: typeof import('./components/AppHeader.vue')['default']
     AppIcon: typeof import('./components/AppIcon.vue')['default']
+    AppInput: typeof import('./components/AppInput.vue')['default']
     AppLogo: typeof import('./components/AppLogo.vue')['default']
     HeaderNavigationItem: typeof import('./components/Header/NavigationItem.vue')['default']
     HexagonButtonBase: typeof import('./components/HexagonButton/Base.vue')['default']
@@ -22,6 +23,7 @@ declare module 'vue' {
     SwapLayout: typeof import('./components/Swap/layout.vue')['default']
     SwapNavButton: typeof import('./components/Swap/NavButton.vue')['default']
     SwapSelect: typeof import('./components/SwapSelect.vue')['default']
+    SwapSummary: typeof import('./components/Swap/Summary.vue')['default']
     WalletConnectButton: typeof import('./components/Wallet/ConnectButton.vue')['default']
   }
 }
