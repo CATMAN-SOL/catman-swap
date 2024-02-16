@@ -13,6 +13,11 @@ declare module 'vue' {
     HeaderNavigationItem: typeof import('./components/Header/NavigationItem.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SwapCard: typeof import('./components/Swap/Card.vue')['default']
+    SwapContainer: typeof import('./components/Swap/Container.vue')['default']
+    SwapLayout: typeof import('./components/Swap/layout.vue')['default']
+    SwapNavButton: typeof import('./components/Swap/NavButton.vue')['default']
+    SwapSelect: typeof import('./components/SwapSelect.vue')['default']
     WalletConnectButton: typeof import('./components/Wallet/ConnectButton.vue')['default']
   }
 }

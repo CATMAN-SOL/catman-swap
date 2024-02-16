@@ -1,5 +1,11 @@
 <script lang="ts" setup>
-
+const loading = ref(false)
+const connectWallet = () => {
+  loading.value = true
+  setTimeout(() => {
+    loading.value = false
+  }, 5000)
+}
 </script>
 
 <template>
@@ -12,11 +18,15 @@
         <span class="text-theme-white-2 text-lg font-semibold tracking-[1.2px]">Catman : Swap & DCA – Connect your wallet
           for<br> seamless transactions!</span>
         <WalletConnectButton
-          :loading="true"
+          :loading="loading"
+          :connected="true"
           class="w-1/3"
+          @click="connectWallet"
         />
       </div>
-      <div />
+      <div>
+        <SwapContainer />
+      </div>
     </div>
   </div>
 </template>
