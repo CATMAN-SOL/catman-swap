@@ -8,9 +8,12 @@ import {
 import { findTokenByAddress } from './tokens.service'
 import { decode as decodeBase58, encode as encodeBase58 } from 'bs58'
 import { VersionedTransaction } from '@solana/web3.js'
+import { swapRequests } from '~/db/schema'
+import { SwapQuote } from '~/models/swap-quote.model'
+import { createUserIfNotExists } from './users.service'
 
 export type CreateSwapTxOptions = {
-  quote: object
+  quote: SwapQuote
   publicKey: string
   wrapAndUnwrapSol: boolean
 }
@@ -75,6 +78,8 @@ export const createSwapTx = async (options: CreateSwapTxOptions) => {
     feeAccount: config.FEE_ACCOUNT,
   })
 
+  await saveCreateSwapTransactionRequest(options)
+
   // Re-serializing base64 -> base58 due to issues with decoding base64 on front-end side and bs58 package
   // already being a dependency of @solana/web3.js
   const serializedTransaction = Buffer.from(
@@ -118,6 +123,20 @@ export const executeSwapTx = async (options: ExecuteSwapTxOptions) => {
   }
 
   return txSignature
+}
+
+const saveCreateSwapTransactionRequest = async (
+  options: CreateSwapTxOptions
+) => {
+  await createUserIfNotExists(options.publicKey)
+
+  await dbClient.insert(swapRequests).values({
+    userAddress: options.publicKey,
+    tokenFromAddress: options.quote.inputMint,
+    tokenToAddress: options.quote.outputMint,
+    amountFrom: options.quote.inAmount,
+    amountTo: options.quote.outAmount,
+  })
 }
 
 const trySimulateTransaction = async (

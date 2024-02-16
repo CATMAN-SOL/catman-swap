@@ -17,14 +17,18 @@ const isDependant = (
 }
 
 const isInitModule = (value: unknown): value is InitModule => {
-  if (!value) return false
+  if (!value) {
+    return false
+  }
 
   const hasInitFunciton =
     typeof value === 'object' &&
     'init' in value &&
     typeof value.init === 'function'
 
-  if (!hasInitFunciton) return false
+  if (!hasInitFunciton) {
+    return false
+  }
 
   const hasCorrectName =
     ('name' in value && typeof value.name === 'string') || !('name' in value)
