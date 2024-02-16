@@ -565,6 +565,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@headlessui/vue@npm:^1.7.19":
+  version: 1.7.19
+  resolution: "@headlessui/vue@npm:1.7.19"
+  dependencies:
+    "@tanstack/vue-virtual": ^3.0.0-beta.60
+  peerDependencies:
+    vue: ^3.2.0
+  checksum: 2a0e328d8068e343ec2c61ad5fff4a8260689571530f297953de812fb0c9bae100a049963647dc0af47fd7a841aa6b5075cac89217ca645d030f1ea2db00e771
+  languageName: node
+  linkType: hard
+
 "@humanwhocodes/config-array@npm:^0.11.13":
   version: 0.11.14
   resolution: "@humanwhocodes/config-array@npm:0.11.14"
@@ -914,6 +925,24 @@ __metadata:
     rpc-websockets: ^7.5.1
     superstruct: ^0.14.2
   checksum: 8ea1bb731b7d399285005e386d328e284d2884ebdf3e80c6c3845b2278248f12379e6a2765c3471f319d09061dabde1cf0a0e9b300e9537408c613713df52b70
+  languageName: node
+  linkType: hard
+
+"@tanstack/virtual-core@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@tanstack/virtual-core@npm:3.0.0"
+  checksum: 7283d50fc7b7a56608c37a8e94a93b85890ff7e39c6281633a19c4d6f6f4fbf25f8418f1eec302a008a8746a0d1d0cd00630137b55e6cf019818d68af8ed16b6
+  languageName: node
+  linkType: hard
+
+"@tanstack/vue-virtual@npm:^3.0.0-beta.60":
+  version: 3.0.4
+  resolution: "@tanstack/vue-virtual@npm:3.0.4"
+  dependencies:
+    "@tanstack/virtual-core": 3.0.0
+  peerDependencies:
+    vue: ^2.7.0 || ^3.0.0
+  checksum: 9bae7a7f210154f27e379722d4e5777fbc7dcecd379cd1e88b7fe815c0066cabc3cf3235cdf4b708ca99c926c26cd0602704344ae4e22670a1ec78e1e2324bc4
   languageName: node
   linkType: hard
 
@@ -2119,6 +2148,7 @@ __metadata:
   dependencies:
     "@fontsource/poppins": ^5.0.8
     "@fontsource/urbanist": ^5.0.18
+    "@headlessui/vue": ^1.7.19
     "@inc-dev/eslint-config": ^1.1.5
     "@inc-dev/eslint-config-vue": ^1.1.1
     "@vitejs/plugin-vue": ^4.5.2

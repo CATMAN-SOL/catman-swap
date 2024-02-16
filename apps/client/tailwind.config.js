@@ -20,6 +20,9 @@ export default {
           1: '#E2E4E9',
           2: '#A3A5B6',
         },
+        'theme-dark-gray': {
+          4: '#21262C',
+        },
       },
       fontFamily: {
         primary: ['Urbanist', 'system-ui', 'sans-serif', 'serif'],

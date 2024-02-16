@@ -12,6 +12,7 @@
   "dependencies": {
     "@fontsource/poppins": "^5.0.8",
     "@fontsource/urbanist": "^5.0.18",
+    "@headlessui/vue": "^1.7.19",
     "@vueuse/core": "^10.7.2",
     "@vueuse/head": "^2.0.0",
     "pinia": "^2.1.7",

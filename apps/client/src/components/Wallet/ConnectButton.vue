@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import lightning from '../../assets/icons/lightning.svg'
 import arrowDown from '../../assets/icons/arrow-down.svg'
+
 const props = defineProps<{
   loading?: boolean,
   connected: boolean
