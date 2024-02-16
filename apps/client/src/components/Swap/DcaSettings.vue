@@ -1,0 +1,21 @@
+<template>
+  <SwapCard>
+    <div class="grid w-full grid-cols-3 items-center gap-2.5">
+      <AppInput
+        placeholder="1"
+        label="Every"
+      />
+      <AppInput
+        placeholder="Minutes"
+        label="Timeline"
+      />
+      <AppInput
+        placeholder="2"
+        :button="true"
+        button-text="Orders"
+        :button-disabled="true"
+        label="Over"
+      />
+    </div>
+  </SwapCard>
+</template>

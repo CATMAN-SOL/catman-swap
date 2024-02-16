@@ -48,7 +48,7 @@ import MiddleShape from '../../assets/icons/swap/middle-shape.svg'
         </div>
       </div>
     </div>
-    <div class="rounded-b-[72px] bg-[#090A0B] p-6 w-full">
+    <div class="w-full rounded-b-[72px] bg-[#090A0B] p-6">
       <div class="flex w-full flex-col gap-0">
         <div class="rounded-t-[20px] bg-[#16191D] px-6 pb-[18px] pt-6">
           fas
@@ -83,9 +83,10 @@ import MiddleShape from '../../assets/icons/swap/middle-shape.svg'
           fas
         </div>
       </div>
-      <SwapSummary class="mt-[18px]"/>
-      <WalletConnectButton class="mt-[18px] w-full"/>
-      <AppInput class="mt-5" :button="true" placeholder="test" />
+      <SwapSummary class="mt-[18px]" />
+      <SwapDcaSettings />
+      <SwapDcaPriceRange />
+      <WalletConnectButton class="mt-[18px] w-full" />
     </div>
   </div>
 </template>

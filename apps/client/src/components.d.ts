@@ -20,6 +20,8 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     SwapCard: typeof import('./components/Swap/Card.vue')['default']
     SwapContainer: typeof import('./components/Swap/Container.vue')['default']
+    SwapDcaPriceRange: typeof import('./components/Swap/DcaPriceRange.vue')['default']
+    SwapDcaSettings: typeof import('./components/Swap/DcaSettings.vue')['default']
     SwapLayout: typeof import('./components/Swap/layout.vue')['default']
     SwapNavButton: typeof import('./components/Swap/NavButton.vue')['default']
     SwapSelect: typeof import('./components/SwapSelect.vue')['default']
