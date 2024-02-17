@@ -33,6 +33,7 @@ const connectWallet = () => {
           class="w-1/3"
           @click="connectWallet"
         />
+        <SwapChoice />
       </div>
       <div>
         <SwapContainer />

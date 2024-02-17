@@ -21,7 +21,7 @@ const modelValue = defineModel<string>()
         :placeholder="props.placeholder"
         :class="[props.button ? '' : 'rounded-r-2xl']"
         type="number"
-        class="box-border w-full rounded-l-2xl border border-transparent bg-[#21262C] p-5 text-base tracking-[1px] text-[#A3A5B6] outline-none transition-all placeholder:text-[A3A5B6] hover:bg-[#2D353F] focus:border-[#74D172] focus:placeholder:text-[#E2E4E9]"
+        class="box-border w-full rounded-l-2xl border border-transparent bg-[#21262C] p-5 text-base tracking-[1px] text-[#E2E4E9] outline-none transition-all placeholder:text-[A3A5B6] hover:bg-[#2D353F] focus:border-[#74D172] focus:placeholder:text-[#E2E4E9]"
       >
       <button
         v-if="props.button"

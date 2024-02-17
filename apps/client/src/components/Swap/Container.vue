@@ -9,11 +9,11 @@ import MiddleShape from '../../assets/icons/swap/middle-shape.svg'
   <div class="flex w-full flex-col gap-0">
     <div class="flex items-end gap-0">
       <div
-        class="!-z-10 mb-[1px] flex h-12 w-[409px] items-center justify-center rounded-tl-3xl bg-[#E1D33E] px-[53px] text-xl font-bold text-[#030303]"
+        class="!-z-10 flex h-12 w-[340px] items-center justify-center rounded-tl-3xl bg-[#E1D33E] px-[53px] text-xl font-bold text-[#030303]"
       >
         Swap
       </div>
-      <div class="relative ml-[-46px] flex w-full items-end gap-0">
+      <div class="relative ml-[-7%] flex w-full items-end gap-0">
         <img
           class="h-[65px]"
           :src="leftShape"
@@ -50,8 +50,14 @@ import MiddleShape from '../../assets/icons/swap/middle-shape.svg'
     </div>
     <div class="w-full rounded-b-[72px] bg-[#090A0B] p-6">
       <div class="flex w-full flex-col gap-0">
-        <div class="rounded-t-[20px] bg-[#16191D] px-6 pb-[18px] pt-6">
-          fas
+        <div class="grid grid-cols-[auto_1fr] items-end gap-3 rounded-t-[20px] bg-[#16191D] px-6 pb-[18px] pt-6">
+          <SwapCurrencySelect label="From" />
+          <AppInput
+            label="Amount"
+            placeholder="Enter amount here"
+            :button="true"
+            button-text="max"
+          />
         </div>
         <div class="flex items-center gap-0">
           <div class="h-[50px] w-full rounded-bl-[20px] bg-[#16191D]" />
@@ -79,13 +85,19 @@ import MiddleShape from '../../assets/icons/swap/middle-shape.svg'
           >
           <div class="h-[50px] w-full rounded-tr-[20px] bg-[#16191D]" />
         </div>
-        <div class="rounded-b-[20px] bg-[#16191D] px-6 pb-[18px] pt-6">
-          fas
+        <div class="grid grid-cols-[auto_1fr] items-end gap-3 rounded-b-[20px] bg-[#16191D] px-6 pb-[18px] pt-6">
+          <SwapCurrencySelect label="To" />
+          <AppInput
+            label="Amount"
+            placeholder="Enter amount here"
+            :button="true"
+            button-text="max"
+          />
         </div>
       </div>
       <SwapSummary class="mt-[18px]" />
-      <SwapDcaSettings />
-      <SwapDcaPriceRange />
+      <SwapDcaSettings class="mt-[18px]" />
+      <SwapDcaPriceRange class="mt-[18px]" />
       <WalletConnectButton class="mt-[18px] w-full" />
     </div>
   </div>
