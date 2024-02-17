@@ -43,19 +43,19 @@ const modelValue = defineModel<boolean>()
         <div class="flex min-h-full items-center justify-center text-center">
           <TransitionChild
             as="template"
-            enter="duration-300 ease-out"
-            enter-from="opacity-0 scale-50"
-            enter-to="opacity-100 scale-100"
-            leave="duration-200 ease-in"
-            leave-from="opacity-100 scale-100"
-            leave-to="opacity-0 scale-50"
+            enter="duration-[.75s] transition-all dialog-content"
+            enter-from="translate-y-[100vh]"
+            enter-to="translate-y-[0vh]"
+            leave="duration-[.75s] transition-all dialog-content"
+            leave-from="translate-y-[0vh]"
+            leave-to="translate-y-[100vh]"
           >
             <DialogPanel
-              class="w-full self-stretch overflow-hidden rounded-3xl border border-black bg-[#090A0B] p-10 text-left shadow-xl transition-all md:self-center lg:w-[800px]"
+              class="w-full self-stretch overflow-hidden rounded-3xl border border-black bg-[#090A0B] p-10 text-left shadow-xl transition-all md:self-center lg:w-[800px] [&_div]:transition-all"
               :class="props.panelClass"
             >
-              <div>
-                <div class="border-b-theme-dark-gray-4 grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-y-4 border-b pb-5">
+              <div class="transition-all">
+                <div class="border-b-theme-dark-gray-4 grid grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-y-4 border-b pb-5 transition-all">
                   <div class="text-theme-white-1 text-5xl font-semibold">
                     {{ props.title }}
                   </div>
@@ -77,4 +77,9 @@ const modelValue = defineModel<boolean>()
   </TransitionRoot>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+
+.dialog-content {
+  transition-timing-function: cubic-bezier(0.125, 1.300, 0.540, 1.010) !important;
+}
+</style>

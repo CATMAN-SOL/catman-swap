@@ -7,6 +7,8 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    AppBadge: typeof import('./components/AppBadge.vue')['default']
+    AppButton: typeof import('./components/AppButton.vue')['default']
     AppDialog: typeof import('./components/AppDialog.vue')['default']
     AppHeader: typeof import('./components/AppHeader.vue')['default']
     AppIcon: typeof import('./components/AppIcon.vue')['default']
@@ -14,6 +16,7 @@ declare module 'vue' {
     HeaderNavigationItem: typeof import('./components/Header/NavigationItem.vue')['default']
     HexagonButtonBase: typeof import('./components/HexagonButton/Base.vue')['default']
     HexagonButtonClose: typeof import('./components/HexagonButton/Close.vue')['default']
+    LoadingIcon: typeof import('./components/LoadingIcon.vue')['default']
     PentagonButtonBase: typeof import('./components/PentagonButton/Base.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

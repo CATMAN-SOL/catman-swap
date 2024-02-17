@@ -16,7 +16,8 @@ const bootstrap = async () => {
   const server = await createServer()
 
   await server.listen({
-    port: config.SERVER_PORT,
+    port: config.PORT,
+    host: config.HOST,
   })
 }
 

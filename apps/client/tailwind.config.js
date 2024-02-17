@@ -15,11 +15,13 @@ export default {
         },
         primary: {
           default: '#E1D33E',
+          DEFAULT: '#E1D33E',
         },
         'theme-white': {
           1: '#E2E4E9',
           2: '#A3A5B6',
         },
+        'theme-green': '#74D172',
         'theme-dark-gray': {
           3: '#16191D',
           4: '#21262C',
