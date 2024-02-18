@@ -32,6 +32,7 @@ const connectWallet = () => {
           class="max-w-[450px]"
           @more-button-click="displayWalletDisconnectDialog = true"
         />
+        <SwapChoice />
       </div>
       <div>
         <SwapContainer />
