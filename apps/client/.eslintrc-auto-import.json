@@ -305,6 +305,15 @@
     "whenever": true,
     "useIcon": true,
     "useWallet": true,
-    "useWalletConnectStore": true
+    "useWalletConnectStore": true,
+    "API_BASE_URL": true,
+    "REQUEST_DELAY": true,
+    "defineActionEndpoint": true,
+    "defineDataEndpoint": true,
+    "isError": true,
+    "plainQueryBuilder": true,
+    "sendRequest": true,
+    "tokens": true,
+    "useTokenListStore": true
   }
 }
