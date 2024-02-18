@@ -59,6 +59,8 @@ const onToCurrencySelectClick = () => {
   currentSelectingToken.value = 'to'
   displayTokenSelectDialog.value = true
 }
+
+const choice = ref('swap')
 </script>
 
 <template>
@@ -79,7 +81,9 @@ const onToCurrencySelectClick = () => {
           :src="leftShape"
           alt=""
         >
-        <div class="flex h-[65px] w-full items-center gap-1.5 rounded-tr-3xl !bg-[#090A0B] pr-6 pt-3">
+        <div
+          class="flex h-[65px] w-full items-center gap-1.5 rounded-tr-3xl !bg-[#090A0B] pr-6 pt-3"
+        >
           <SwapNavButton>
             Market
             <img
@@ -106,6 +110,14 @@ const onToCurrencySelectClick = () => {
             >
           </SwapNavButton>
         </div>
+        <!-- <div class="flex h-[65px] w-full items-center justify-end rounded-tr-3xl !bg-[#090A0B] pr-6 pt-3">
+          <div class="flex items-center gap-2 rounded-[36px] bg-[#16191D] px-4 py-3">
+            <span class="cursor-pointer text-base font-semibold text-[#A3A7B7]">
+              Enable Pricing Strategy
+            </span>
+            <input type="checkbox">
+          </div>
+        </div> -->
       </div>
     </div>
     <div class="w-full rounded-b-[72px] bg-[#090A0B] p-6">
@@ -165,9 +177,18 @@ const onToCurrencySelectClick = () => {
           />
         </div>
       </div>
-      <SwapSummary class="mt-[18px]" />
-      <SwapDcaSettings class="mt-[18px]" />
-      <SwapDcaPriceRange class="mt-[18px]" />
+      <SwapSummary
+        v-if="choice === 'swap'"
+        class="mt-[18px]"
+      />
+      <SwapDcaSettings
+        v-if="choice === 'dca'"
+        class="mt-[18px]"
+      />
+      <SwapDcaPriceRange
+        v-if="choice === 'dca'"
+        class="mt-[18px]"
+      />
       <!-- <WalletConnectButton class="mt-[18px] w-full" /> -->
     </div>
   </div>
