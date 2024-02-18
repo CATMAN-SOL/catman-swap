@@ -1,25 +1,18 @@
 <script lang="ts" setup>
-const displayConnectWalletDialog = ref(false)
+const displayWalletConnectDialog = ref(false)
+const displayWalletDisconnectDialog = ref(false)
 
-const loading = ref(false)
+const { connected, connecting } = useWallet()
 
 const connectWallet = () => {
-  displayConnectWalletDialog.value = true
-
-  loading.value = true
-  setTimeout(() => {
-    loading.value = false
-  }, 5000)
+  displayWalletConnectDialog.value = true
 }
 </script>
 
 <template>
   <div class="container">
-    <AppDialog
-      v-model="displayConnectWalletDialog"
-      title="Transaction Priority"
-      text="The priority fee is remitted to the Solana network, enhancing transaction prioritization for expedited execution and improved transaction processing times."
-    />
+    <WalletConnectDialog v-model="displayWalletConnectDialog" />
+    <WalletDisconnectDialog v-model="displayWalletDisconnectDialog" />
     <div class="grid grid-cols-2 pt-16">
       <div class="flex flex-col items-stretch gap-8">
         <h1 class="text-theme-white-1 text-8xl font-semibold tracking-[-4px]">
@@ -28,10 +21,16 @@ const connectWallet = () => {
         <span class="text-theme-white-2 text-lg font-semibold tracking-[1.2px]">Catman : Swap & DCA – Connect your wallet
           for<br> seamless transactions!</span>
         <WalletConnectButton
-          :loading="loading"
+          v-if="!connected"
+          :loading="displayWalletConnectDialog || connecting"
           :connected="true"
-          class="w-1/3"
+          class="max-w-[300px]"
           @click="connectWallet"
+        />
+        <WalletAddressButton
+          v-else
+          class="max-w-[450px]"
+          @more-button-click="displayWalletDisconnectDialog = true"
         />
         <SwapChoice />
       </div>

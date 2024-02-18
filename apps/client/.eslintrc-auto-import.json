@@ -303,6 +303,8 @@
     "watchTriggerable": true,
     "watchWithFilter": true,
     "whenever": true,
-    "useIcon": true
+    "useIcon": true,
+    "useWallet": true,
+    "useWalletConnectStore": true
   }
 }
