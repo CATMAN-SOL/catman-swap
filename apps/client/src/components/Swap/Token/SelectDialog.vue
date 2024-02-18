@@ -1,15 +1,19 @@
 <script lang="ts" setup>
+import { Token } from '@/models/token.model'
 import LinkIcon from '../../../assets/icons/link.svg'
 import VirtualScroller from 'primevue/virtualscroller'
 
 const modelValue = defineModel<boolean>()
-
-const searchQuery = ref('')
+const emit = defineEmits<{(e: 'select', val: Token): void }>()
 
 const tokenListStore = useTokenListStore()
 
-watch(() => tokenListStore.filter.verifiedOnly, () => {
+const throttledFilterApply = useThrottleFn(() => {
   tokenListStore.applyFilter()
+}, 1000, true)
+
+watch([() => tokenListStore.filter.verifiedOnly, () => tokenListStore.filter.searchQuery], () => {
+  throttledFilterApply()
 })
 
 const onVirtualScrollerLazyLoad = async (data: {first: number, last: number}) => {
@@ -24,8 +28,9 @@ const shortenPublicKey = (publicKey: string) => {
   return `${publicKeyString.slice(0, 4)}...${publicKeyString.slice(-5, -1)}`
 }
 
-const onTokenButtonClick = () => {
-  alert('token!')
+const onTokenButtonClick = (token: Token) => {
+  modelValue.value = false
+  emit('select', token)
 }
 </script>
 
@@ -36,7 +41,7 @@ const onTokenButtonClick = () => {
   >
     <div class="flex flex-col items-stretch gap-8 py-8">
       <AppInput
-        v-model="searchQuery"
+        v-model="tokenListStore.filter.searchQuery"
         placeholder="Search for tokens.."
       />
       <div class="flex flex-col items-stretch gap-4">
@@ -62,7 +67,7 @@ const onTokenButtonClick = () => {
               <button
                 v-if="item"
                 class="group relative box-border size-full overflow-hidden rounded-[16px] p-2"
-                @click="onTokenButtonClick"
+                @click="onTokenButtonClick(item)"
               >
                 <div class="relative z-[11] box-border grid size-full grid-flow-col grid-cols-[auto_auto_auto_1fr] grid-rows-[1fr_auto] gap-x-3 ">
                   <div class="row-span-2 h-full">

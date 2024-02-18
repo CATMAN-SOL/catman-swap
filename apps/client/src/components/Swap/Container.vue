@@ -3,13 +3,70 @@ import leftShape from '../../assets/icons/swap/left-shape.svg'
 import cog from '../../assets/icons/swap/cog.svg'
 import ArrowDown from '../../assets/icons/swap/arrow-down.svg'
 import MiddleShape from '../../assets/icons/swap/middle-shape.svg'
+import { Token } from '@/models/token.model'
 
-const displayTokenSelectDialog = ref(true)
+const displayTokenSelectDialog = ref(false)
+const currentSelectingToken = ref<'from' | 'to'>()
+
+const tokenFrom = ref<Token>({
+    address: 'So11111111111111111111111111111111111111112',
+    chainId: 101,
+    decimals: 9,
+    name: 'Wrapped SOL',
+    symbol: 'SOL',
+    logoUrl: 'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png',
+    tags: [
+      'old-registry'
+    ],
+    extensions: {
+      coingeckoId: 'wrapped-solana'
+    },
+    removed: false,
+    createdAt: '2024-02-17T20:09:03.453Z'
+})
+
+const tokenTo = ref<Token>({
+    address: 'EavJDLh8cYTAnt3QDitpKGMsPL2hq1My5g9R2P6at6Lc',
+    chainId: 101,
+    decimals: 9,
+    name: 'CATMAN',
+    symbol: 'CATMAN',
+    logoUrl: null,
+    tags: [
+      'unknown'
+    ],
+    extensions: {
+      coingeckoId: 'catman'
+    },
+    removed: false,
+    createdAt: '2024-02-17T20:09:03.453Z'
+})
+
+const onTokenSelect = (token: Token) => {
+  if (currentSelectingToken.value === 'from') {
+    tokenFrom.value = token
+  } else {
+    tokenTo.value = token
+  }
+}
+
+const onFromCurrencySelectClick = () => {
+  currentSelectingToken.value = 'from'
+  displayTokenSelectDialog.value = true
+}
+
+const onToCurrencySelectClick = () => {
+  currentSelectingToken.value = 'to'
+  displayTokenSelectDialog.value = true
+}
 </script>
 
 <template>
   <div class="flex w-full flex-col gap-0">
-    <SwapTokenSelectDialog v-model="displayTokenSelectDialog" />
+    <SwapTokenSelectDialog
+      v-model="displayTokenSelectDialog"
+      @select="onTokenSelect"
+    />
     <div class="flex items-end gap-0">
       <div
         class="!-z-10 flex h-12 w-[340px] items-center justify-center rounded-tl-3xl bg-[#E1D33E] px-[53px] text-xl font-bold text-[#030303]"
@@ -56,13 +113,15 @@ const displayTokenSelectDialog = ref(true)
         <div class="grid grid-cols-[auto_1fr] items-end gap-3 rounded-t-[20px] bg-[#16191D] px-6 pb-[18px] pt-6">
           <SwapCurrencySelect
             label="From"
-            @click="displayTokenSelectDialog = true"
+            :current-token="tokenFrom"
+            @click="onFromCurrencySelectClick"
           />
           <AppInput
             label="Amount"
             placeholder="Enter amount here"
             :button="true"
             button-text="max"
+            type="number"
           />
         </div>
         <div class="flex items-center gap-0">
@@ -92,12 +151,17 @@ const displayTokenSelectDialog = ref(true)
           <div class="h-[50px] w-full rounded-tr-[20px] bg-[#16191D]" />
         </div>
         <div class="grid grid-cols-[auto_1fr] items-end gap-3 rounded-b-[20px] bg-[#16191D] px-6 pb-[18px] pt-6">
-          <SwapCurrencySelect label="To" />
+          <SwapCurrencySelect
+            label="To"
+            :current-token="tokenTo"
+            @click="onToCurrencySelectClick"
+          />
           <AppInput
             label="Amount"
             placeholder="Enter amount here"
             :button="true"
             button-text="max"
+            type="number"
           />
         </div>
       </div>

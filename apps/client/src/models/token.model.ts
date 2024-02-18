@@ -4,7 +4,7 @@ export interface Token {
   decimals: number
   name: string
   symbol: string
-  logoUrl: string
+  logoUrl: string | null
   tags: string[]
   extensions: any
   removed: boolean
