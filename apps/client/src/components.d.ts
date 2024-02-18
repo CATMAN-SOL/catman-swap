@@ -17,6 +17,8 @@ declare module 'vue' {
     HeaderNavigationItem: typeof import('./components/Header/NavigationItem.vue')['default']
     HexagonButtonBase: typeof import('./components/HexagonButton/Base.vue')['default']
     HexagonButtonClose: typeof import('./components/HexagonButton/Close.vue')['default']
+    HexagonButtonRotate: typeof import('./components/HexagonButton/Rotate.vue')['default']
+    HexagonButtonSwap: typeof import('./components/HexagonButton/Swap.vue')['default']
     LightningButton: typeof import('./components/LightningButton.vue')['default']
     LoadingIcon: typeof import('./components/LoadingIcon.vue')['default']
     PentagonButtonBase: typeof import('./components/PentagonButton/Base.vue')['default']

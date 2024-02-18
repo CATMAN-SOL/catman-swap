@@ -1,0 +1,29 @@
+<template>
+  <HexagonButtonBase>
+    <svg
+      class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-500 group-hover:rotate-180 group-hover:scale-[1.2]"
+      xmlns="http://www.w3.org/2000/svg"
+      width="38"
+      height="38"
+      viewBox="0 0 48 49"
+      fill="none"
+    >
+      <g clip-path="url(#clip0_61_1953)">
+        <path
+          d="M37.999 16.6448L29.999 24.6448H35.999C35.999 31.2748 30.629 36.6448 23.999 36.6448C21.969 36.6448 20.069 36.1348 18.389 35.2548L15.469 38.1748C17.949 39.7248 20.859 40.6448 23.999 40.6448C32.839 40.6448 39.999 33.4848 39.999 24.6448H45.999L37.999 16.6448ZM11.999 24.6448C11.999 18.0148 17.369 12.6448 23.999 12.6448C26.029 12.6448 27.929 13.1548 29.609 14.0348L32.529 11.1148C30.049 9.56478 27.139 8.64478 23.999 8.64478C15.159 8.64478 7.99902 15.8048 7.99902 24.6448H1.99902L9.99902 32.6448L17.999 24.6448H11.999Z"
+          fill="#030303"
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_61_1953">
+          <rect
+            width="48"
+            height="48"
+            fill="white"
+            transform="translate(-0.000976562 0.644775)"
+          />
+        </clipPath>
+      </defs>
+    </svg>
+  </HexagonButtonBase>
+</template>

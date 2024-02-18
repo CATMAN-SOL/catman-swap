@@ -49,50 +49,48 @@ import MiddleShape from '../../assets/icons/swap/middle-shape.svg'
       </div>
     </div>
     <div class="w-full rounded-b-[72px] bg-[#090A0B] p-6">
-      <div class="flex w-full flex-col gap-0">
-        <div class="grid grid-cols-[auto_1fr] items-end gap-3 rounded-t-[20px] bg-[#16191D] px-6 pb-[18px] pt-6">
-          <SwapCurrencySelect label="From" />
-          <AppInput
-            label="Amount"
-            placeholder="Enter amount here"
-            :button="true"
-            button-text="max"
-          />
-        </div>
-        <div class="flex items-center gap-0">
-          <div class="h-[50px] w-full rounded-bl-[20px] bg-[#16191D]" />
-          <img
-            :src="MiddleShape"
-            alt=""
-          >
-          <div class="flex h-[50px] w-full items-center justify-end rounded-br-[20px] bg-[#16191D] pr-5">
-            <span class="text-base text-[#A3A5B6]">Balance: <strong class="text-[#E1D33E]">500 USDT</strong></span>
+      <div class="flex w-full flex-col items-center">
+        <div class="flex w-full flex-col gap-0">
+          <div class="grid grid-cols-[auto_1fr] items-end gap-3 rounded-t-[20px] bg-[#16191D] px-6 pb-[18px] pt-6">
+            <SwapCurrencySelect label="From" />
+            <AppInput
+              label="Amount"
+              placeholder="Enter amount here"
+              :button="true"
+              button-text="max"
+            />
+          </div>
+          <div class="flex items-center gap-0">
+            <div class="h-[50px] w-full rounded-bl-[20px] bg-[#16191D]" />
+            <img
+              :src="MiddleShape"
+              alt=""
+            >
+            <div class="flex h-[50px] w-full items-center justify-end rounded-br-[20px] bg-[#16191D] pr-5">
+              <span class="text-base text-[#A3A5B6]">Balance: <strong class="text-[#E1D33E]">500 USDT</strong></span>
+            </div>
           </div>
         </div>
-      </div>
-
-      <div
-        style="clip-path: polygon( 25.00% 0.00%, 75.00% 0.20%, 100% 50.00%, 75.00% 100%, 25.00% 100%, 0.00% 50.00% );"
-        class="size-10 bg-white"
-      />
-      <div class="mt-5 flex w-full flex-col gap-0">
-        <div class="flex items-center gap-0">
-          <div class="h-[50px] w-full rounded-tl-[20px] bg-[#16191D]" />
-          <img
-            class="rotate-180"
-            :src="MiddleShape"
-            alt=""
-          >
-          <div class="h-[50px] w-full rounded-tr-[20px] bg-[#16191D]" />
-        </div>
-        <div class="grid grid-cols-[auto_1fr] items-end gap-3 rounded-b-[20px] bg-[#16191D] px-6 pb-[18px] pt-6">
-          <SwapCurrencySelect label="To" />
-          <AppInput
-            label="Amount"
-            placeholder="Enter amount here"
-            :button="true"
-            button-text="max"
-          />
+        <HexagonButtonRotate class="my-[-10px]" />
+        <div class="flex w-full flex-col gap-0">
+          <div class="flex items-center gap-0">
+            <div class="h-[50px] w-full rounded-tl-[20px] bg-[#16191D]" />
+            <img
+              class="rotate-180"
+              :src="MiddleShape"
+              alt=""
+            >
+            <div class="h-[50px] w-full rounded-tr-[20px] bg-[#16191D]" />
+          </div>
+          <div class="grid grid-cols-[auto_1fr] items-end gap-3 rounded-b-[20px] bg-[#16191D] px-6 pb-[18px] pt-6">
+            <SwapCurrencySelect label="To" />
+            <AppInput
+              label="Amount"
+              placeholder="Enter amount here"
+              :button="true"
+              button-text="max"
+            />
+          </div>
         </div>
       </div>
       <SwapSummary class="mt-[18px]" />
