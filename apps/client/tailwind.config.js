@@ -23,6 +23,7 @@ export default {
         },
         'theme-green': '#74D172',
         'theme-dark-gray': {
+          1: '#030303',
           3: '#16191D',
           4: '#21262C',
           5: '#2D353F',

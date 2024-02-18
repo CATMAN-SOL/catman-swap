@@ -304,6 +304,7 @@
     "watchWithFilter": true,
     "whenever": true,
     "useIcon": true,
-    "useWallet": true
+    "useWallet": true,
+    "useWalletConnectStore": true
   }
 }

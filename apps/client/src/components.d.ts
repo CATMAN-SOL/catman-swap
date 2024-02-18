@@ -16,6 +16,7 @@ declare module 'vue' {
     HeaderNavigationItem: typeof import('./components/Header/NavigationItem.vue')['default']
     HexagonButtonBase: typeof import('./components/HexagonButton/Base.vue')['default']
     HexagonButtonClose: typeof import('./components/HexagonButton/Close.vue')['default']
+    LightningButton: typeof import('./components/LightningButton.vue')['default']
     LoadingIcon: typeof import('./components/LoadingIcon.vue')['default']
     PentagonButtonBase: typeof import('./components/PentagonButton/Base.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
@@ -25,7 +26,10 @@ declare module 'vue' {
     SwapLayout: typeof import('./components/Swap/layout.vue')['default']
     SwapNavButton: typeof import('./components/Swap/NavButton.vue')['default']
     SwapSelect: typeof import('./components/SwapSelect.vue')['default']
+    WalletAddressButton: typeof import('./components/Wallet/AddressButton.vue')['default']
     WalletConnectButton: typeof import('./components/Wallet/ConnectButton.vue')['default']
     WalletConnectDialog: typeof import('./components/Wallet/ConnectDialog.vue')['default']
+    WalletDialogConnectStatus: typeof import('./components/Wallet/DialogConnectStatus.vue')['default']
+    WalletDisconnectDialog: typeof import('./components/Wallet/DisconnectDialog.vue')['default']
   }
 }

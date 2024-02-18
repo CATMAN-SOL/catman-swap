@@ -1,13 +1,17 @@
 <script lang="ts" setup>
+import { useWalletConnectStore } from '../../store/wallet-connect.store'
+
 const modelValue = defineModel<boolean>()
 
-const { wallets, connecting, connected, connect, select, publicKey } = useWallet()
+const { wallets, connected, connecting, connect, select } = useWallet()
 
 const selectedWalletIndex = ref(-1)
+const walletConnectStore = useWalletConnectStore()
 
 watch(modelValue, (newValue) => {
   if (newValue) {
     selectedWalletIndex.value = -1
+    walletConnectStore.currentConnectingWalletAdapterIndex = -1
   }
 })
 
@@ -16,8 +20,10 @@ const onWalletClick = async (index: number) => {
 
   if (currentSelectedWallet.value?.adapter.name) {
     select(currentSelectedWallet.value?.adapter.name)
+    walletConnectStore.currentConnectingWalletAdapterIndex = index
 
-    await connect()
+    await nextTick()
+    connect()
   }
 }
 
@@ -52,51 +58,16 @@ const currentSelectedWallet = computed(() => {
         </button>
       </div>
     </div>
-    <div
-      v-else
-      class="flex flex-col items-stretch gap-8"
-    >
-      <div
-        class="bg-theme-dark-gray-3 hover:bg-theme-dark-gray-4 group flex flex-col items-center justify-center gap-3 rounded-2xl border border-transparent py-8 text-white transition-all"
-      >
-        <img
-          class="w-[37px] transition-all group-hover:w-[45px]"
-          :src="currentSelectedWallet.adapter.icon"
+    <WalletDialogConnectStatus>
+      <template #after>
+        <AppButton
+          v-if="connected || (!connecting && !connected)"
+          @click="modelValue = false"
         >
-        <span class="text-[16px] font-semibold">{{ currentSelectedWallet.adapter.name }}</span>
-      </div>
-      <div
-        v-if="connecting"
-        class="bg-theme-dark-gray-3 flex w-full flex-row items-center justify-between rounded-[16px] px-3 py-2"
-      >
-        <div class="flex flex-row items-center gap-3 text-[16px] font-semibold">
-          <span>Connecting</span>
-          <LoadingIcon dot-class="bg-white" />
-        </div>
-        <AppBadge
-          severity="warning"
-          text="Please wait"
-        />
-      </div>
-      <div
-        v-else-if="connected"
-        class="bg-theme-dark-gray-3 flex w-full flex-row items-center justify-between rounded-[16px] px-3 py-2"
-      >
-        <div class="text-theme-white-2 flex flex-row items-center gap-3 text-[16px] font-semibold">
-          <span>{{ publicKey }}</span>
-        </div>
-        <AppBadge
-          severity="success"
-          text="Connected"
-        />
-      </div>
-      <AppButton
-        v-if="connected"
-        @click="modelValue = false"
-      >
-        Proceed
-      </AppButton>
-    </div>
+          Proceed
+        </AppButton>
+      </template>
+    </WalletDialogConnectStatus>
   </AppDialog>
 </template>
 

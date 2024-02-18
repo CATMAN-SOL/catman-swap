@@ -276,6 +276,7 @@ declare global {
   const useVirtualList: typeof import('@vueuse/core')['useVirtualList']
   const useWakeLock: typeof import('@vueuse/core')['useWakeLock']
   const useWallet: typeof import('solana-wallets-vue')['useWallet']
+  const useWalletConnectStore: typeof import('./store/wallet-connect.store')['useWalletConnectStore']
   const useWebNotification: typeof import('@vueuse/core')['useWebNotification']
   const useWebSocket: typeof import('@vueuse/core')['useWebSocket']
   const useWebWorker: typeof import('@vueuse/core')['useWebWorker']
