@@ -10,6 +10,8 @@
     "lint:fix": "eslint --fix src --ext vue,ts"
   },
   "dependencies": {
+    "@fontsource/dm-sans": "^5.0.18",
+    "@fontsource/inter": "^5.0.16",
     "@fontsource/poppins": "^5.0.8",
     "@fontsource/urbanist": "^5.0.18",
     "@headlessui/vue": "^1.7.19",
@@ -17,7 +19,9 @@
     "@solana/wallet-adapter-wallets": "^0.19.26",
     "@vueuse/core": "^10.7.2",
     "@vueuse/head": "^2.0.0",
+    "axios": "^1.6.7",
     "pinia": "^2.1.7",
+    "primevue": "^3.48.1",
     "solana-wallets-vue": "^0.6.1",
     "vite-tsconfig-paths": "^4.3.1",
     "vue": "^3.3.11",

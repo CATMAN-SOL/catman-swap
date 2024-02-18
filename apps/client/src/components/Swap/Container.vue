@@ -3,10 +3,13 @@ import leftShape from '../../assets/icons/swap/left-shape.svg'
 import cog from '../../assets/icons/swap/cog.svg'
 import ArrowDown from '../../assets/icons/swap/arrow-down.svg'
 import MiddleShape from '../../assets/icons/swap/middle-shape.svg'
+
+const displayTokenSelectDialog = ref(true)
 </script>
 
 <template>
   <div class="flex w-full flex-col gap-0">
+    <SwapTokenSelectDialog v-model="displayTokenSelectDialog" />
     <div class="flex items-end gap-0">
       <div
         class="!-z-10 flex h-12 w-[340px] items-center justify-center rounded-tl-3xl bg-[#E1D33E] px-[53px] text-xl font-bold text-[#030303]"
@@ -51,7 +54,10 @@ import MiddleShape from '../../assets/icons/swap/middle-shape.svg'
     <div class="w-full rounded-b-[72px] bg-[#090A0B] p-6">
       <div class="flex w-full flex-col gap-0">
         <div class="grid grid-cols-[auto_1fr] items-end gap-3 rounded-t-[20px] bg-[#16191D] px-6 pb-[18px] pt-6">
-          <SwapCurrencySelect label="From" />
+          <SwapCurrencySelect
+            label="From"
+            @click="displayTokenSelectDialog = true"
+          />
           <AppInput
             label="Amount"
             placeholder="Enter amount here"
