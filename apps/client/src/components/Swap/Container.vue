@@ -136,10 +136,7 @@ const onToCurrencySelectClick = () => {
         </div>
       </div>
 
-      <div
-        style="clip-path: polygon( 25.00% 0.00%, 75.00% 0.20%, 100% 50.00%, 75.00% 100%, 25.00% 100%, 0.00% 50.00% );"
-        class="size-10 bg-white"
-      />
+      <HexagonButtonRotate class="my-[-10px]" />
       <div class="mt-5 flex w-full flex-col gap-0">
         <div class="flex items-center gap-0">
           <div class="h-[50px] w-full rounded-tl-[20px] bg-[#16191D]" />
@@ -168,7 +165,7 @@ const onToCurrencySelectClick = () => {
       <SwapSummary class="mt-[18px]" />
       <SwapDcaSettings class="mt-[18px]" />
       <SwapDcaPriceRange class="mt-[18px]" />
-      <WalletConnectButton class="mt-[18px] w-full" />
+      <!-- <WalletConnectButton class="mt-[18px] w-full" /> -->
     </div>
   </div>
 </template>
