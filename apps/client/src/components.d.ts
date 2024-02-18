@@ -25,6 +25,7 @@ declare module 'vue' {
     PentagonButtonBase: typeof import('./components/PentagonButton/Base.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SwapButton: typeof import('./components/Swap/Button.vue')['default']
     SwapCard: typeof import('./components/Swap/Card.vue')['default']
     SwapChoice: typeof import('./components/SwapChoice.vue')['default']
     SwapContainer: typeof import('./components/Swap/Container.vue')['default']

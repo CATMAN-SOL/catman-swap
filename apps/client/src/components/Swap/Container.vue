@@ -59,6 +59,11 @@ const onToCurrencySelectClick = () => {
   currentSelectingToken.value = 'to'
   displayTokenSelectDialog.value = true
 }
+const onRotateButtonClick = () => {
+  const temp = tokenFrom.value
+  tokenFrom.value = tokenTo.value
+  tokenTo.value = temp
+}
 
 const choice = ref('swap')
 </script>
@@ -149,7 +154,10 @@ const choice = ref('swap')
       </div>
 
       <div class="relative w-full">
-        <HexagonButtonRotate class="absolute left-1/2 my-[-10px] -translate-x-1/2" />
+        <HexagonButtonRotate
+          class="absolute left-1/2 my-[-10px] -translate-x-1/2"
+          @click="onRotateButtonClick"
+        />
       </div>
 
       <div class="mt-5 flex w-full flex-col gap-0">
@@ -189,7 +197,10 @@ const choice = ref('swap')
         v-if="choice === 'dca'"
         class="mt-[18px]"
       />
-      <!-- <WalletConnectButton class="mt-[18px] w-full" /> -->
+      <SwapButton
+        :loading="false"
+        class="mt-[18px]"
+      />
     </div>
   </div>
 </template>
