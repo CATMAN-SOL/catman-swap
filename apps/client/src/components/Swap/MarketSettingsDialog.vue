@@ -67,9 +67,12 @@ const selectItem = (index: number) => {
       placeholder="Max 2 SOL"
       type="number"
     />
+    <AppButton
+      class="mt-8 w-full"
+      button-style="primary"
+      @click="modelValue = false"
+    >
+      Save Settings
+    </AppButton>
   </AppDialog>
-  <AppButton
-    class="mt-8"
-    text="Save"
-  />
 </template>
