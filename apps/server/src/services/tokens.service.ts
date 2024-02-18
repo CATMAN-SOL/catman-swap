@@ -1,5 +1,14 @@
 import { TokenRaw } from '~models/token-raw.model'
-import { count, desc, eq, inArray, sql } from 'drizzle-orm'
+import {
+  and,
+  arrayOverlaps,
+  count,
+  desc,
+  eq,
+  inArray,
+  not,
+  sql,
+} from 'drizzle-orm'
 import { tokenListRevalidations, tokens } from '~db/schema'
 import { Token, TokenInsert } from '~db/types'
 import chunk from 'lodash/chunk'
@@ -11,50 +20,56 @@ const REVALIDATION_INTERVAL = 1000 * 60 * 60 * 6
 
 let isTokenListRevalidating = false
 
+export type TokenFilterOptions = {
+  verifiedOnly?: boolean
+  searchQuery?: string
+}
+
 export const findTokenByAddress = async (address: string) => {
   return await dbClient.query.tokens.findFirst({
     where: eq(tokens.address, address),
   })
 }
 
-export const getTokensCount = async ({
-  searchQuery,
-}: {
-  searchQuery: string
-}) => {
-  const searchSqlQuery = `%${searchQuery}%`
-
+export const getTokensCount = async (filter: TokenFilterOptions) => {
   const result = await dbClient
     .select({
       tokensCount: count(tokens),
     })
     .from(tokens)
-    .where(sql`CONCAT(${tokens.name}, ${tokens.symbol}) LIKE ${searchSqlQuery}`)
+    .where(createTokenSqlFilter(filter))
 
   return result[0].tokensCount
 }
 
-export const getTokensList = async ({
-  skip,
-  limit,
-  searchQuery,
-}: {
-  skip: number
-  limit: number
-  searchQuery: string
-}) => {
-  const searchSqlQuery = `%${searchQuery}%`
-
+export const getTokensList = async (
+  options: {
+    skip: number
+    limit: number
+  } & TokenFilterOptions
+) => {
   const tokensList = await dbClient.query.tokens.findMany({
-    where: sql`CONCAT(${tokens.name}, ${tokens.symbol}) LIKE ${searchSqlQuery}`,
-    limit,
-    offset: skip,
+    where: createTokenSqlFilter(options),
+    limit: options.limit,
+    offset: options.skip,
   })
 
   // Starts in parallel so it doesn't block users's tokens request
   revalidateTokenListIfRequired()
 
   return tokensList
+}
+
+const createTokenSqlFilter = ({
+  verifiedOnly = false,
+  searchQuery = '',
+}: TokenFilterOptions) => {
+  const searchSqlQuery = `%${searchQuery}%`
+
+  return and(
+    sql`CONCAT(${tokens.name}, ${tokens.symbol}) LIKE ${searchSqlQuery}`,
+    verifiedOnly ? not(arrayOverlaps(tokens.tags, ['unknown'])) : sql`TRUE`
+  )
 }
 
 const revalidateTokenListIfRequired = async () => {
