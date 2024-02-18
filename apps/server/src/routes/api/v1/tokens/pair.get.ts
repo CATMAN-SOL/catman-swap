@@ -12,8 +12,8 @@ export default createRoute({
   handler: async ({ query }) => {
     const queryUrl = new URL('https://price.jup.ag/v4/price')
 
-    queryUrl.searchParams.set('ids', query.from)
-    queryUrl.searchParams.set('vsToken', query.to)
+    queryUrl.searchParams.set('ids', query.to)
+    queryUrl.searchParams.set('vsToken', query.from)
 
     const response = await fetch(queryUrl)
     const priceData = (await response.json()) as {
@@ -24,11 +24,11 @@ export default createRoute({
       }
     }
 
-    if (!priceData.data[query.from]) {
+    if (!priceData.data[query.to]) {
       throw new NotFoundException()
     }
 
-    const tokenFromPrice = priceData.data[query.from].price
+    const tokenFromPrice = priceData.data[query.to].price
 
     let fromBalance: null | number = null
 

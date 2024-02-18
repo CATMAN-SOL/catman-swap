@@ -5,6 +5,9 @@ import ArrowDown from '../../assets/icons/swap/arrow-down.svg'
 import MiddleShape from '../../assets/icons/swap/middle-shape.svg'
 import { Token } from '@/models/token.model'
 
+const { fetch: fetchTokenPairInfo, result: tokenPairInfo } = tokens.useTokensPairInfo()
+
+const { publicKey } = useWallet()
 const displayTokenSelectDialog = ref(false)
 const displayMarketSettingsDialog = ref(false)
 const currentSelectingToken = ref<'from' | 'to'>()
@@ -41,6 +44,54 @@ const tokenTo = ref<Token>({
     },
     removed: false,
     createdAt: '2024-02-17T20:09:03.453Z'
+})
+
+const fromAmount = ref('')
+const toAmount = ref('')
+
+syncRef(fromAmount, toAmount, {
+  transform: {
+    ltr: (value) => {
+      return convertFromAmount(value)
+    },
+    rtl: (value) => {
+      return convertToAmount(value)
+    }
+  }
+})
+
+const convertFromAmount = (value: string) => {
+  const parsedValue = parseFloat(value)
+
+  if (!tokenPairInfo.value) {
+    return ''
+  }
+
+  return (parsedValue / (tokenPairInfo.value.price ?? 0)).toString()
+}
+
+const convertToAmount = (value: string) => {
+  const parsedValue = parseFloat(value)
+
+  if (!tokenPairInfo.value) {
+    return ''
+  }
+
+  return (parsedValue / (tokenPairInfo.value.price ?? 0)).toString()
+}
+
+watch(tokenPairInfo, () => {
+  toAmount.value = convertFromAmount(fromAmount.value)
+})
+
+watch([tokenFrom, tokenTo], ([from, to]) => {
+  fetchTokenPairInfo({
+    from: from.address,
+    to: to.address,
+    publicKey: publicKey.value?.toString()
+  })
+}, {
+  immediate: true
 })
 
 const onTokenSelect = (token: Token) => {
@@ -116,14 +167,6 @@ const choice = ref('swap')
             >
           </SwapNavButton>
         </div>
-        <!-- <div class="flex h-[65px] w-full items-center justify-end rounded-tr-3xl !bg-[#090A0B] pr-6 pt-3">
-          <div class="flex items-center gap-2 rounded-[36px] bg-[#16191D] px-4 py-3">
-            <span class="cursor-pointer text-base font-semibold text-[#A3A7B7]">
-              Enable Pricing Strategy
-            </span>
-            <input type="checkbox">
-          </div>
-        </div> -->
       </div>
     </div>
     <div class="w-full rounded-b-[72px] bg-[#090A0B] p-6">
@@ -135,10 +178,11 @@ const choice = ref('swap')
             @click="onFromCurrencySelectClick"
           />
           <AppInput
+            v-model="fromAmount"
             label="Amount"
             placeholder="Enter amount here"
             :button="true"
-            button-text="max"
+            button-text="MAX"
             type="number"
           />
         </div>
@@ -149,19 +193,22 @@ const choice = ref('swap')
             alt=""
           >
           <div class="flex h-[50px] w-full items-center justify-end rounded-br-[20px] bg-[#16191D] pr-5">
-            <span class="text-base text-[#A3A5B6]">Balance: <strong class="text-[#E1D33E]">500 USDT</strong></span>
+            <span
+              v-if="publicKey && tokenPairInfo"
+              class="text-base text-[#A3A5B6]"
+            >Balance: <strong class="text-[#E1D33E]">{{ tokenPairInfo.fromBalance ?? 0 }} {{ tokenFrom.symbol }}</strong></span>
           </div>
         </div>
       </div>
 
       <div class="relative w-full">
         <HexagonButtonRotate
-          class="absolute left-1/2 my-[-10px] -translate-x-1/2"
+          class="absolute left-1/2 my-[-10px] -translate-x-[calc(50%+2px)]"
           @click="onRotateButtonClick"
         />
       </div>
 
-      <div class="mt-5 flex w-full flex-col gap-0">
+      <div class="flex w-full flex-col gap-0">
         <div class="flex items-center gap-0">
           <div class="h-[50px] w-full rounded-tl-[20px] bg-[#16191D]" />
           <img
@@ -178,16 +225,19 @@ const choice = ref('swap')
             @click="onToCurrencySelectClick"
           />
           <AppInput
+            v-model="toAmount"
             label="Amount"
             placeholder="Enter amount here"
             :button="true"
-            button-text="max"
+            button-text="MAX"
             type="number"
           />
         </div>
       </div>
       <SwapSummary
         v-if="choice === 'swap'"
+        :current-token="tokenFrom"
+        :price="tokenPairInfo?.price ?? 0"
         class="mt-[18px]"
       />
       <SwapDcaSettings
