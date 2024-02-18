@@ -24,6 +24,7 @@ export default {
         'theme-green': '#74D172',
         'theme-dark-gray': {
           1: '#030303',
+          2: '#090A0B',
           3: '#16191D',
           4: '#21262C',
           5: '#2D353F',
@@ -32,6 +33,8 @@ export default {
       fontFamily: {
         primary: ['Urbanist', 'system-ui', 'sans-serif', 'serif'],
         secondary: ['Poppins', 'system-ui', 'sans-serif', 'serif'],
+        dmSans: ['DM Sans', 'system-ui', 'sans-serif', 'serif'],
+        inter: ['Inter', 'system-ui', 'sans-serif', 'serif'],
       },
       height: {
         header: '100px',

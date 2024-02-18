@@ -15,6 +15,8 @@ import {
   LedgerWalletAdapter,
 } from '@solana/wallet-adapter-wallets'
 
+import PrimeVue from 'primevue/config'
+
 const app = createApp(App)
 
 const router = createRouter({
@@ -23,6 +25,10 @@ const router = createRouter({
 })
 
 app.use(router)
+
+app.use(PrimeVue, {
+  unstyled: true,
+})
 
 const pinia = createPinia()
 

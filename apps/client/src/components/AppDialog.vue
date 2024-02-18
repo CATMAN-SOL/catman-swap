@@ -51,7 +51,7 @@ const modelValue = defineModel<boolean>()
             leave-to="translate-y-[100vh]"
           >
             <DialogPanel
-              class="w-full self-stretch overflow-hidden rounded-3xl border border-black bg-[#090A0B] p-10 text-left shadow-xl transition-all md:self-center lg:w-[800px] [&_div]:transition-all"
+              class="w-full self-stretch overflow-hidden rounded-3xl border border-black bg-[#090A0B] p-10 text-left shadow-xl transition-all md:self-center lg:w-[800px]"
               :class="props.panelClass"
             >
               <div class="transition-all">

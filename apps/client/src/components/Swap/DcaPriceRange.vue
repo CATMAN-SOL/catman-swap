@@ -4,10 +4,12 @@
       <AppInput
         label="Minimum Price"
         placeholder="Optional"
+        type="number"
       />
       <AppInput
         label="Maximim Price"
         placeholder="Optional"
+        type="number"
       />
     </div>
   </SwapCard>

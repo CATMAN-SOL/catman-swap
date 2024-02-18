@@ -4,10 +4,12 @@
       <AppInput
         placeholder="1"
         label="Every"
+        type="number"
       />
       <AppInput
         placeholder="Minutes"
         label="Timeline"
+        type="number"
       />
       <AppInput
         placeholder="2"
@@ -15,6 +17,7 @@
         button-text="Orders"
         :button-disabled="true"
         label="Over"
+        type="number"
       />
     </div>
   </SwapCard>

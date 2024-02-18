@@ -1,11 +1,20 @@
 <script lang="ts" setup>
-const props = defineProps<{
-  button?: boolean
-  placeholder: string,
-  buttonText?: string,
-  label?: string
-  buttonDisabled?: boolean
-}>()
+const props = withDefaults(
+  defineProps<{
+    button?: boolean
+    placeholder: string,
+    buttonText?: string,
+    label?: string
+    type?: string
+    buttonDisabled?: boolean
+  }>(),
+  {
+    buttonDisabled: false,
+    type: 'text',
+    label: undefined,
+    buttonText: undefined
+  }
+)
 
 const emit = defineEmits(['button-click'])
 
@@ -20,7 +29,7 @@ const modelValue = defineModel<string>()
         v-model="modelValue"
         :placeholder="props.placeholder"
         :class="[props.button ? '' : 'rounded-r-2xl']"
-        type="number"
+        :type="props.type"
         class="box-border w-full rounded-l-2xl border border-transparent bg-[#21262C] p-5 text-base tracking-[1px] text-[#E2E4E9] outline-none transition-all placeholder:text-[A3A5B6] hover:bg-[#2D353F] focus:border-[#74D172] focus:placeholder:text-[#E2E4E9]"
       >
       <button
