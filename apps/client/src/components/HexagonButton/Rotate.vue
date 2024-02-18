@@ -4,8 +4,8 @@
       <svg
         class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-500 group-hover:rotate-180 group-hover:scale-[1.2]"
         xmlns="http://www.w3.org/2000/svg"
-        width="38"
-        height="38"
+        width="48"
+        height="48"
         viewBox="0 0 48 49"
         fill="none"
       >
@@ -28,7 +28,7 @@
       </svg>
     </div>
     <svg
-      class="absolute left-0 top-0 z-[9] size-full"
+      class="absolute left-1/2 top-1/2 z-[10] -translate-x-1/2 -translate-y-1/2 mix-blend-screen"
       xmlns="http://www.w3.org/2000/svg"
       width="88"
       height="83"
@@ -41,7 +41,7 @@
       />
     </svg>
     <svg
-      class="absolute left-1/2 top-1/2 z-[10] -translate-x-1/2 -translate-y-1/2 mix-blend-screen"
+      class="absolute left-0 top-0 z-[9] size-full"
       xmlns="http://www.w3.org/2000/svg"
       width="76"
       height="71"
