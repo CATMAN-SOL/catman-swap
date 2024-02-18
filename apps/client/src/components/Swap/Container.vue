@@ -6,6 +6,7 @@ import MiddleShape from '../../assets/icons/swap/middle-shape.svg'
 import { Token } from '@/models/token.model'
 
 const displayTokenSelectDialog = ref(false)
+const displayMarketSettingsDialog = ref(false)
 const currentSelectingToken = ref<'from' | 'to'>()
 
 const tokenFrom = ref<Token>({
@@ -89,7 +90,7 @@ const choice = ref('swap')
         <div
           class="flex h-[65px] w-full items-center gap-1.5 rounded-tr-3xl !bg-[#090A0B] pr-6 pt-3"
         >
-          <SwapNavButton>
+          <SwapNavButton @click="displayMarketSettingsDialog = true">
             Market
             <img
               class="size-4"
@@ -203,4 +204,7 @@ const choice = ref('swap')
       />
     </div>
   </div>
+  <SwapMarketSettingsDialog
+    v-model="displayMarketSettingsDialog"
+  />
 </template>
