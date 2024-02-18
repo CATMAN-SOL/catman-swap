@@ -136,7 +136,10 @@ const onToCurrencySelectClick = () => {
         </div>
       </div>
 
-      <HexagonButtonRotate class="my-[-10px]" />
+      <div class="relative w-full">
+        <HexagonButtonRotate class="absolute left-1/2 my-[-10px] -translate-x-1/2" />
+      </div>
+
       <div class="mt-5 flex w-full flex-col gap-0">
         <div class="flex items-center gap-0">
           <div class="h-[50px] w-full rounded-tl-[20px] bg-[#16191D]" />
