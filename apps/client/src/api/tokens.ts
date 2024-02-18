@@ -14,4 +14,16 @@ export const tokens = {
     url: '/api/v1/tokens',
     queryBuilder: (input) => input,
   }),
+  useTokensPairInfo: defineDataEndpoint<
+    {
+      from: string
+      to: string
+      publicKey?: string
+    },
+    { price: number; fromBalance?: number }
+  >({
+    method: 'GET',
+    url: '/api/v1/tokens/pair',
+    queryBuilder: (input) => input,
+  }),
 }
