@@ -5,9 +5,12 @@ import VirtualScroller from 'primevue/virtualscroller'
 const modelValue = defineModel<boolean>()
 
 const searchQuery = ref('')
-const verifiedOnly = ref(false)
 
 const tokenListStore = useTokenListStore()
+
+watch(() => tokenListStore.filter.verifiedOnly, () => {
+  tokenListStore.applyFilter()
+})
 
 const onVirtualScrollerLazyLoad = async (data: {first: number, last: number}) => {
   await tokenListStore.fetchNextTokensBatch(data)
@@ -40,7 +43,7 @@ const onTokenButtonClick = () => {
         <div class="flex flex-row items-end justify-between">
           <span class="text-theme-white-2 text-[16px] font-semibold">All tokens</span>
           <AppSwitch
-            v-model="verifiedOnly"
+            v-model="tokenListStore.filter.verifiedOnly"
             label="Verified tokens only"
           />
         </div>

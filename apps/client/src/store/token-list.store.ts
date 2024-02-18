@@ -8,7 +8,14 @@ export const useTokenListStore = defineStore('token-list', () => {
 
   let currentOffset = 0
 
-  const searchQuery = ref<string>('')
+  const filter = ref<{
+    searchQuery: string
+    verifiedOnly: boolean
+  }>({
+    searchQuery: '',
+    verifiedOnly: false,
+  })
+
   const tokensList = ref<(Token | undefined)[]>([])
 
   const fetchNextTokensBatch = async ({
@@ -28,7 +35,8 @@ export const useTokenListStore = defineStore('token-list', () => {
     const skip = currentOffset
 
     const response = await fetchTokensList({
-      searchQuery: searchQuery.value,
+      searchQuery: filter.value.searchQuery,
+      verifiedOnly: filter.value.verifiedOnly,
       limit: BATCH_SIZE,
       skip,
     })
@@ -53,19 +61,20 @@ export const useTokenListStore = defineStore('token-list', () => {
     tokensList.value = _tokensList
   }
 
-  const updateTokenSearchQueryAndFetch = async (newSearchQuery: string) => {
-    searchQuery.value = newSearchQuery
+  const applyFilter = async () => {
     tokensList.value = []
     currentOffset = 0
 
-    await fetchNextTokensBatch()
+    await fetchNextTokensBatch({ first: 0, last: BATCH_SIZE })
   }
 
   return {
+    filter,
+
     tokensList,
     tokensListLoading,
 
     fetchNextTokensBatch,
-    updateTokenSearchQueryAndFetch,
+    applyFilter,
   }
 })

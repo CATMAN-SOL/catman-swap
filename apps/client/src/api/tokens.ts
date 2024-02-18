@@ -5,7 +5,8 @@ export const tokens = {
     {
       skip: number
       limit: number
-      searchQuery: string
+      searchQuery?: string
+      verifiedOnly?: boolean
     },
     { data: Token[]; meta: { total: number } }
   >({
