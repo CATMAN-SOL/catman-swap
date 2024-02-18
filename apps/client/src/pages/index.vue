@@ -13,7 +13,7 @@ const connectWallet = () => {
   <div class="container">
     <WalletConnectDialog v-model="displayWalletConnectDialog" />
     <WalletDisconnectDialog v-model="displayWalletDisconnectDialog" />
-    <div class="grid grid-cols-2 pt-16">
+    <div class="grid grid-cols-2 gap-20 pt-16">
       <div class="flex flex-col items-stretch gap-8">
         <h1 class="text-theme-white-1 text-8xl font-semibold tracking-[-4px]">
           Swap & DCA

@@ -98,7 +98,7 @@ import MiddleShape from '../../assets/icons/swap/middle-shape.svg'
       <SwapSummary class="mt-[18px]" />
       <SwapDcaSettings class="mt-[18px]" />
       <SwapDcaPriceRange class="mt-[18px]" />
-      <WalletConnectButton class="mt-[18px] w-full" />
+      <!-- <WalletConnectButton class="mt-[18px] w-full" /> -->
     </div>
   </div>
 </template>
