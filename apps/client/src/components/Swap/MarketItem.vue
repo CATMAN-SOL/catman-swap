@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import yellowCheck from '../../../assets/icons/swap/yellow-check.svg'
+import yellowCheck from '../../assets/icons/swap/yellow-check.svg'
 
 const props = defineProps<{
   maxFee: string,
@@ -10,10 +10,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div
-    :class="{ 'border-[#E1D33E]': props.selected }"
-    class="bg-theme-dark-gray-3 hover:bg-theme-dark-gray-4 box-border flex w-full cursor-pointer items-center justify-between rounded-xl border-2 border-transparent p-[18px] transition-all"
-  >
+  <SwapBaseDialogItem :selected="props.selected">
     <div class="flex flex-col">
       <div class="flex items-start gap-2">
         <span class="text-theme-white-1 text-[18px] font-semibold leading-[28px] tracking-[1.2px]">{{ props.name }}</span>
@@ -37,5 +34,5 @@ const props = defineProps<{
         alt=""
       >
     </div>
-  </div>
+  </SwapBaseDialogItem>
 </template>

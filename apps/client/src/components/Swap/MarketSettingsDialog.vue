@@ -34,7 +34,6 @@ const selectItem = (index: number) => {
     }
   })
   selectedItem.value = marketItems.value[index].maxFee
-  // modelValue.value = false
 }
 </script>
 

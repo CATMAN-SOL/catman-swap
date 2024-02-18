@@ -10,6 +10,7 @@ const { fetch: fetchTokenPairInfo, result: tokenPairInfo } = tokens.useTokensPai
 const { publicKey } = useWallet()
 const displayTokenSelectDialog = ref(false)
 const displayMarketSettingsDialog = ref(false)
+const displaySlippageSettingsDialog = ref(false)
 const currentSelectingToken = ref<'from' | 'to'>()
 
 const tokenFrom = ref<Token>({
@@ -149,7 +150,7 @@ const choice = ref('swap')
               alt=""
             >
           </SwapNavButton>
-          <SwapNavButton>
+          <SwapNavButton @click="displaySlippageSettingsDialog = true">
             <span class="whitespace-nowrap">0.5% Slippage</span>
             <img
               class="size-4"
@@ -257,4 +258,5 @@ const choice = ref('swap')
   <SwapMarketSettingsDialog
     v-model="displayMarketSettingsDialog"
   />
+  <SwapSlippageSettingsDialog v-model="displaySlippageSettingsDialog" />
 </template>
