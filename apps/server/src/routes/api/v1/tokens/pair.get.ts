@@ -3,6 +3,8 @@ import { z } from 'zod'
 import { NotFoundException } from '~/exceptions'
 import { createRoute } from '~core/create-route'
 
+const SOL_WRAP_ADDRESS = 'So11111111111111111111111111111111111111112'
+
 export default createRoute({
   query: z.object({
     from: z.string(),
@@ -32,7 +34,7 @@ export default createRoute({
 
     let fromBalance: null | number = null
 
-    if (query.publicKey) {
+    if (query.publicKey && query.from !== SOL_WRAP_ADDRESS) {
       const account = new PublicKey(query.publicKey)
       const info = await rpcConnection.getTokenAccountsByOwner(account, {
         mint: new PublicKey(query.from),
@@ -44,6 +46,12 @@ export default createRoute({
           await rpcConnection.getTokenAccountBalance(accountPubKey)
         fromBalance = balanceResult.value.uiAmount
       }
+    }
+
+    if (query.publicKey && query.from === SOL_WRAP_ADDRESS) {
+      const account = new PublicKey(query.publicKey)
+      const info = await rpcConnection.getBalance(account)
+      fromBalance = info / 10 ** 9
     }
 
     return {
