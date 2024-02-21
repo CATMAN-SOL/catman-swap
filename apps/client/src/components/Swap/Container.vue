@@ -11,6 +11,7 @@ const { publicKey } = useWallet()
 const displayTokenSelectDialog = ref(false)
 const displayMarketSettingsDialog = ref(false)
 const displaySlippageSettingsDialog = ref(false)
+const displayGeneralSettingsDialog = ref(false)
 const currentSelectingToken = ref<'from' | 'to'>()
 
 const tokenFrom = ref<Token>({
@@ -161,7 +162,7 @@ const choice = ref('swap')
           <SwapNavButton>
             Refresh
           </SwapNavButton>
-          <SwapNavButton>
+          <SwapNavButton @click="displayGeneralSettingsDialog = true">
             <img
               :src="cog"
               alt=""
@@ -259,4 +260,5 @@ const choice = ref('swap')
     v-model="displayMarketSettingsDialog"
   />
   <SwapSlippageSettingsDialog v-model="displaySlippageSettingsDialog" />
+  <SwapGeneralSettingsDialog v-model="displayGeneralSettingsDialog" />
 </template>

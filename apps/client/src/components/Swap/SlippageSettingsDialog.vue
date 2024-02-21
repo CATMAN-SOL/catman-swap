@@ -51,5 +51,19 @@ const selectItem = (index: number) => {
         />
       </div>
     </div>
+    <AppInput
+      v-model="selectedItem"
+      class="mt-8"
+      label="Custom"
+      placeholder="0%-50%"
+      type="number"
+    />
+    <AppButton
+      class="mt-8 w-full"
+      button-style="primary"
+      @click="modelValue = false"
+    >
+      Save Settings
+    </AppButton>
   </AppDialog>
 </template>
