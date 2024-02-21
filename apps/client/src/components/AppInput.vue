@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import type { ErrorObject } from '@vuelidate/core'
+
 const props = withDefaults(
   defineProps<{
     button?: boolean
@@ -9,28 +11,41 @@ const props = withDefaults(
     disabled?: boolean
     loading?: boolean
     buttonDisabled?: boolean
+    error?: ErrorObject[] | ErrorObject | string
   }>(),
   {
     buttonDisabled: false,
     type: 'text',
     label: undefined,
-    buttonText: undefined
+    buttonText: undefined,
+    error: undefined
   }
 )
 
 const emit = defineEmits(['button-click'])
 
 const modelValue = defineModel<string>()
+const {
+  displayedError,
+  hasError
+} = useErrorDestruct(props)
 </script>
 
 <template>
   <div class="flex flex-col gap-1">
     <div class="flex flex-row items-center gap-1 text-base font-semibold text-[#A3A5B6]">
-      {{ props.label }} <LoadingIcon
+      {{ props.label }}
+      <LoadingIcon
         v-if="props.loading"
         class="scale-75"
         dot-class="bg-theme-white-2 scale-50"
       />
+      <span
+        v-if="hasError"
+        class="text-theme-red"
+      >
+        - Error: {{ displayedError }}
+      </span>
     </div>
     <div class="grid grid-cols-[1fr_auto] items-center gap-0">
       <input
@@ -39,7 +54,8 @@ const modelValue = defineModel<string>()
         :class="
           {
             'rounded-r-2xl': !props.button,
-            'pointer-events-none hover:cursor-not-allowed': props.disabled
+            'pointer-events-none hover:cursor-not-allowed': props.disabled,
+            '!border-theme-red !bg-theme-red/10 hover:!bg-theme-red/20 focus:!bg-theme-red/20': hasError
           }
         "
         :type="props.type"

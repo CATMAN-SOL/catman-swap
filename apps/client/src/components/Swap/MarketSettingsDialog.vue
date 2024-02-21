@@ -1,39 +1,37 @@
 <script lang="ts" setup>
+import { useVuelidate } from '@vuelidate/core'
+import { required, numeric, maxValue } from '@vuelidate/validators'
+
 const modelValue = defineModel<boolean>()
 
-const marketItems = ref([
-  {
-    maxFee: '0.001',
-    name: 'Market',
-    description: '85% percentile fees from last 20 blocks',
-    selected: false
-  },
-  {
-    maxFee: '0.002',
-    name: 'Market',
-    description: '85% percentile fees from last 20 blocks',
-    selected: false
-  },
-  {
-    maxFee: '0.003',
-    name: 'Market',
-    description: '85% percentile fees from last 20 blocks',
-    selected: false
+const swapSettingsStore = useSwapSettingsStore()
+
+const priorityFee = ref('')
+
+const rules = {
+  priorityFee: {
+    required, numeric, maxValue: maxValue(2)
+  }
+}
+
+const vuelidate = useVuelidate(rules, computed(() => ({ priorityFee: priorityFee.value })))
+
+// Store value changes -> update local value
+watch(() => swapSettingsStore.priorityFee, (newPriorityFee) => {
+  priorityFee.value = newPriorityFee.toString()
+}, {
+  immediate: true
+})
+
+const onSaveButtonClick = () => {
+  vuelidate.value.$touch()
+
+  if (vuelidate.value.$error) {
+    return
   }
 
-])
-const selectedItem = ref()
-
-const selectItem = (index: number) => {
-  marketItems.value.forEach((item, i) => {
-    if (i === index) {
-      item.selected = true
-      selectedItem.value = item
-    } else {
-      item.selected = false
-    }
-  })
-  selectedItem.value = marketItems.value[index].maxFee
+  swapSettingsStore.updatePriorityFee(priorityFee.value)
+  modelValue.value = false
 }
 </script>
 
@@ -49,27 +47,28 @@ const selectItem = (index: number) => {
       </p>
       <div class="flex w-full flex-col gap-6">
         <SwapMarketItem
-          v-for="(item, index) in marketItems"
+          v-for="item in swapSettingsStore.defaultPriorityFeeOptions"
           :key="item.name"
           :name="item.name"
           :max-fee="item.maxFee"
           :description="item.description"
-          :selected="item.selected"
-          @click="selectItem(index)"
+          :selected="item.maxFee === priorityFee"
+          @click="swapSettingsStore.updatePriorityFee(item.maxFee)"
         />
       </div>
     </div>
     <AppInput
-      v-model="selectedItem"
+      v-model="priorityFee"
       class="mt-8"
       label="Custom"
       placeholder="Max 2 SOL"
       type="number"
+      :error="vuelidate.priorityFee.$errors"
     />
     <AppButton
       class="mt-8 w-full"
       button-style="primary"
-      @click="modelValue = false"
+      @click="onSaveButtonClick"
     >
       Save Settings
     </AppButton>

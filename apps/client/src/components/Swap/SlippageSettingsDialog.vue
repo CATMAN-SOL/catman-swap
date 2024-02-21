@@ -1,33 +1,36 @@
 <script lang="ts" setup>
+import { useVuelidate } from '@vuelidate/core'
+import { required, numeric, maxValue } from '@vuelidate/validators'
+
 const modelValue = defineModel<boolean>()
 
-const slippageItems = ref([
-  {
-    value: '0.3',
-    selected: false
-  },
-  {
-    value: '0.5',
-    selected: false
-  },
-  {
-    value: '1',
-    selected: false
-  }
-])
-const selectedItem = ref()
+const slippage = ref('')
 
-const selectItem = (index: number) => {
-  slippageItems.value.forEach((item, i) => {
-    if (i === index) {
-      item.selected = true
-      selectedItem.value = item
-    } else {
-      item.selected = false
-    }
-  })
-  selectedItem.value = slippageItems.value[index].value
-  // modelValue.value = false
+const swapSettingsStore = useSwapSettingsStore()
+
+const rules = {
+  slippage: {
+    required, numeric, maxValue: maxValue(50)
+  }
+}
+
+const vuelidate = useVuelidate(rules, computed(() => ({ slippage: slippage.value })))
+
+watch(() => swapSettingsStore.slippage, (newSlippage) => {
+  slippage.value = newSlippage.toString()
+}, {
+  immediate: true
+})
+
+const onSaveButtonClick = () => {
+  vuelidate.value.$touch()
+
+  if (vuelidate.value.$error) {
+    return
+  }
+
+  swapSettingsStore.updateSlippage(slippage.value)
+  modelValue.value = false
 }
 </script>
 
@@ -43,25 +46,26 @@ const selectItem = (index: number) => {
       </p>
       <div class="flex w-full flex-col gap-6">
         <SwapSlippageItem
-          v-for="(item, index) in slippageItems"
+          v-for="item in swapSettingsStore.defaultSlippageOptions"
           :key="item.value"
           :value="item.value"
-          :selected="item.selected"
-          @click="selectItem(index)"
+          :selected="item.value === slippage"
+          @click="slippage = item.value"
         />
       </div>
     </div>
     <AppInput
-      v-model="selectedItem"
+      v-model="slippage"
       class="mt-8"
-      label="Custom"
+      label="Custom (%)"
       placeholder="0%-50%"
       type="number"
+      :error="vuelidate.slippage.$errors"
     />
     <AppButton
       class="mt-8 w-full"
       button-style="primary"
-      @click="modelValue = false"
+      @click="onSaveButtonClick"
     >
       Save Settings
     </AppButton>

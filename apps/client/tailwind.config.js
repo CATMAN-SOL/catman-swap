@@ -22,6 +22,7 @@ export default {
           2: '#A3A5B6',
         },
         'theme-green': '#74D172',
+        'theme-red': '#D17272',
         'theme-dark-gray': {
           1: '#030303',
           2: '#090A0B',

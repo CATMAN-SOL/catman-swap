@@ -15,7 +15,7 @@ const props = defineProps<{
       <div class="flex items-start gap-2">
         <span class="text-theme-white-1 text-[18px] font-semibold leading-[28px] tracking-[1.2px]">{{ props.name }}</span>
         <div
-          class="bg-theme-dark-gray-5 text-theme-white-1 border-theme-dark-gray-4 cursor-default rounded-md border px-[9px] py-[3px] text-xs"
+          class="border-theme-dark-gray-4 bg-theme-dark-gray-5 text-theme-white-1 cursor-default rounded-md border px-[9px] py-[3px] text-xs"
         >
           Max: {{ props.maxFee }} SOL
         </div>
@@ -25,7 +25,7 @@ const props = defineProps<{
     <div>
       <div
         v-if="!props.selected"
-        class="bg-theme-dark-gray-3 border-theme-dark-gray-5 box-border size-4 rounded-full border"
+        class="border-theme-dark-gray-5 bg-theme-dark-gray-3 box-border size-4 rounded-full border"
       />
       <img
         v-if="props.selected"

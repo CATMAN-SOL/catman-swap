@@ -315,6 +315,9 @@
     "tokens": true,
     "API_BASE_URL": true,
     "REQUEST_DELAY": true,
-    "useTokenListStore": true
+    "useTokenListStore": true,
+    "useSwapSettingsStore": true,
+    "useGenericInputGroupError": true,
+    "useErrorDestruct": true
   }
 }

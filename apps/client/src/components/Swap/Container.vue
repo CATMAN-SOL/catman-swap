@@ -12,7 +12,10 @@ const {
   loading: tokensRouteInfoLoading
 } = tokens.useTokensRouteInfo()
 
+const swapSettingsStore = useSwapSettingsStore()
+
 const { publicKey, connected } = useWallet()
+const { inc: refreshSwapData, count: refreshSwapDataKey } = useCounter()
 const displayTokenSelectDialog = ref(false)
 const displayMarketSettingsDialog = ref(false)
 const displaySlippageSettingsDialog = ref(false)
@@ -56,7 +59,7 @@ const tokenTo = ref<Token>({
 const fromAmount = ref('')
 const toAmount = ref('')
 
-throttledWatch([tokenFrom, tokenTo, fromAmount, publicKey, connected], async ([from, to, amount]) => {
+throttledWatch([tokenFrom, tokenTo, fromAmount, publicKey, connected, refreshSwapDataKey], async ([from, to, amount]) => {
   fetchTokenPairInfo({
     from: from.address,
     to: to.address,
@@ -133,7 +136,7 @@ const choice = ref('swap')
           class="flex h-[65px] w-full items-center gap-1.5 rounded-tr-3xl !bg-[#090A0B] pr-6 pt-3"
         >
           <SwapNavButton @click="displayMarketSettingsDialog = true">
-            Market
+            {{ swapSettingsStore.displayedSelectedPriorityFeeName }}
             <img
               class="size-4"
               :src="ArrowDown"
@@ -141,14 +144,14 @@ const choice = ref('swap')
             >
           </SwapNavButton>
           <SwapNavButton @click="displaySlippageSettingsDialog = true">
-            <span class="whitespace-nowrap">0.5% Slippage</span>
+            <span class="whitespace-nowrap">{{ swapSettingsStore.slippage }}% Slippage</span>
             <img
               class="size-4"
               :src="ArrowDown"
               alt=""
             >
           </SwapNavButton>
-          <SwapNavButton>
+          <SwapNavButton @click="refreshSwapData()">
             Refresh
           </SwapNavButton>
           <SwapNavButton @click="displayGeneralSettingsDialog = true">
