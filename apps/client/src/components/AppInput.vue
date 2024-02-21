@@ -6,6 +6,8 @@ const props = withDefaults(
     buttonText?: string,
     label?: string
     type?: string
+    disabled?: boolean
+    loading?: boolean
     buttonDisabled?: boolean
   }>(),
   {
@@ -23,14 +25,26 @@ const modelValue = defineModel<string>()
 
 <template>
   <div class="flex flex-col gap-1">
-    <span class="text-base font-semibold text-[#A3A5B6]">{{ props.label }}</span>
+    <div class="flex flex-row items-center gap-1 text-base font-semibold text-[#A3A5B6]">
+      {{ props.label }} <LoadingIcon
+        v-if="props.loading"
+        class="scale-75"
+        dot-class="bg-theme-white-2 scale-50"
+      />
+    </div>
     <div class="grid grid-cols-[1fr_auto] items-center gap-0">
       <input
         v-model="modelValue"
         :placeholder="props.placeholder"
-        :class="[props.button ? '' : 'rounded-r-2xl']"
+        :class="
+          {
+            'rounded-r-2xl': !props.button,
+            'pointer-events-none hover:cursor-not-allowed': props.disabled
+          }
+        "
         :type="props.type"
         class="box-border w-full rounded-l-2xl border border-transparent bg-[#21262C] p-5 text-base tracking-[1px] text-[#E2E4E9] outline-none transition-all placeholder:text-[A3A5B6] hover:bg-[#2D353F] focus:border-[#74D172] focus:placeholder:text-[#E2E4E9]"
+        :disabled="props.disabled"
       >
       <button
         v-if="props.button"

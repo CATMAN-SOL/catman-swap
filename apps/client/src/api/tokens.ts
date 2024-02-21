@@ -14,6 +14,28 @@ export const tokens = {
     url: '/api/v1/tokens',
     queryBuilder: (input) => input,
   }),
+  useTokensRouteInfo: defineDataEndpoint<
+    {
+      from: string
+      to: string
+      amount: number
+      slippage: number
+    },
+    {
+      inAmount: number
+      outAmount: number
+      quote: any
+    }
+  >({
+    method: 'GET',
+    url: '/api/v1/swap/route',
+    queryBuilder: ({ amount, from, slippage, to }) => ({
+      inputMint: from,
+      outputMint: to,
+      slippage,
+      amount: amount ?? 0,
+    }),
+  }),
   useTokensPairInfo: defineDataEndpoint<
     {
       from: string

@@ -6,8 +6,13 @@ import MiddleShape from '../../assets/icons/swap/middle-shape.svg'
 import { Token } from '@/models/token.model'
 
 const { fetch: fetchTokenPairInfo, result: tokenPairInfo } = tokens.useTokensPairInfo()
+const {
+  fetch: fetchTokensRouteInfo,
+  result: tokensRouteInfo,
+  loading: tokensRouteInfoLoading
+} = tokens.useTokensRouteInfo()
 
-const { publicKey } = useWallet()
+const { publicKey, connected } = useWallet()
 const displayTokenSelectDialog = ref(false)
 const displayMarketSettingsDialog = ref(false)
 const displaySlippageSettingsDialog = ref(false)
@@ -15,85 +20,68 @@ const displayGeneralSettingsDialog = ref(false)
 const currentSelectingToken = ref<'from' | 'to'>()
 
 const tokenFrom = ref<Token>({
-    address: 'So11111111111111111111111111111111111111112',
-    chainId: 101,
-    decimals: 9,
-    name: 'Wrapped SOL',
-    symbol: 'SOL',
-    logoUrl: 'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png',
-    tags: [
-      'old-registry'
-    ],
-    extensions: {
-      coingeckoId: 'wrapped-solana'
-    },
-    removed: false,
-    createdAt: '2024-02-17T20:09:03.453Z'
+  address: 'So11111111111111111111111111111111111111112',
+  chainId: 101,
+  decimals: 9,
+  name: 'Wrapped SOL',
+  symbol: 'SOL',
+  logoUrl: 'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png',
+  tags: [
+    'old-registry'
+  ],
+  extensions: {
+    coingeckoId: 'wrapped-solana'
+  },
+  removed: false,
+  createdAt: '2024-02-17T20:09:03.453Z'
 })
 
 const tokenTo = ref<Token>({
-    address: 'EavJDLh8cYTAnt3QDitpKGMsPL2hq1My5g9R2P6at6Lc',
-    chainId: 101,
-    decimals: 9,
-    name: 'CATMAN',
-    symbol: 'CATMAN',
-    logoUrl: null,
-    tags: [
-      'unknown'
-    ],
-    extensions: {
-      coingeckoId: 'catman'
-    },
-    removed: false,
-    createdAt: '2024-02-17T20:09:03.453Z'
+  address: 'EavJDLh8cYTAnt3QDitpKGMsPL2hq1My5g9R2P6at6Lc',
+  chainId: 101,
+  decimals: 9,
+  name: 'CATMAN',
+  symbol: 'CATMAN',
+  logoUrl: null,
+  tags: [
+    'unknown'
+  ],
+  extensions: {
+    coingeckoId: 'catman'
+  },
+  removed: false,
+  createdAt: '2024-02-17T20:09:03.453Z'
 })
 
 const fromAmount = ref('')
 const toAmount = ref('')
 
-syncRef(fromAmount, toAmount, {
-  transform: {
-    ltr: (value) => {
-      return convertFromAmount(value)
-    },
-    rtl: (value) => {
-      return convertToAmount(value)
-    }
-  }
-})
-
-const convertFromAmount = (value: string) => {
-  const parsedValue = parseFloat(value)
-
-  if (!tokenPairInfo.value) {
-    return ''
-  }
-
-  return (parsedValue / (tokenPairInfo.value.price ?? 0)).toString()
-}
-
-const convertToAmount = (value: string) => {
-  const parsedValue = parseFloat(value)
-
-  if (!tokenPairInfo.value) {
-    return ''
-  }
-
-  return (parsedValue / (tokenPairInfo.value.price ?? 0)).toString()
-}
-
-watch(tokenPairInfo, () => {
-  toAmount.value = convertFromAmount(fromAmount.value)
-})
-
-watch([tokenFrom, tokenTo], ([from, to]) => {
+throttledWatch([tokenFrom, tokenTo, fromAmount, publicKey, connected], async ([from, to, amount]) => {
   fetchTokenPairInfo({
     from: from.address,
     to: to.address,
-    publicKey: publicKey.value?.toString()
+    publicKey: publicKey.value?.toBase58()
   })
+
+  const parsedAmount = parseFloat(amount)
+
+  if (Number.isNaN(parsedAmount) || parsedAmount === 0) {
+    toAmount.value = ''
+    return
+  }
+
+  const response = await fetchTokensRouteInfo({
+    from: from.address,
+    to: to.address,
+    amount: parseFloat(amount),
+    slippage: 0.05
+  })
+
+  toAmount.value = response.outAmount.toString()
 }, {
-  immediate: true
+  immediate: true,
+  trailing: true,
+  throttle: 500
 })
 
 const onTokenSelect = (token: Token) => {
@@ -113,6 +101,7 @@ const onToCurrencySelectClick = () => {
   currentSelectingToken.value = 'to'
   displayTokenSelectDialog.value = true
 }
+
 const onRotateButtonClick = () => {
   const temp = tokenFrom.value
   tokenFrom.value = tokenTo.value
@@ -227,9 +216,11 @@ const choice = ref('swap')
             @click="onToCurrencySelectClick"
           />
           <AppInput
-            v-model="toAmount"
+            :model-value="toAmount"
+            :loading="(fromAmount.length > 0 && tokensRouteInfo?.inAmount !== parseFloat(fromAmount)) || tokensRouteInfoLoading"
             label="Amount"
-            placeholder="Enter amount here"
+            placeholder="The output amount will be displayed here"
+            :disabled="true"
             :button="true"
             button-text="MAX"
             type="number"
@@ -239,7 +230,13 @@ const choice = ref('swap')
       <SwapSummary
         v-if="choice === 'swap'"
         :current-token="tokenFrom"
+        :out-token="tokenTo"
         :price="tokenPairInfo?.price ?? 0"
+        :in-amount-raw="parseFloat(fromAmount)"
+        :loading="(fromAmount.length > 0 && tokensRouteInfo?.inAmount !== parseFloat(fromAmount)) || tokensRouteInfoLoading"
+        :in-amount="tokensRouteInfo?.inAmount ?? 0"
+        :out-amount="tokensRouteInfo?.outAmount ?? 0"
+        :zeroes="Number.isNaN(parseFloat(fromAmount))"
         class="mt-[18px]"
       />
       <SwapDcaSettings
