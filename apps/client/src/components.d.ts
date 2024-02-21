@@ -15,6 +15,8 @@ declare module 'vue' {
     AppInput: typeof import('./components/AppInput.vue')['default']
     AppLogo: typeof import('./components/AppLogo.vue')['default']
     AppSwitch: typeof import('./components/AppSwitch.vue')['default']
+    ChoiceDca: typeof import('./components/Choice/Dca.vue')['default']
+    ChoiceSwap: typeof import('./components/Choice/Swap.vue')['default']
     HeaderNavigationItem: typeof import('./components/Header/NavigationItem.vue')['default']
     HexagonButtonBase: typeof import('./components/HexagonButton/Base.vue')['default']
     HexagonButtonClose: typeof import('./components/HexagonButton/Close.vue')['default']

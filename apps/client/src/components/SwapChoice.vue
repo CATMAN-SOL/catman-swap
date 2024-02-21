@@ -1,13 +1,21 @@
 <script lang="ts" setup>
-import StateIndicatorTop from '../assets/state-indicator-top.svg'
-import StateIndicatorBottom from '../assets/state-indicator-bottom.svg'
+// import StateIndicatorTop from '../assets/state-indicator-top.svg'
+// import StateIndicatorBottom from '../assets/state-indicator-bottom.svg'
 
 const active = ref('swap')
 </script>
 
 <template>
   <div class="flex w-full flex-col gap-6 ">
-    <div
+    <ChoiceSwap
+      :active="active === 'swap'"
+      @activate-swap="active = 'swap'"
+    />
+    <ChoiceDca
+      :active="active === 'dca'"
+      @activate-dca="active = 'dca'"
+    />
+    <!-- <div
       :class="{'group': active !== 'swap'}"
       class="relative flex cursor-pointer items-center gap-0 transition-all duration-300"
       @click="active = 'swap'"
@@ -77,7 +85,7 @@ const active = ref('swap')
       <div class="flex size-full items-start rounded-r-3xl bg-[#21262C] px-[18px] py-12 group-hover:bg-[#090A0B]">
         <span class="text-start text-lg font-semibold text-[#D7DAE1]">Effortless Crypto Accumulation Strategy</span>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
