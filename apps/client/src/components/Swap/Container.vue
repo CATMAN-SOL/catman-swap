@@ -24,6 +24,7 @@ const displayTokenSelectDialog = ref(false)
 const displayMarketSettingsDialog = ref(false)
 const displaySlippageSettingsDialog = ref(false)
 const displayGeneralSettingsDialog = ref(false)
+const displaySwapConfirmDialog = ref(false)
 const currentSelectingToken = ref<'from' | 'to'>()
 
 const tokenFrom = ref<Token>({
@@ -100,6 +101,8 @@ throttledWatch([tokenFrom, tokenTo, fromAmount, publicKey, connected, refreshSwa
     onlyDirectRoute: swapSettingsStore.additionalOptions.directRouteOnly
   })
 
+  if (!response) return
+
   if ('error' in response) {
     toAmount.value = ''
     toAmountError.value = 'No swap route found'
@@ -163,7 +166,9 @@ const onSwapButtonClick = () => {
     return
   }
 
-  alert('LETS SWAP')
+  refreshSwapDataKey.value++
+
+  displaySwapConfirmDialog.value = true
 }
 </script>
 
@@ -172,6 +177,18 @@ const onSwapButtonClick = () => {
     <SwapTokenSelectDialog
       v-model="displayTokenSelectDialog"
       @select="onTokenSelect"
+    />
+    <SwapConfirmDialog
+      v-model="displaySwapConfirmDialog"
+      :current-token="tokenFrom"
+      :out-token="tokenTo"
+      :price="tokenPairInfo?.price ?? 0"
+      :in-amount-raw="parseFloat(fromAmount)"
+      :loading="(fromAmount.length > 0 && tokensRouteInfo && 'inAmount' in tokensRouteInfo && tokensRouteInfo?.inAmount !== parseFloat(fromAmount)) || tokensRouteInfoLoading"
+      :in-amount="tokensRouteInfo && 'inAmount' in tokensRouteInfo && tokensRouteInfo?.inAmount ? tokensRouteInfo.inAmount : 0"
+      :out-amount="tokensRouteInfo && 'outAmount' in tokensRouteInfo && tokensRouteInfo?.outAmount ? tokensRouteInfo.outAmount : 0"
+      :zeroes="Number.isNaN(parseFloat(fromAmount))"
+      class="mt-[18px]"
     />
     <div class="flex items-end gap-0">
       <div

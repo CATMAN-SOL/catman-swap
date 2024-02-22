@@ -32,6 +32,7 @@ declare module 'vue' {
     SwapButton: typeof import('./components/Swap/Button.vue')['default']
     SwapCard: typeof import('./components/Swap/Card.vue')['default']
     SwapChoice: typeof import('./components/SwapChoice.vue')['default']
+    SwapConfirmDialog: typeof import('./components/Swap/ConfirmDialog.vue')['default']
     SwapContainer: typeof import('./components/Swap/Container.vue')['default']
     SwapCurrencySelect: typeof import('./components/Swap/CurrencySelect.vue')['default']
     SwapDcaPriceRange: typeof import('./components/Swap/DcaPriceRange.vue')['default']
