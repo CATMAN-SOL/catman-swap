@@ -16,6 +16,7 @@ export type CreateSwapTxOptions = {
   quote: SwapQuote
   publicKey: string
   wrapAndUnwrapSol: boolean
+  prioritizationFee?: number
 }
 
 export type GetSwapRouteOptions = {
@@ -23,6 +24,7 @@ export type GetSwapRouteOptions = {
   outputMint: string
   amount: number
   slippage: number
+  onlyDirectRoute: boolean
 }
 
 export type ExecuteSwapTxOptions = {
@@ -51,6 +53,7 @@ export const getSwapRoute = async (options: GetSwapRouteOptions) => {
     amount: amount.toString(),
     slippageBps: Math.round(options.slippage * 100),
     platformFeeBps: 80,
+    onlyDirectRoutes: options.onlyDirectRoute,
   })
 
   const parsedInAmount = stringIntegerToFloat(
@@ -76,6 +79,9 @@ export const createSwapTx = async (options: CreateSwapTxOptions) => {
     userPublicKey: options.publicKey,
     wrapAndUnwrapSol: options.wrapAndUnwrapSol,
     feeAccount: config.FEE_ACCOUNT,
+    prioritizationFeeLamports: options.prioritizationFee
+      ? options.prioritizationFee * 10 ** 9
+      : 'auto',
   })
 
   await saveCreateSwapTransactionRequest(options)

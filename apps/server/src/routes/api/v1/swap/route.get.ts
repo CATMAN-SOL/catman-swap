@@ -8,6 +8,10 @@ export default createRoute({
     outputMint: z.string(),
     amount: z.coerce.number(),
     slippage: z.coerce.number(),
+    onlyDirectRoute: z
+      .string()
+      .default('false')
+      .transform((val) => val === 'true'),
   }),
   handler: async ({ query }) => {
     return await getSwapRoute(query)

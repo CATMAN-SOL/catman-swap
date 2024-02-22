@@ -10,7 +10,10 @@ export default createRoute({
     from: z.string(),
     to: z.string(),
     publicKey: z.string().optional(),
-    useWrappedSol: z.boolean().default(false),
+    useWrappedSol: z
+      .string()
+      .default('false')
+      .transform((val) => val === 'true'),
   }),
   handler: async ({ query }) => {
     const queryUrl = new URL('https://price.jup.ag/v4/price')

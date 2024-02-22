@@ -20,6 +20,7 @@ export type CreateSerializedTransactionOptions = {
   userPublicKey: string
   wrapAndUnwrapSol: boolean
   feeAccount?: string
+  prioritizationFeeLamports?: number | 'auto'
 }
 
 type CreateSerializedTransactionResponse = {

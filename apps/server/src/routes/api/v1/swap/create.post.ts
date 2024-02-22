@@ -7,13 +7,18 @@ export default createRoute({
   body: z.object({
     quote: z.any().refine((val) => typeof val === 'object'),
     publicKey: z.string(),
-    wrapAndUnwrapSol: z.boolean().default(true),
+    useWrappedSol: z
+      .string()
+      .default('false')
+      .transform((val) => val === 'true'),
+    prioritizationFee: z.coerce.number().optional(),
   }),
   handler: async ({ body }) => {
     const tx = await createSwapTx({
       quote: body.quote as SwapQuote,
       publicKey: body.publicKey,
-      wrapAndUnwrapSol: body.wrapAndUnwrapSol,
+      wrapAndUnwrapSol: body.useWrappedSol,
+      prioritizationFee: body.prioritizationFee,
     })
 
     return {
