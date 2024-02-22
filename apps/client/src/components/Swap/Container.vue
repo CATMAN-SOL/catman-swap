@@ -315,6 +315,7 @@ const onSwapButtonClick = () => {
       />
       <WalletConnectButton
         v-else
+        class="mt-[18px]"
         :loading="connecting"
         @click="walletConnectStore.displayConnectDialog = true"
       />
