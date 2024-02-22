@@ -1,3 +1,11 @@
+import clone from 'lodash/clone'
+
+export type AdditionalOptions = {
+  directRouteOnly: boolean
+  useWrappedSol: boolean
+  versionedTransaction: boolean
+}
+
 export const useSwapSettingsStore = defineStore('swap-settings', () => {
   const defaultPriorityFeeOptions = ref([
     {
@@ -29,6 +37,12 @@ export const useSwapSettingsStore = defineStore('swap-settings', () => {
     },
   ])
 
+  const additionalOptions = ref<AdditionalOptions>({
+    directRouteOnly: false,
+    useWrappedSol: false,
+    versionedTransaction: true,
+  })
+
   const priorityFee = ref(0.0001)
   const slippage = ref(0.3)
 
@@ -53,6 +67,10 @@ export const useSwapSettingsStore = defineStore('swap-settings', () => {
     slippage.value = parsedValue
   }
 
+  const updateAdditionalOptions = (options: AdditionalOptions) => {
+    additionalOptions.value = clone(options)
+  }
+
   return {
     priorityFee,
     updatePriorityFee,
@@ -62,5 +80,8 @@ export const useSwapSettingsStore = defineStore('swap-settings', () => {
     slippage,
     updateSlippage,
     defaultSlippageOptions,
+
+    additionalOptions,
+    updateAdditionalOptions,
   }
 })

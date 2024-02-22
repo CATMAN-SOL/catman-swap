@@ -11,7 +11,9 @@ const props = defineProps<{
 }>()
 
 const onAdditionalTextClick = (ev: Event) => {
-  if (props.additionalTextHref) ev.stopPropagation()
+  if (props.additionalTextHref) {
+    ev.stopPropagation()
+  }
 }
 </script>
 
