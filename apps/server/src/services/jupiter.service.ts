@@ -1,4 +1,4 @@
-import { SwapQuote } from '~models/swap-quote.model'
+import { SwapQuote, SwapQuoteError } from '~models/swap-quote.model'
 
 const JUPITER_QUOTE_API_BASE_URL = 'https://quote-api.jup.ag'
 
@@ -60,7 +60,7 @@ export const fetchSwapRouteQuote = async (options: FetchSwapRouteOptions) => {
   const response = await fetch(url)
   const responseBody = await response.json()
 
-  return responseBody as SwapQuote
+  return responseBody as SwapQuote | SwapQuoteError
 }
 
 // Is required as URLSearchParams constructor can only accept Record<string,string>

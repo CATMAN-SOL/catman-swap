@@ -56,6 +56,12 @@ export const getSwapRoute = async (options: GetSwapRouteOptions) => {
     onlyDirectRoutes: options.onlyDirectRoute,
   })
 
+  if ('error' in quote) {
+    return {
+      error: 'No routes found',
+    }
+  }
+
   const parsedInAmount = stringIntegerToFloat(
     quote.inAmount,
     inputMintToken.decimals

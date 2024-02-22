@@ -15,6 +15,10 @@ export interface SwapQuote {
   timeTaken: number
 }
 
+export interface SwapQuoteError {
+  error: string
+}
+
 export interface PlatformFee {
   amount: string
   feeBps: number
