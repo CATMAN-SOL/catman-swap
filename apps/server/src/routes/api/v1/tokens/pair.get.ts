@@ -10,6 +10,7 @@ export default createRoute({
     from: z.string(),
     to: z.string(),
     publicKey: z.string().optional(),
+    useWrappedSol: z.boolean().default(false),
   }),
   handler: async ({ query }) => {
     const queryUrl = new URL('https://price.jup.ag/v4/price')
@@ -34,7 +35,18 @@ export default createRoute({
 
     let fromBalance: null | number = null
 
-    if (query.publicKey && query.from !== SOL_WRAP_ADDRESS) {
+    if (!query.publicKey) {
+      return {
+        price: tokenFromPrice,
+        fromBalance: null,
+      }
+    }
+
+    if (query.from === SOL_WRAP_ADDRESS && !query.useWrappedSol) {
+      const account = new PublicKey(query.publicKey)
+      const info = await rpcConnection.getBalance(account)
+      fromBalance = info / 10 ** 9
+    } else {
       const account = new PublicKey(query.publicKey)
       const info = await rpcConnection.getTokenAccountsByOwner(account, {
         mint: new PublicKey(query.from),
@@ -46,12 +58,6 @@ export default createRoute({
           await rpcConnection.getTokenAccountBalance(accountPubKey)
         fromBalance = balanceResult.value.uiAmount
       }
-    }
-
-    if (query.publicKey && query.from === SOL_WRAP_ADDRESS) {
-      const account = new PublicKey(query.publicKey)
-      const info = await rpcConnection.getBalance(account)
-      fromBalance = info / 10 ** 9
     }
 
     return {
