@@ -5,6 +5,9 @@ import ArrowDown from '../../assets/icons/swap/arrow-down.svg'
 import MiddleShape from '../../assets/icons/swap/middle-shape.svg'
 import { Token } from '@/models/token.model'
 
+import { useVuelidate } from '@vuelidate/core'
+import { required, numeric, maxValue, helpers } from '@vuelidate/validators'
+
 const { fetch: fetchTokenPairInfo, result: tokenPairInfo } = tokens.useTokensPairInfo()
 const {
   fetch: fetchTokensRouteInfo,
@@ -13,8 +16,9 @@ const {
 } = tokens.useTokensRouteInfo()
 
 const swapSettingsStore = useSwapSettingsStore()
+const walletConnectStore = useWalletConnectStore()
 
-const { publicKey, connected } = useWallet()
+const { publicKey, connected, connecting } = useWallet()
 const { inc: refreshSwapData, count: refreshSwapDataKey } = useCounter()
 const displayTokenSelectDialog = ref(false)
 const displayMarketSettingsDialog = ref(false)
@@ -59,6 +63,19 @@ const tokenTo = ref<Token>({
 const fromAmount = ref('')
 const toAmount = ref('')
 const toAmountError = ref('')
+
+const rules = computed(() => ({
+  fromAmount: {
+    required,
+    numeric,
+    maxValue: helpers.withMessage(
+      'Insufficient balance',
+      maxValue(tokenPairInfo.value?.fromBalance ?? 0)
+    ),
+  }
+}))
+
+const amountVuelidate = useVuelidate(rules, computed(() => ({ fromAmount: fromAmount.value })))
 
 throttledWatch([tokenFrom, tokenTo, fromAmount, publicKey, connected, refreshSwapDataKey, () => swapSettingsStore.slippage, () => swapSettingsStore.additionalOptions], async ([from, to, amount]) => {
   fetchTokenPairInfo({
@@ -121,6 +138,10 @@ const onRotateButtonClick = () => {
   tokenTo.value = temp
 }
 
+const onMaxButtonClick = () => {
+  fromAmount.value = (tokenPairInfo.value?.fromBalance ?? 0).toString()
+}
+
 const choice = ref('swap')
 
 const balanceTokenSymbol = computed(() => {
@@ -134,6 +155,16 @@ const balanceTokenSymbol = computed(() => {
 
   return 'SOL'
 })
+
+const onSwapButtonClick = () => {
+  amountVuelidate.value.$touch()
+
+  if (amountVuelidate.value.$error) {
+    return
+  }
+
+  alert('LETS SWAP')
+}
 </script>
 
 <template>
@@ -200,6 +231,8 @@ const balanceTokenSymbol = computed(() => {
             :button="true"
             button-text="MAX"
             type="number"
+            :error="amountVuelidate.fromAmount.$errors"
+            @button-click="onMaxButtonClick"
           />
         </div>
         <div class="flex items-center gap-0">
@@ -250,6 +283,7 @@ const balanceTokenSymbol = computed(() => {
             button-text="MAX"
             type="number"
             :error="toAmountError"
+            @button-click="onMaxButtonClick"
           />
         </div>
       </div>
@@ -274,8 +308,15 @@ const balanceTokenSymbol = computed(() => {
         class="mt-[18px]"
       />
       <SwapButton
+        v-if="connected"
         :loading="false"
         class="mt-[18px]"
+        @click="onSwapButtonClick"
+      />
+      <WalletConnectButton
+        v-else
+        :loading="connecting"
+        @click="walletConnectStore.displayConnectDialog = true"
       />
     </div>
   </div>

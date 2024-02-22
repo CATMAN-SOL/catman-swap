@@ -1,17 +1,14 @@
 <script lang="ts" setup>
-const displayWalletConnectDialog = ref(false)
 const displayWalletDisconnectDialog = ref(false)
 
-const { connected, connecting } = useWallet()
+const walletConnectStore = useWalletConnectStore()
 
-const connectWallet = () => {
-  displayWalletConnectDialog.value = true
-}
+const { connected, connecting } = useWallet()
 </script>
 
 <template>
   <div class="container">
-    <WalletConnectDialog v-model="displayWalletConnectDialog" />
+    <WalletConnectDialog v-model="walletConnectStore.displayConnectDialog" />
     <WalletDisconnectDialog v-model="displayWalletDisconnectDialog" />
     <div class="grid grid-cols-2 gap-20 pt-16">
       <div class="flex flex-col items-stretch gap-8">
@@ -22,10 +19,10 @@ const connectWallet = () => {
           for<br> seamless transactions!</span>
         <WalletConnectButton
           v-if="!connected"
-          :loading="displayWalletConnectDialog || connecting"
+          :loading="walletConnectStore.displayConnectDialog || connecting"
           :connected="true"
           class="max-w-[300px]"
-          @click="connectWallet"
+          @click="walletConnectStore.displayConnectDialog = true"
         />
         <WalletAddressButton
           v-else

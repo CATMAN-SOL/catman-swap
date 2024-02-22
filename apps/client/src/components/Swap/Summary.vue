@@ -27,7 +27,7 @@ const props = defineProps<{
     </div>
     <div class="flex items-center justify-between text-[18px] font-semibold tracking-[1.2px]">
       <span class="text-[#A3A5B6]">Price</span>
-      <span class="text-[#E2E4E9]">{{ props.price }} {{ props.currentToken.symbol }}</span>
+      <span class="text-[#E2E4E9]">{{ props.inAmount }} {{ props.currentToken.symbol }}</span>
     </div>
     <div class="flex items-center justify-between text-[18px] font-semibold tracking-[1.2px]">
       <span class="text-[#A3A5B6]">You will recieve:</span><span class="text-[#E2E4E9]">
@@ -39,7 +39,7 @@ const props = defineProps<{
         Fee:
       </span>
       <span class="text-[#E1D33E]">
-        {{ props.zeroes ? 0 : (props.inAmount - (props.outAmount * props.price)).toFixed(4) }} {{ props.currentToken.symbol }}
+        {{ props.zeroes ? 0 : (props.inAmount * 0.01) }} {{ props.currentToken.symbol }}
       </span>
     </div>
   </SwapCard>
