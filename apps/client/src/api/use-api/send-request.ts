@@ -9,7 +9,7 @@ const asyncTimeout = (milis: number) => {
 
 export const sendRequest = async <TOutput, TInput = any>(
   config: AxiosRequestConfig<TInput>
-): Promise<AxiosResponse<TOutput, TInput>> => {
+): Promise<AxiosResponse<TOutput, TInput> | 'cancelled'> => {
   const requestConfig: AxiosRequestConfig<TInput> = {
     baseURL: API_BASE_URL,
     ...config,
@@ -23,6 +23,10 @@ export const sendRequest = async <TOutput, TInput = any>(
     // eslint-disable-next-line @typescript-eslint/return-await
     return await axios.request<TOutput>(requestConfig)
   } catch (e) {
+    if (axios.isCancel(e)) {
+      return 'cancelled'
+    }
+
     const axiosError = e as AxiosError<TOutput, TInput>
 
     if (axiosError.response) return axiosError.response

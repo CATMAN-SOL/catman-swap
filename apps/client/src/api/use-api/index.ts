@@ -21,11 +21,15 @@ export const defineDataEndpoint =
     const loading = ref<boolean>(false)
     const result = ref<TResult>()
     const status = ref<number>()
-    const controller = new AbortController()
     const fetchedOnce = ref<boolean>(false)
 
+    let controller: AbortController | undefined
+
     const fetch = async (inputData: TInputData) => {
-      if (loading.value === true) controller.abort()
+      if (controller && loading.value === true) {
+        controller.abort()
+      }
+      controller = new AbortController()
 
       loading.value = true
 
@@ -47,10 +51,14 @@ export const defineDataEndpoint =
       const response = await sendRequestFunc<ErrorOr<TResult>>({
         method: parameters.method,
         url,
-        // signal: controller.signal,
+        signal: controller.signal,
         data,
         params: query,
       })
+
+      if (response === 'cancelled') {
+        return result.value
+      }
 
       const responseData = response.data
 
@@ -96,11 +104,8 @@ export const defineActionEndpoint =
     const error = ref<ResponseError | null>(null)
     const loading = ref<boolean>(false)
     const status = ref<number>()
-    const controller = new AbortController()
 
     const fetch = async (inputData: TInputData) => {
-      if (loading.value === true) controller.abort()
-
       loading.value = true
 
       const url =
@@ -121,10 +126,14 @@ export const defineActionEndpoint =
       const response = await sendRequestFunc<ErrorOr<TResult>>({
         method: parameters.method,
         url,
-        signal: controller.signal,
         data,
         params: query,
       })
+
+      if (response === 'cancelled') {
+        return 'cancelled'
+      }
+
       const responseData = response.data
 
       if (isError(responseData)) {
