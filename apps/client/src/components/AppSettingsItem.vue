@@ -19,8 +19,8 @@ const onAdditionalTextClick = (ev: Event) => {
 
 <template>
   <div
-    :class="{ 'border-primary': props.selected }"
-    class="bg-theme-dark-gray-3 hover:bg-theme-dark-gray-4 group box-border flex w-full cursor-pointer items-center justify-between rounded-xl border-2 border-solid border-transparent p-[18px] transition-all"
+    :class="{ 'border-primary': props.selected, 'border-transparent': !props.selected }"
+    class="bg-theme-dark-gray-3 hover:bg-theme-dark-gray-4 group box-border flex w-full cursor-pointer items-center justify-between rounded-xl border-2 border-solid p-[18px] transition-all"
   >
     <div class="flex flex-col">
       <div class="flex items-start gap-2">
