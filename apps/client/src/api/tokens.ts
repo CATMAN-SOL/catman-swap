@@ -20,20 +20,25 @@ export const tokens = {
       to: string
       amount: number
       slippage: number
+      onlyDirectRoute?: boolean
     },
-    {
-      inAmount: number
-      outAmount: number
-      quote: any
-    }
+    | {
+        inAmount: number
+        outAmount: number
+        quote: any
+      }
+    | {
+        error: string
+      }
   >({
     method: 'GET',
     url: '/api/v1/swap/route',
-    queryBuilder: ({ amount, from, slippage, to }) => ({
+    queryBuilder: ({ amount, from, slippage, to, onlyDirectRoute }) => ({
       inputMint: from,
       outputMint: to,
       slippage,
       amount: amount ?? 0,
+      onlyDirectRoute,
     }),
   }),
   useTokensPairInfo: defineDataEndpoint<
@@ -41,6 +46,7 @@ export const tokens = {
       from: string
       to: string
       publicKey?: string
+      useWrappedSol?: boolean
     },
     { price: number; fromBalance?: number }
   >({

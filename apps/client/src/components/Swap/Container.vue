@@ -58,12 +58,14 @@ const tokenTo = ref<Token>({
 
 const fromAmount = ref('')
 const toAmount = ref('')
+const toAmountError = ref('')
 
-throttledWatch([tokenFrom, tokenTo, fromAmount, publicKey, connected, refreshSwapDataKey], async ([from, to, amount]) => {
+throttledWatch([tokenFrom, tokenTo, fromAmount, publicKey, connected, refreshSwapDataKey, () => swapSettingsStore.slippage, () => swapSettingsStore.additionalOptions], async ([from, to, amount]) => {
   fetchTokenPairInfo({
     from: from.address,
     to: to.address,
-    publicKey: publicKey.value?.toBase58()
+    publicKey: publicKey.value?.toBase58(),
+    useWrappedSol: swapSettingsStore.additionalOptions.useWrappedSol
   })
 
   const parsedAmount = parseFloat(amount)
@@ -77,13 +79,21 @@ throttledWatch([tokenFrom, tokenTo, fromAmount, publicKey, connected, refreshSwa
     from: from.address,
     to: to.address,
     amount: parseFloat(amount),
-    slippage: 0.05
+    slippage: 0.05,
+    onlyDirectRoute: swapSettingsStore.additionalOptions.directRouteOnly
   })
 
-  toAmount.value = response.outAmount.toString()
+  if ('error' in response) {
+    toAmount.value = ''
+    toAmountError.value = 'No swap route found'
+  } else {
+    toAmount.value = response.outAmount.toString()
+    toAmountError.value = ''
+  }
 }, {
   immediate: true,
   trailing: true,
+  deep: true,
   throttle: 500
 })
 
@@ -112,6 +122,18 @@ const onRotateButtonClick = () => {
 }
 
 const choice = ref('swap')
+
+const balanceTokenSymbol = computed(() => {
+  if (tokenFrom.value.address !== 'So11111111111111111111111111111111111111112') {
+    return tokenFrom.value.symbol
+  }
+
+  if (swapSettingsStore.additionalOptions.useWrappedSol) {
+    return 'wSOL'
+  }
+
+  return 'SOL'
+})
 </script>
 
 <template>
@@ -190,7 +212,7 @@ const choice = ref('swap')
             <span
               v-if="publicKey && tokenPairInfo"
               class="text-base text-[#A3A5B6]"
-            >Balance: <strong class="text-[#E1D33E]">{{ tokenPairInfo.fromBalance ?? 0 }} {{ tokenFrom.symbol }}</strong></span>
+            >Balance: <strong class="text-[#E1D33E]">{{ tokenPairInfo.fromBalance ?? 0 }} {{ balanceTokenSymbol }}</strong></span>
           </div>
         </div>
       </div>
@@ -220,13 +242,14 @@ const choice = ref('swap')
           />
           <AppInput
             :model-value="toAmount"
-            :loading="(fromAmount.length > 0 && tokensRouteInfo?.inAmount !== parseFloat(fromAmount)) || tokensRouteInfoLoading"
+            :loading="(fromAmount.length > 0 && tokensRouteInfo && 'inAmount' in tokensRouteInfo && tokensRouteInfo?.inAmount !== parseFloat(fromAmount)) || tokensRouteInfoLoading"
             label="Amount"
             placeholder="The output amount will be displayed here"
             :disabled="true"
             :button="true"
             button-text="MAX"
             type="number"
+            :error="toAmountError"
           />
         </div>
       </div>
@@ -236,9 +259,9 @@ const choice = ref('swap')
         :out-token="tokenTo"
         :price="tokenPairInfo?.price ?? 0"
         :in-amount-raw="parseFloat(fromAmount)"
-        :loading="(fromAmount.length > 0 && tokensRouteInfo?.inAmount !== parseFloat(fromAmount)) || tokensRouteInfoLoading"
-        :in-amount="tokensRouteInfo?.inAmount ?? 0"
-        :out-amount="tokensRouteInfo?.outAmount ?? 0"
+        :loading="(fromAmount.length > 0 && tokensRouteInfo && 'inAmount' in tokensRouteInfo && tokensRouteInfo?.inAmount !== parseFloat(fromAmount)) || tokensRouteInfoLoading"
+        :in-amount="tokensRouteInfo && 'inAmount' in tokensRouteInfo && tokensRouteInfo?.inAmount ? tokensRouteInfo.inAmount : 0"
+        :out-amount="tokensRouteInfo && 'outAmount' in tokensRouteInfo && tokensRouteInfo?.outAmount ? tokensRouteInfo.outAmount : 0"
         :zeroes="Number.isNaN(parseFloat(fromAmount))"
         class="mt-[18px]"
       />
