@@ -17,6 +17,7 @@ const {
 
 const swapSettingsStore = useSwapSettingsStore()
 const walletConnectStore = useWalletConnectStore()
+const selectorStore = useSwapSelectorStore()
 
 const { publicKey, connected, connecting } = useWallet()
 const { inc: refreshSwapData, count: refreshSwapDataKey } = useCounter()
@@ -26,6 +27,8 @@ const displaySlippageSettingsDialog = ref(false)
 const displayGeneralSettingsDialog = ref(false)
 const displaySwapConfirmDialog = ref(false)
 const currentSelectingToken = ref<'from' | 'to'>()
+
+const enablePricingStrategy = ref(false)
 
 const tokenFrom = ref<Token>({
   address: 'So11111111111111111111111111111111111111112',
@@ -145,8 +148,6 @@ const onMaxButtonClick = () => {
   fromAmount.value = (tokenPairInfo.value?.fromBalance ?? 0).toString()
 }
 
-const choice = ref('swap')
-
 const balanceTokenSymbol = computed(() => {
   if (tokenFrom.value.address !== 'So11111111111111111111111111111111111111112') {
     return tokenFrom.value.symbol
@@ -194,7 +195,7 @@ const onSwapButtonClick = () => {
       <div
         class="!-z-10 flex h-12 w-[340px] items-center justify-center rounded-tl-3xl bg-[#E1D33E] px-[53px] text-xl font-bold text-[#030303]"
       >
-        Swap
+        {{ selectorStore.active === 'swap' ? 'Swap' : 'DCA' }}
       </div>
       <div class="relative ml-[-7%] flex w-full items-end gap-0">
         <img
@@ -202,34 +203,42 @@ const onSwapButtonClick = () => {
           :src="leftShape"
           alt=""
         >
-        <div
-          class="flex h-[65px] w-full items-center gap-1.5 rounded-tr-3xl !bg-[#090A0B] pr-6 pt-3"
-        >
-          <SwapNavButton @click="displayMarketSettingsDialog = true">
-            {{ swapSettingsStore.displayedSelectedPriorityFeeName }}
-            <img
-              class="size-4"
-              :src="ArrowDown"
-              alt=""
-            >
-          </SwapNavButton>
-          <SwapNavButton @click="displaySlippageSettingsDialog = true">
-            <span class="whitespace-nowrap">{{ swapSettingsStore.slippage }}% Slippage</span>
-            <img
-              class="size-4"
-              :src="ArrowDown"
-              alt=""
-            >
-          </SwapNavButton>
-          <SwapNavButton @click="refreshSwapData()">
-            Refresh
-          </SwapNavButton>
-          <SwapNavButton @click="displayGeneralSettingsDialog = true">
-            <img
-              :src="cog"
-              alt=""
-            >
-          </SwapNavButton>
+        <div class="flex h-[65px] w-full items-center justify-end gap-1.5 rounded-tr-3xl !bg-[#090A0B] pr-6 pt-3">
+          <div
+            v-if="selectorStore.active === 'swap'"
+            class="flex size-full items-center gap-1.5"
+          >
+            <SwapNavButton @click="displayMarketSettingsDialog = true">
+              {{ swapSettingsStore.displayedSelectedPriorityFeeName }}
+              <img
+                class="size-4"
+                :src="ArrowDown"
+                alt=""
+              >
+            </SwapNavButton>
+            <SwapNavButton @click="displaySlippageSettingsDialog = true">
+              <span class="whitespace-nowrap">{{ swapSettingsStore.slippage }}% Slippage</span>
+              <img
+                class="size-4"
+                :src="ArrowDown"
+                alt=""
+              >
+            </SwapNavButton>
+            <SwapNavButton @click="refreshSwapData()">
+              Refresh
+            </SwapNavButton>
+            <SwapNavButton @click="displayGeneralSettingsDialog = true">
+              <img
+                :src="cog"
+                alt=""
+              >
+            </SwapNavButton>
+          </div>
+          <AppSwitch
+            v-if="selectorStore.active === 'dca'"
+            v-model="enablePricingStrategy"
+            label="Enable Pricing Strategy"
+          />
         </div>
       </div>
     </div>
@@ -262,7 +271,9 @@ const onSwapButtonClick = () => {
             <span
               v-if="publicKey && tokenPairInfo"
               class="text-base text-[#A3A5B6]"
-            >Balance: <strong class="text-[#E1D33E]">{{ tokenPairInfo.fromBalance ?? 0 }} {{ balanceTokenSymbol }}</strong></span>
+            >Balance: <strong
+              class="text-[#E1D33E]"
+            >{{ tokenPairInfo.fromBalance ?? 0 }} {{ balanceTokenSymbol }}</strong></span>
           </div>
         </div>
       </div>
@@ -305,7 +316,7 @@ const onSwapButtonClick = () => {
         </div>
       </div>
       <SwapSummary
-        v-if="choice === 'swap'"
+        v-if="selectorStore.active === 'swap'"
         :current-token="tokenFrom"
         :out-token="tokenTo"
         :price="tokenPairInfo?.price ?? 0"
@@ -317,11 +328,11 @@ const onSwapButtonClick = () => {
         class="mt-[18px]"
       />
       <SwapDcaSettings
-        v-if="choice === 'dca'"
+        v-if="selectorStore.active === 'dca'"
         class="mt-[18px]"
       />
       <SwapDcaPriceRange
-        v-if="choice === 'dca'"
+        v-if="selectorStore.active === 'dca' && enablePricingStrategy"
         class="mt-[18px]"
       />
       <SwapButton
@@ -338,9 +349,7 @@ const onSwapButtonClick = () => {
       />
     </div>
   </div>
-  <SwapMarketSettingsDialog
-    v-model="displayMarketSettingsDialog"
-  />
+  <SwapMarketSettingsDialog v-model="displayMarketSettingsDialog" />
   <SwapSlippageSettingsDialog v-model="displaySlippageSettingsDialog" />
   <SwapGeneralSettingsDialog v-model="displayGeneralSettingsDialog" />
 </template>

@@ -318,6 +318,7 @@
     "useTokenListStore": true,
     "useSwapSettingsStore": true,
     "useGenericInputGroupError": true,
-    "useErrorDestruct": true
+    "useErrorDestruct": true,
+    "useSwapSelectorStore": true
   }
 }

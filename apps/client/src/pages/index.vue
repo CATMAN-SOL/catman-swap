@@ -10,7 +10,7 @@ const { connected, connecting } = useWallet()
   <div class="container">
     <WalletConnectDialog v-model="walletConnectStore.displayConnectDialog" />
     <WalletDisconnectDialog v-model="displayWalletDisconnectDialog" />
-    <div class="grid grid-cols-2 gap-20 pt-16">
+  <div class="grid grid-rows-2 gap-20 pt-16 lg:grid-cols-2 lg:grid-rows-1">
       <div class="flex flex-col items-stretch gap-8">
         <h1 class="text-theme-white-1 text-8xl font-semibold tracking-[-4px]">
           Swap & DCA
