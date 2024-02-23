@@ -193,25 +193,27 @@ const onSwapButtonClick = () => {
     />
     <div class="flex items-end gap-0">
       <div
-        class="!-z-10 flex h-12 w-[340px] items-center justify-center rounded-tl-3xl bg-[#E1D33E] px-[53px] text-xl font-bold text-[#030303]"
+        class="!-z-10 hidden h-12 basis-[40%] items-center justify-center rounded-tl-3xl bg-[#E1D33E] text-xl font-bold  text-[#030303] xl:flex"
       >
         {{ selectorStore.active === 'swap' ? 'Swap' : 'DCA' }}
       </div>
-      <div class="relative ml-[-7%] flex w-full items-end gap-0">
+      <div class="relative ml-0 flex w-full items-end gap-0 xl:ml-[-8%]">
         <img
-          class="h-[65px]"
+          class="hidden h-[65px] xl:block"
           :src="leftShape"
           alt=""
         >
-        <div class="flex h-[65px] w-full items-center justify-end gap-1.5 rounded-tr-3xl !bg-[#090A0B] pr-6 pt-3">
+        <div
+          class="flex h-[65px] w-full items-center justify-end gap-1.5 rounded-t-3xl !bg-[#090A0B] px-3  pt-3 md:pl-0 md:pr-6 xl:rounded-tl-none"
+        >
           <div
             v-if="selectorStore.active === 'swap'"
-            class="flex size-full items-center gap-1.5"
+            class="flex size-full items-center justify-end gap-1.5"
           >
             <SwapNavButton @click="displayMarketSettingsDialog = true">
               {{ swapSettingsStore.displayedSelectedPriorityFeeName }}
               <img
-                class="size-4"
+                class="size-3 xl:size-4"
                 :src="ArrowDown"
                 alt=""
               >
@@ -219,7 +221,7 @@ const onSwapButtonClick = () => {
             <SwapNavButton @click="displaySlippageSettingsDialog = true">
               <span class="whitespace-nowrap">{{ swapSettingsStore.slippage }}% Slippage</span>
               <img
-                class="size-4"
+                class="size-3 xl:size-4"
                 :src="ArrowDown"
                 alt=""
               >
@@ -244,7 +246,9 @@ const onSwapButtonClick = () => {
     </div>
     <div class="w-full rounded-b-[72px] bg-[#090A0B] p-6">
       <div class="flex w-full flex-col gap-0">
-        <div class="grid grid-cols-[auto_1fr] items-end gap-3 rounded-t-[20px] bg-[#16191D] px-6 pb-[18px] pt-6">
+        <div
+          class="grid grid-rows-2 items-end gap-3 rounded-t-[20px] bg-[#16191D] px-6 pb-[18px] pt-6 md:grid-cols-[auto_1fr] md:grid-rows-1"
+        >
           <SwapCurrencySelect
             label="From"
             :current-token="tokenFrom"
@@ -270,10 +274,11 @@ const onSwapButtonClick = () => {
           <div class="flex h-[50px] w-full items-center justify-end rounded-br-[20px] bg-[#16191D] pr-5">
             <span
               v-if="publicKey && tokenPairInfo"
-              class="text-base text-[#A3A5B6]"
+              class="text-xs text-[#A3A5B6] md:text-base"
             >Balance: <strong
               class="text-[#E1D33E]"
-            >{{ tokenPairInfo.fromBalance ?? 0 }} {{ balanceTokenSymbol }}</strong></span>
+            >{{ tokenPairInfo.fromBalance?.toFixed(4) ?? 0 }} {{ balanceTokenSymbol
+            }}</strong></span>
           </div>
         </div>
       </div>
@@ -295,7 +300,9 @@ const onSwapButtonClick = () => {
           >
           <div class="h-[50px] w-full rounded-tr-[20px] bg-[#16191D]" />
         </div>
-        <div class="grid grid-cols-[auto_1fr] items-end gap-3 rounded-b-[20px] bg-[#16191D] px-6 pb-[18px] pt-6">
+        <div
+          class="grid grid-rows-2 items-end gap-3 rounded-b-[20px] bg-[#16191D] px-6 pb-[18px] pt-6 md:grid-cols-[auto_1fr] md:grid-rows-1"
+        >
           <SwapCurrencySelect
             label="To"
             :current-token="tokenTo"

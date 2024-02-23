@@ -18,16 +18,16 @@ const choose = () => {
   >
     <div
       :class="[active ? 'bg-[#21262C]' : 'bg-[#090A0B] group-hover:bg-[#21262C]']"
-      class="flex size-full items-end rounded-l-3xl px-6 py-12 "
+      class="relative flex size-full items-end rounded-l-3xl px-6 py-12"
     >
-      <span class="text-[48px] font-semibold text-[#E2E4E9]">Swap</span>
+      <span class="absolute text-[32px] font-semibold text-[#E2E4E9] lg:text-[48px]">Swap</span>
     </div>
     <div class="absolute left-1/2 top-0 z-[-10] h-full w-[176px]  -translate-x-1/2 overflow-hidden">
       <div
-        class="bg-primary absolute left-0 flex size-full flex-col items-center justify-start py-1 transition-all"
+        class="bg-primary absolute left-0 flex size-full h-fit flex-col items-center justify-start py-1 transition-all"
         :class="{
           'top-[25px]': props.active,
-          'top-[70px]': !props.active,
+          'top-[60px]': !props.active,
         }"
       >
         <span class="font-secondary translate-x-[4px] text-[16px] font-semibold text-black">Selected</span>
@@ -58,7 +58,7 @@ const choose = () => {
     >
       <span
         :class="[props.active ? 'text-[#E2E4E9]' : 'text-[#A3A5B6]']"
-        class="text-start text-lg font-semibold"
+        class="text-start text-xs font-semibold lg:text-lg"
       >Instant Token Exchanges Made Simple</span>
     </div>
   </div>

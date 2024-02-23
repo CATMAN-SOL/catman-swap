@@ -8,6 +8,14 @@ const wallet = computed(() => {
   if (connectedWallet.value) return connectedWallet.value.adapter
   return walletConnectStore.currentConnectingWalletAdapter?.adapter
 })
+
+const shortPublicKey = computed(() => {
+  if (!publicKey.value) return ''
+
+  const publicKeyString = publicKey.value.toString()
+
+  return `${publicKeyString.slice(0, 8)}...${publicKeyString.slice(-9, -1)}`
+})
 </script>
 
 <template>
@@ -42,7 +50,7 @@ const wallet = computed(() => {
       class="bg-theme-dark-gray-3 flex w-full flex-row items-center justify-between rounded-[16px] px-3 py-2"
     >
       <div class="text-theme-white-2 flex flex-row items-center gap-3 text-[16px] font-semibold">
-        <span>{{ publicKey }}</span>
+        <span class="overflow-hidden">{{ shortPublicKey }}</span>
       </div>
       <AppBadge
         severity="success"

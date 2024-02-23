@@ -18,9 +18,9 @@ const choose = () => {
   >
     <div
       :class="[active ? 'bg-[#21262C]' : 'bg-[#090A0B] group-hover:bg-[#21262C]']"
-      class="flex size-full items-start rounded-l-3xl px-6 py-12 transition-all"
+      class="relative flex size-full items-start rounded-l-3xl px-6 py-12 transition-all"
     >
-      <span class="text-[48px] font-semibold text-[#E2E4E9]">DCA</span>
+      <span class="absolute text-[32px] font-semibold text-[#E2E4E9] lg:text-[48px]">DCA</span>
     </div>
     <div class="absolute left-1/2 top-0 z-[-10] h-full w-[176px]  -translate-x-1/2 overflow-hidden">
       <div
@@ -58,7 +58,7 @@ const choose = () => {
     >
       <span
         :class="[props.active ? 'text-[#E2E4E9]' : 'text-[#A3A5B6]']"
-        class="text-start text-lg font-semibold"
+        class="text-start text-xs font-semibold lg:text-lg"
       >Effortless Crypto Accumulation Strategy</span>
     </div>
   </div>
