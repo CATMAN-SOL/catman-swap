@@ -58,7 +58,7 @@ export const getSwapRoute = async (options: GetSwapRouteOptions) => {
     outputMint: options.outputMint,
     amount: amount.toString(),
     slippageBps: Math.round(options.slippage * 100),
-    platformFeeBps: 100,
+    platformFeeBps: config.FEE_ACCOUNT ? 100 : 0,
     onlyDirectRoutes: options.onlyDirectRoute,
   })
 
