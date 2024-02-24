@@ -183,34 +183,38 @@ const onSwapConfirm = async () => {
     return
   }
 
-  swapConfirmDialogState.value = 'processing'
+  try {
+    swapConfirmDialogState.value = 'processing'
 
-  const result = await fetchSwapTransactionCreate({
-    quote: tokensRouteInfo.value.quote,
-    prioritizationFee: swapSettingsStore.priorityFee,
-    publicKey: publicKey.value.toString(),
-    useWrappedSol: swapSettingsStore.additionalOptions.useWrappedSol
-  })
+    const result = await fetchSwapTransactionCreate({
+      quote: tokensRouteInfo.value.quote,
+      prioritizationFee: swapSettingsStore.priorityFee,
+      publicKey: publicKey.value.toString(),
+      useWrappedSol: swapSettingsStore.additionalOptions.useWrappedSol
+    })
 
-  if (!result) {
-    return
+    if (!result) {
+      return
+    }
+
+    const { tx: txEncoded } = result
+    const txSerialized = decodeBase58(txEncoded)
+    const tx = VersionedTransaction.deserialize(txSerialized)
+
+    const signedTx = await signTransaction.value(tx)
+
+    const signedTxSerialized = signedTx.serialize()
+    const signedTxEncoded = encodeBase58(signedTxSerialized)
+
+    await fetchSwapTransactionExecute({
+      txHash: signedTxEncoded,
+      senderPublicKey: publicKey.value.toString()
+    })
+
+    swapConfirmDialogState.value = 'success'
+  } catch (e) {
+    swapConfirmDialogState.value = 'error'
   }
-
-  const { tx: txEncoded } = result
-  const txSerialized = decodeBase58(txEncoded)
-  const tx = VersionedTransaction.deserialize(txSerialized)
-
-  const signedTx = await signTransaction.value(tx)
-
-  const signedTxSerialized = signedTx.serialize()
-  const signedTxEncoded = encodeBase58(signedTxSerialized)
-
-  await fetchSwapTransactionExecute({
-    txHash: signedTxEncoded,
-    senderPublicKey: publicKey.value.toString()
-  })
-
-  swapConfirmDialogState.value = 'success'
 }
 </script>
 

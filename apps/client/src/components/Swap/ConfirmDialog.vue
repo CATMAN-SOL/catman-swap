@@ -9,10 +9,6 @@ const modelValue = defineModel<boolean>()
 const emit = defineEmits(['proceed'])
 
 const dialogTitle = computed(() => {
-  if (props.currentState === 'awaiting-confirmation') {
-    return 'Confirmation'
-  }
-
   if (props.currentState === 'processing') {
     return 'Loading'
   }
@@ -21,7 +17,11 @@ const dialogTitle = computed(() => {
     return 'Successful swap'
   }
 
-  return 'Confirmation'
+  if (props.currentState === 'error') {
+    return 'Error'
+  }
+
+    return 'Confirmation'
 })
 </script>
 
@@ -32,7 +32,7 @@ const dialogTitle = computed(() => {
   >
     <div class="flex flex-col items-stretch gap-4 py-4">
       <template
-        v-if="props.currentState !== 'success'"
+        v-if="props.currentState !== 'success' && props.currentState !== 'error'"
       >
         <span class="text-primary text-[16px] font-semibold">
           Are you sure you want to complete following transaction?
@@ -83,6 +83,21 @@ const dialogTitle = computed(() => {
             <span class="text-[18px]">Received</span>
             <span>{{ props.outAmount }} {{ props.outToken.symbol }}</span>
           </div>
+        </div>
+        <AppButton
+          button-style="primary"
+          @click="modelValue = false"
+        >
+          OK
+        </AppButton>
+      </template>
+      <template
+        v-else-if="props.currentState === 'error'"
+      >
+        <div
+          class="border-theme-red bg-theme-red/10 text-theme-red flex flex-col items-stretch gap-2 rounded-[24px] border p-6 font-semibold"
+        >
+          <span>An error happened while trying to perform the swap. Please, try again</span>
         </div>
         <AppButton
           button-style="primary"
