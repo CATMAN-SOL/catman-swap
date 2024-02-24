@@ -41,20 +41,23 @@ export const useTokenListStore = defineStore('token-list', () => {
       skip,
     })
 
-    currentOffset += response.data.length
+    currentOffset += response?.data?.length ?? 0
 
     const _tokensList = [
       ...tokensList.value,
       ...Array.from(
         {
-          length: Math.max(0, response.meta.total - tokensList.value.length),
+          length: Math.max(
+            0,
+            response?.meta?.total ?? 0 - tokensList.value.length
+          ),
         },
         () => undefined
       ),
     ]
 
-    for (let i = 0; i < response.data.length; i++) {
-      _tokensList[i + skip] = response.data[i]
+    for (let i = 0; i < (response?.data?.length ?? 0); i++) {
+      _tokensList[i + skip] = response?.data[i]
     }
 
     // console.log(tokensList.value)
