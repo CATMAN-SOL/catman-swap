@@ -44,11 +44,11 @@ const modelValue = defineModel<boolean>()
           <TransitionChild
             as="template"
             enter="duration-[.75s] transition-all dialog-content"
-            enter-from="translate-y-[100vh]"
+            enter-from="translate-y-[calc(100vh+100%)]"
             enter-to="translate-y-[0vh]"
             leave="duration-[.75s] transition-all dialog-content"
             leave-from="translate-y-[0vh]"
-            leave-to="translate-y-[100vh]"
+            leave-to="translate-y-[calc(100vh+100%)]"
           >
             <DialogPanel
               class="w-full self-stretch overflow-hidden rounded-3xl border border-black bg-[#090A0B] p-10 text-left shadow-xl transition-all md:self-center lg:w-[800px]"
