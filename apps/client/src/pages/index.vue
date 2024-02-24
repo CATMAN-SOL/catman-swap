@@ -15,7 +15,7 @@ const scrollTo = (view: HTMLElement | null) => {
 </script>
 
 <template>
-  <div class="container px-5 lg:px-0">
+  <div class="container px-5 lg:px-0 lg:pb-28">
     <WalletConnectDialog v-model="walletConnectStore.displayConnectDialog" />
     <WalletDisconnectDialog v-model="displayWalletDisconnectDialog" />
     <div class="grid grid-rows-1 gap-5 pt-16 lg:grid-cols-2 lg:grid-rows-1 lg:gap-20">
