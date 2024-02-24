@@ -69,20 +69,20 @@ const onTokenButtonClick = (token: Token) => {
                 class="group relative box-border size-full overflow-hidden rounded-[16px] p-2"
                 @click="onTokenButtonClick(item)"
               >
-                <div class="relative z-[11] box-border grid size-full grid-flow-col grid-cols-[auto_auto_auto_1fr] grid-rows-[1fr_auto] gap-x-3 ">
-                  <div class="row-span-2 h-full">
-                    <img
-                      class="aspect-square h-full rounded-full object-cover"
-                      :src="item.logoUrl ?? '/unknown-token.svg'"
-                    >
-                  </div>
+                <div class="relative z-[11] box-border grid size-full grid-flow-col grid-cols-[36px_auto_auto_1fr] grid-rows-[1fr_auto] gap-x-3">
+                  <div
+                    class="row-span-2 aspect-square w-full place-self-center rounded-full bg-cover"
+                    :style="{
+                      backgroundImage: `url(${item.logoUrl ?? '/unknown-token.svg'})`
+                    }"
+                  />
                   <div class="font-dmSans text-theme-white-1 self-end text-left text-[16px]">
                     {{ item.symbol }}
                   </div>
                   <div class="self-start text-left text-[10px] text-white/75">
                     {{ item.name }}
                   </div>
-                  <div class="row-span-2 grid h-full place-items-center pl-2">
+                  <div class="row-span-2 hidden h-full place-items-center pl-2 lg:grid">
                     <a
                       target="_blank"
                       :href="`https://solscan.io/token/${item.address}`"
@@ -93,6 +93,7 @@ const onTokenButtonClick = (token: Token) => {
                       <img :src="LinkIcon">
                     </a>
                   </div>
+                  <div class="row-span-2 lg:hidden" />
                   <div class="row-span-2 flex flex-row items-center justify-end">
                     <AppBadge
                       v-if="!item.tags.find((value: string) => value === 'unknown')"

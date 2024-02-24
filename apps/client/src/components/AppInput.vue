@@ -47,7 +47,7 @@ const {
         - Error: {{ displayedError }}
       </span>
     </div>
-    <div class="grid grid-cols-[1fr_auto] items-center gap-0">
+    <div class="grid grid-cols-[1fr_auto] grid-rows-1 items-center gap-0">
       <input
         v-model="modelValue"
         :placeholder="props.placeholder"
