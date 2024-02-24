@@ -4799,6 +4799,7 @@ __metadata:
     "@vueuse/head": ^2.0.0
     autoprefixer: ^10.4.17
     axios: ^1.6.7
+    buffer: ^6.0.3
     eslint: ^8.56.0
     eslint-plugin-tailwindcss: ^3.14.2
     pinia: ^2.1.7
