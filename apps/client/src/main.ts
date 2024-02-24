@@ -1,3 +1,5 @@
+import { Buffer } from 'buffer'
+
 import './fonts'
 import './style.css'
 
@@ -16,6 +18,8 @@ import {
 } from '@solana/wallet-adapter-wallets'
 
 import PrimeVue from 'primevue/config'
+
+globalThis.Buffer = Buffer
 
 const app = createApp(App)
 
