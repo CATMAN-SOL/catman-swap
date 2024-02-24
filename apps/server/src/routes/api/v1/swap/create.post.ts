@@ -7,10 +7,7 @@ export default createRoute({
   body: z.object({
     quote: z.any().refine((val) => typeof val === 'object'),
     publicKey: z.string(),
-    useWrappedSol: z
-      .string()
-      .default('false')
-      .transform((val) => val === 'true'),
+    useWrappedSol: z.boolean(),
     prioritizationFee: z.coerce.number().optional(),
   }),
   handler: async ({ body }) => {

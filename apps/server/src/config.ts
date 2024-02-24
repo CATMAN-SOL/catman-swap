@@ -9,6 +9,8 @@ const ConfigSchema = z.object({
   RPC_URL: z.string().url(),
   DATABASE_URL: z.string(),
   FEE_ACCOUNT: z.string().optional(),
+  FEE_ACCOUNT_PRIVATE_KEY: z.string().optional(),
+  FEE_ACCOUNT_PUBLIC_KEY: z.string().optional(),
 })
 
 export const config = ConfigSchema.parse(process.env)

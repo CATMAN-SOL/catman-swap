@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { Token } from '@/models/token.model'
+import catmanLogo from '@/assets/catman-logo.png'
 import LinkIcon from '../../../assets/icons/link.svg'
 import VirtualScroller from 'primevue/virtualscroller'
 
@@ -73,7 +74,7 @@ const onTokenButtonClick = (token: Token) => {
                   <div
                     class="row-span-2 aspect-square w-full place-self-center rounded-full bg-cover"
                     :style="{
-                      backgroundImage: `url(${item.logoUrl ?? '/unknown-token.svg'})`
+                      backgroundImage: `url(${item.symbol === 'CATMAN' ? catmanLogo : (item.logoUrl ?? '/unknown-token.svg')})`
                     }"
                   />
                   <div class="font-dmSans text-theme-white-1 self-end text-left text-[16px]">

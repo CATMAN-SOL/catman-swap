@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { Token } from '@/models/token.model'
+import catmanLogo from '@/assets/catman-logo.png'
 import ArrowDown from '../../assets/icons/swap/arrow-down.svg'
 
 const props = defineProps<{
@@ -15,7 +16,7 @@ const props = defineProps<{
       <div class="flex items-center gap-4">
         <img
           class="aspect-square size-8 rounded-full object-cover"
-          :src="props.currentToken.logoUrl ?? '/unknown-token.svg'"
+          :src="currentToken.symbol === 'CATMAN' ? catmanLogo : (currentToken.logoUrl ?? '/unknown-token.svg')"
           alt=""
         >
         <span class="whitespace-nowrap">{{ props.currentToken.symbol }}</span>

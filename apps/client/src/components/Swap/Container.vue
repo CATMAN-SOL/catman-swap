@@ -3,6 +3,8 @@ import leftShape from '../../assets/icons/swap/left-shape.svg'
 import cog from '../../assets/icons/swap/cog.svg'
 import ArrowDown from '../../assets/icons/swap/arrow-down.svg'
 import MiddleShape from '../../assets/icons/swap/middle-shape.svg'
+import { VersionedTransaction } from '@solana/web3.js'
+import { decode as decodeBase58, encode as encodeBase58 } from 'bs58'
 import { Token } from '@/models/token.model'
 
 import { useVuelidate } from '@vuelidate/core'
@@ -14,18 +16,21 @@ const {
   result: tokensRouteInfo,
   loading: tokensRouteInfoLoading
 } = tokens.useTokensRouteInfo()
+const { fetch: fetchSwapTransactionCreate } = swap.useCreateSwapTransaction()
+const { fetch: fetchSwapTransactionExecute } = swap.useExecuteSwapTransaction()
 
 const swapSettingsStore = useSwapSettingsStore()
 const walletConnectStore = useWalletConnectStore()
 const selectorStore = useSwapSelectorStore()
 
-const { publicKey, connected, connecting } = useWallet()
+const { publicKey, connected, connecting, signTransaction } = useWallet()
 const { inc: refreshSwapData, count: refreshSwapDataKey } = useCounter()
 const displayTokenSelectDialog = ref(false)
 const displayMarketSettingsDialog = ref(false)
 const displaySlippageSettingsDialog = ref(false)
 const displayGeneralSettingsDialog = ref(false)
 const displaySwapConfirmDialog = ref(false)
+const swapConfirmDialogState = ref<'awaiting-confirmation' | 'processing' | 'success' | 'error'>('awaiting-confirmation')
 const currentSelectingToken = ref<'from' | 'to'>()
 
 const enablePricingStrategy = ref(false)
@@ -169,7 +174,47 @@ const onSwapButtonClick = () => {
 
   refreshSwapDataKey.value++
 
+  swapConfirmDialogState.value = 'awaiting-confirmation'
   displaySwapConfirmDialog.value = true
+}
+
+const onSwapConfirm = async () => {
+  if (!publicKey.value || !tokensRouteInfo.value || 'error' in tokensRouteInfo.value || !signTransaction.value) {
+    return
+  }
+
+  try {
+    swapConfirmDialogState.value = 'processing'
+
+    const result = await fetchSwapTransactionCreate({
+      quote: tokensRouteInfo.value.quote,
+      prioritizationFee: swapSettingsStore.priorityFee,
+      publicKey: publicKey.value.toString(),
+      useWrappedSol: swapSettingsStore.additionalOptions.useWrappedSol
+    })
+
+    if (!result) {
+      return
+    }
+
+    const { tx: txEncoded } = result
+    const txSerialized = decodeBase58(txEncoded)
+    const tx = VersionedTransaction.deserialize(txSerialized)
+
+    const signedTx = await signTransaction.value(tx)
+
+    const signedTxSerialized = signedTx.serialize()
+    const signedTxEncoded = encodeBase58(signedTxSerialized)
+
+    await fetchSwapTransactionExecute({
+      txHash: signedTxEncoded,
+      senderPublicKey: publicKey.value.toString()
+    })
+
+    swapConfirmDialogState.value = 'success'
+  } catch (e) {
+    swapConfirmDialogState.value = 'error'
+  }
 }
 </script>
 
@@ -189,7 +234,9 @@ const onSwapButtonClick = () => {
       :in-amount="tokensRouteInfo && 'inAmount' in tokensRouteInfo && tokensRouteInfo?.inAmount ? tokensRouteInfo.inAmount : 0"
       :out-amount="tokensRouteInfo && 'outAmount' in tokensRouteInfo && tokensRouteInfo?.outAmount ? tokensRouteInfo.outAmount : 0"
       :zeroes="Number.isNaN(parseFloat(fromAmount))"
+      :current-state="swapConfirmDialogState"
       class="mt-[18px]"
+      @proceed="onSwapConfirm"
     />
     <div class="flex items-end gap-0">
       <div
@@ -301,7 +348,11 @@ const onSwapButtonClick = () => {
           <div class="h-[50px] w-full rounded-tr-[20px] bg-[#16191D]" />
         </div>
         <div
-          class="grid grid-rows-2 items-end gap-3 rounded-b-[20px] bg-[#16191D] px-6 pb-[18px] pt-6 md:grid-cols-[auto_1fr] md:grid-rows-1"
+          class="grid items-end gap-3 rounded-b-[20px] bg-[#16191D] px-6 pb-[18px] pt-6 md:grid-rows-1"
+          :class="{
+            'grid-rows-2 md:grid-cols-[auto_1fr]': selectorStore.active === 'swap',
+            'grid-rows-1 md:grid-cols-1': selectorStore.active === 'dca',
+          }"
         >
           <SwapCurrencySelect
             label="To"
@@ -309,6 +360,7 @@ const onSwapButtonClick = () => {
             @click="onToCurrencySelectClick"
           />
           <AppInput
+            v-if="selectorStore.active === 'swap'"
             :model-value="toAmount"
             :loading="(fromAmount.length > 0 && tokensRouteInfo && 'inAmount' in tokensRouteInfo && tokensRouteInfo?.inAmount !== parseFloat(fromAmount)) || tokensRouteInfoLoading"
             label="Amount"

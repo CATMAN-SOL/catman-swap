@@ -6,10 +6,11 @@ import Components from 'unplugin-vue-components/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import TsconfigPaths from 'vite-tsconfig-paths'
 
+import * as path from 'path'
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    TsconfigPaths(),
     vue(),
     Components({
       extensions: ['vue'],
@@ -38,5 +39,11 @@ export default defineConfig({
       },
     }),
     Pages(),
+    TsconfigPaths(),
   ],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
 })

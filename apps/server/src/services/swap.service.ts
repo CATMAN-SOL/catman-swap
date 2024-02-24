@@ -1,13 +1,19 @@
 import { config } from '~config'
 import { floatToStringInteger, stringIntegerToFloat } from '~utils/crypto'
 import { BadRequestException } from '../exceptions'
+import { ReferralProvider } from '@jup-ag/referral-sdk'
 import {
   createSerializedSwapTransaction,
   fetchSwapRouteQuote,
 } from './jupiter.service'
 import { findTokenByAddress } from './tokens.service'
 import { decode as decodeBase58, encode as encodeBase58 } from 'bs58'
-import { VersionedTransaction } from '@solana/web3.js'
+import {
+  Keypair,
+  PublicKey,
+  VersionedTransaction,
+  sendAndConfirmTransaction,
+} from '@solana/web3.js'
 import { swapRequests } from '~/db/schema'
 import { SwapQuote } from '~/models/swap-quote.model'
 import { createUserIfNotExists } from './users.service'
@@ -52,7 +58,7 @@ export const getSwapRoute = async (options: GetSwapRouteOptions) => {
     outputMint: options.outputMint,
     amount: amount.toString(),
     slippageBps: Math.round(options.slippage * 100),
-    platformFeeBps: 80,
+    platformFeeBps: config.FEE_ACCOUNT ? 100 : 0,
     onlyDirectRoutes: options.onlyDirectRoute,
   })
 
@@ -80,11 +86,61 @@ export const getSwapRoute = async (options: GetSwapRouteOptions) => {
 }
 
 export const createSwapTx = async (options: CreateSwapTxOptions) => {
+  let feeAccount: string | undefined
+
+  if (config.FEE_ACCOUNT) {
+    const mint = new PublicKey(options.quote.outputMint)
+
+    const programFindResult = PublicKey.findProgramAddressSync(
+      [
+        Buffer.from('referral_ata'),
+        // your referral account public key
+        new PublicKey(config.FEE_ACCOUNT).toBuffer(),
+        // the token mint, output mint for ExactIn, input mint for ExactOut.
+        mint.toBuffer(),
+      ],
+      new PublicKey('REFER4ZgmyYx9c6He5XfaTMiGfdLwRnkV4RPp9t9iF3')
+    )
+
+    const feeAccountPubKey = programFindResult[0]
+    const accountInfo = await rpcConnection.getAccountInfo(feeAccountPubKey)
+
+    if (accountInfo) {
+      feeAccount = feeAccountPubKey.toString()
+    } else if (
+      config.FEE_ACCOUNT_PRIVATE_KEY &&
+      config.FEE_ACCOUNT_PUBLIC_KEY
+    ) {
+      const keypair = Keypair.fromSecretKey(
+        decodeBase58(config.FEE_ACCOUNT_PRIVATE_KEY)
+      )
+
+      const provider = new ReferralProvider(rpcConnection)
+
+      const createTokenAccountTransaction =
+        await provider.initializeReferralTokenAccount({
+          mint,
+          payerPubKey: new PublicKey(config.FEE_ACCOUNT_PUBLIC_KEY),
+          referralAccountPubKey: new PublicKey(config.FEE_ACCOUNT),
+        })
+
+      await sendAndConfirmTransaction(
+        rpcConnection,
+        createTokenAccountTransaction.tx,
+        [keypair]
+      )
+
+      feeAccount = feeAccountPubKey.toString()
+    }
+  }
+
+  logger.info({ feeAccount })
+
   const base64SerializedTransaction = await createSerializedSwapTransaction({
     quoteResponse: options.quote,
     userPublicKey: options.publicKey,
-    wrapAndUnwrapSol: options.wrapAndUnwrapSol,
-    feeAccount: config.FEE_ACCOUNT,
+    wrapAndUnwrapSol: !options.wrapAndUnwrapSol,
+    feeAccount: feeAccount || undefined,
     prioritizationFeeLamports: options.prioritizationFee
       ? options.prioritizationFee * 10 ** 9
       : 'auto',
