@@ -319,6 +319,7 @@
     "useSwapSettingsStore": true,
     "useGenericInputGroupError": true,
     "useErrorDestruct": true,
-    "useSwapSelectorStore": true
+    "useSwapSelectorStore": true,
+    "swap": true
   }
 }

@@ -18,7 +18,7 @@ const choose = () => {
   >
     <div
       :class="[active ? 'bg-[#21262C]' : 'bg-[#090A0B] group-hover:bg-[#21262C]']"
-      class="relative flex size-full items-end rounded-l-3xl px-6 py-12"
+      class="relative flex size-full items-end rounded-l-3xl px-6 py-12 transition-all"
     >
       <span class="absolute text-[32px] font-semibold text-[#E2E4E9] lg:text-[48px]">Swap</span>
     </div>
@@ -45,6 +45,7 @@ const choose = () => {
       >
         <path
           :class="[active ? 'fill-[#21262C]' : 'fill-[#090A0B] group-hover:fill-[#21262C]']"
+          class="transition-all"
           fill-rule="evenodd"
           clip-rule="evenodd"
           d="m 408.42399,187.696 c 0,14.229 -11.0574,26.304 -24.69726,26.304 h -615.0255 c -13.64082,0 -24.69822,-12.075 -24.69822,-26.304 V 25.9092 c 0,-14.2293 11.0574,-25.764333 24.69822,-25.764333 H -1.348272 c 8.9488852,0 17.197746,5.049883 21.561754,13.200033 L 35.723083,42.31 c 4.364103,8.1501 12.612916,13.2 21.561792,13.2 h 52.778085 c 8.94849,0 17.19721,-5.0499 21.56169,-13.2 l 15.50912,-28.9651 c 4.36449,-8.15015 12.61321,-13.200033 21.5617,-13.200033 h 215.03126 c 13.63986,0 24.69726,11.535133 24.69726,25.764333 z"
@@ -54,7 +55,7 @@ const choose = () => {
     </div>
     <div
       :class="[active ? 'bg-[#21262C]' : 'bg-[#090A0B] group-hover:bg-[#21262C]']"
-      class="flex size-full w-full items-end rounded-r-3xl px-[18px] py-12"
+      class="flex size-full w-full items-end rounded-r-3xl px-[18px] py-12 transition-all"
     >
       <span
         :class="[props.active ? 'text-[#E2E4E9]' : 'text-[#A3A5B6]']"
