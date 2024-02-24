@@ -26,7 +26,10 @@ jobs:
       - name: Install dependencies
         run: yarn install
       - name: Build application
-        run: cd apps/client && yarn build
+        run: |
+          cd apps/client
+          echo VITE_API_BASE_URL=https://catman-swap-api.fly.dev >> .env
+          yarn build
       - name: Publish
         run: |
           cd apps/client
