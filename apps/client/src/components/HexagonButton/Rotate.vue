@@ -1,5 +1,5 @@
 <template>
-  <button class="icon-fill-primary-default hover:icon-fill-white group relative size-[58px] [&_path]:transition-all">
+  <button class="icon-fill-primary-default hover:icon-fill-white active:icon-fill-theme-yellow-2 group relative size-[58px] [&_path]:transition-all">
     <div class="relative z-[11]">
       <svg
         class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-500 group-hover:rotate-180 group-hover:scale-[1.2]"

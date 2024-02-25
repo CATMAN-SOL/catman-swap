@@ -17,6 +17,9 @@ export default {
           default: '#E1D33E',
           DEFAULT: '#E1D33E',
         },
+        'theme-yellow': {
+          2: '#E1A712',
+        },
         'theme-white': {
           1: '#E2E4E9',
           2: '#A3A5B6',
