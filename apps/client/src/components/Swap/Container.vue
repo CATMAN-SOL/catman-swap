@@ -392,6 +392,7 @@ const onDcaConfirm = async () => {
           class="grid grid-rows-2 items-end gap-3 rounded-t-[20px] bg-[#16191D] px-6 pb-[18px] pt-6 md:grid-cols-[auto_1fr] md:grid-rows-1"
         >
           <SwapCurrencySelect
+            class="w-full md:w-[175px]"
             label="From"
             :current-token="tokenFrom"
             @click="onFromCurrencySelectClick"
@@ -450,6 +451,7 @@ const onDcaConfirm = async () => {
           }"
         >
           <SwapCurrencySelect
+            :class="[selectorStore.active === 'swap' ? 'w-full md:w-[175px]' : 'w-full']"
             label="To"
             :current-token="tokenTo"
             @click="onToCurrencySelectClick"

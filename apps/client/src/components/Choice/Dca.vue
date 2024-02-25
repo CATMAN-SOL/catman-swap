@@ -18,7 +18,7 @@ const choose = () => {
   >
     <div
       :class="[active ? 'bg-[#21262C]' : 'bg-[#090A0B] group-hover:bg-[#21262C]']"
-      class="relative flex size-full items-start rounded-l-3xl px-6 py-12 transition-all"
+      class="relative flex size-full min-w-[115px] items-start rounded-l-3xl px-6 py-12 transition-all"
     >
       <span class="absolute text-[32px] font-semibold text-[#E2E4E9] lg:text-[48px]">DCA</span>
     </div>
@@ -54,7 +54,7 @@ const choose = () => {
     </div>
     <div
       :class="[active ? 'bg-[#21262C]' : 'bg-[#090A0B] group-hover:bg-[#21262C]']"
-      class="flex size-full items-start rounded-r-3xl px-[18px] py-12 transition-all"
+      class="flex size-full min-w-[115px] items-start rounded-r-3xl px-[18px] py-12 transition-all"
     >
       <span
         :class="[props.active ? 'text-[#E2E4E9]' : 'text-[#A3A5B6]']"
