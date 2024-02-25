@@ -19,7 +19,7 @@ const props = defineProps<SwapSummaryProps>()
     </div>
     <div class="flex items-center justify-between text-[18px] font-semibold tracking-[1.2px]">
       <span class="text-[#A3A5B6]">You will recieve:</span><span class="text-[#E2E4E9]">
-        {{ props.inAmount > 0 && !props.zeroes ? `${outAmount.toFixed(4)} ${props.outToken.symbol} ≈ ${(props.outAmount * props.price).toFixed(4)} ${props.currentToken.symbol}` : `0 ${props.outToken.symbol}` }}
+        {{ props.inAmount > 0 && !props.zeroes ? `${outAmount.toFixed(4)} ${props.outToken.symbol}` : `0 ${props.outToken.symbol}` }}
       </span>
     </div>
     <div class="flex items-center justify-between text-[18px] font-semibold tracking-[1.2px]">

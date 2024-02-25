@@ -12,12 +12,16 @@ const dcaOptions = [
     denominator: 60
   },
   {
+    name: 'Hours',
+    denominator: 3600
+  },
+  {
     name: 'Days',
-    denominator: 1440
+    denominator: 86_400
   },
   {
     name: 'Weeks',
-    denominator: 10080
+    denominator: 604_800
   },
 ]
 
@@ -85,7 +89,7 @@ const rules = computed(() => ({
     minValue: selectedDenominatorOptionIndex.value === 0 ? minValue(30) : minValue(1)
   },
   ordersCount: {
-    required, numeric, minValue: minValue(1)
+    required, numeric, minValue: minValue(2)
   },
   rateDenominator: {
     minValue: helpers.withMessage('This field is required', minValue(0))

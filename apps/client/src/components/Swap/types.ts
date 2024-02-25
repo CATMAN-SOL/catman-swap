@@ -1,8 +1,6 @@
 import { Token } from '@/models/token.model'
 
 export type SwapSummaryProps = {
-  price: number
-
   zeroes: boolean
 
   inAmount: number
@@ -12,4 +10,13 @@ export type SwapSummaryProps = {
 
   currentToken: Token
   outToken: Token
+}
+
+export type DcaOptions = {
+  rate: number
+  rateDenominator: number
+  ordersCount: number
+
+  minAmountPerCycle?: number
+  maxAmountPerCycle?: number
 }

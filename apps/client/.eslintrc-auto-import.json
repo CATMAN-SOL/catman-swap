@@ -320,6 +320,7 @@
     "useGenericInputGroupError": true,
     "useErrorDestruct": true,
     "useSwapSelectorStore": true,
-    "swap": true
+    "swap": true,
+    "dca": true
   }
 }

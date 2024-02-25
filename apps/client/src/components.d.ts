@@ -35,6 +35,7 @@ declare module 'vue' {
     SwapCurrencySelect: typeof import('./components/Swap/CurrencySelect.vue')['default']
     SwapDcaPriceRange: typeof import('./components/Swap/DcaPriceRange.vue')['default']
     SwapDcaSettings: typeof import('./components/Swap/DcaSettings.vue')['default']
+    SwapDcaSummary: typeof import('./components/Swap/DcaSummary.vue')['default']
     SwapGeneralSettingsDialog: typeof import('./components/Swap/GeneralSettingsDialog.vue')['default']
     SwapMarketItem: typeof import('./components/Swap/MarketItem.vue')['default']
     SwapMarketSettingsDialog: typeof import('./components/Swap/MarketSettingsDialog.vue')['default']
