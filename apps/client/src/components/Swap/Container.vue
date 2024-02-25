@@ -3,12 +3,13 @@ import leftShape from '../../assets/icons/swap/left-shape.svg'
 import cog from '../../assets/icons/swap/cog.svg'
 import ArrowDown from '../../assets/icons/swap/arrow-down.svg'
 import MiddleShape from '../../assets/icons/swap/middle-shape.svg'
-import { VersionedTransaction } from '@solana/web3.js'
+import { VersionedTransaction, Transaction } from '@solana/web3.js'
 import { decode as decodeBase58, encode as encodeBase58 } from 'bs58'
 import { Token } from '@/models/token.model'
 
 import { useVuelidate } from '@vuelidate/core'
-import { required, numeric, maxValue, helpers } from '@vuelidate/validators'
+import { required, numeric, maxValue, minValue, helpers } from '@vuelidate/validators'
+import { DcaOptions } from './types'
 
 const { fetch: fetchTokenPairInfo, result: tokenPairInfo } = tokens.useTokensPairInfo()
 const {
@@ -18,6 +19,8 @@ const {
 } = tokens.useTokensRouteInfo()
 const { fetch: fetchSwapTransactionCreate } = swap.useCreateSwapTransaction()
 const { fetch: fetchSwapTransactionExecute } = swap.useExecuteSwapTransaction()
+const { fetch: fetchDcaTransactionCreate } = dca.useCreateDcaTransaction()
+const { fetch: fetchDcaTransactionExecute } = dca.useExecuteDcaTransaction()
 
 const swapSettingsStore = useSwapSettingsStore()
 const walletConnectStore = useWalletConnectStore()
@@ -32,6 +35,15 @@ const displayGeneralSettingsDialog = ref(false)
 const displaySwapConfirmDialog = ref(false)
 const swapConfirmDialogState = ref<'awaiting-confirmation' | 'processing' | 'success' | 'error'>('awaiting-confirmation')
 const currentSelectingToken = ref<'from' | 'to'>()
+
+const dcaOptions = reactive<DcaOptions>({
+  rate: 0,
+  rateDenominator: 1,
+  ordersCount: 0,
+
+  minAmountPerCycle: undefined as number | undefined,
+  maxAmountPerCycle: undefined as number | undefined,
+})
 
 const enablePricingStrategy = ref(false)
 
@@ -81,15 +93,26 @@ const rules = computed(() => ({
       'Insufficient balance',
       maxValue(tokenPairInfo.value?.fromBalance ?? 0)
     ),
+    ...(
+      selectorStore.active === 'dca'
+    ? {
+        minValue: helpers.withMessage('Minimum of 1 USD equivalent per order is allowed', minValue(
+          (tokenPairInfo.value?.price ?? 0) * dcaOptions.ordersCount
+        ))
+      }
+    : {}
+    )
   }
 }))
 
 const amountVuelidate = useVuelidate(rules, computed(() => ({ fromAmount: fromAmount.value })))
 
 throttledWatch([tokenFrom, tokenTo, fromAmount, publicKey, connected, refreshSwapDataKey, () => swapSettingsStore.slippage, () => swapSettingsStore.additionalOptions], async ([from, to, amount]) => {
+  // Fetches FROM token -> USDC rate. Is required for DCA order limit
   fetchTokenPairInfo({
-    from: from.address,
-    to: to.address,
+    from: tokenFrom.value.address,
+    // USDC
+    to: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
     publicKey: publicKey.value?.toBase58(),
     useWrappedSol: swapSettingsStore.additionalOptions.useWrappedSol
   })
@@ -123,6 +146,23 @@ throttledWatch([tokenFrom, tokenTo, fromAmount, publicKey, connected, refreshSwa
   trailing: true,
   deep: true,
   throttle: 500
+})
+
+watch(enablePricingStrategy, (newValue) => {
+  if (!newValue) {
+    dcaOptions.minAmountPerCycle = undefined
+    dcaOptions.maxAmountPerCycle = undefined
+  }
+})
+
+watch(() => selectorStore.active, (newActive) => {
+  if (newActive === 'swap') {
+    swapSettingsStore.additionalOptions.useWrappedSol = false
+  }
+
+  if (newActive === 'dca') {
+    swapSettingsStore.additionalOptions.useWrappedSol = true
+  }
 })
 
 const onTokenSelect = (token: Token) => {
@@ -179,6 +219,10 @@ const onSwapButtonClick = () => {
 }
 
 const onSwapConfirm = async () => {
+  if (selectorStore.active === 'dca') {
+    return await onDcaConfirm()
+  }
+
   if (!publicKey.value || !tokensRouteInfo.value || 'error' in tokensRouteInfo.value || !signTransaction.value) {
     return
   }
@@ -216,6 +260,55 @@ const onSwapConfirm = async () => {
     swapConfirmDialogState.value = 'error'
   }
 }
+
+const onDcaConfirm = async () => {
+  if (!publicKey.value || !signTransaction.value) {
+    return
+  }
+
+  const amount = parseFloat(fromAmount.value)
+
+  if (Number.isNaN(amount)) {
+    return
+  }
+
+  try {
+    swapConfirmDialogState.value = 'processing'
+
+    const result = await fetchDcaTransactionCreate({
+      cycleSeconds: dcaOptions.rate * dcaOptions.rateDenominator,
+      inAmount: amount,
+      inAmountPerCycle: amount / dcaOptions.ordersCount,
+      publicKey: publicKey.value.toString(),
+      tokenFrom: tokenFrom.value.address,
+      tokenTo: tokenTo.value.address,
+      minOutAmountPerCycle: dcaOptions.minAmountPerCycle,
+      maxOutAmountPerCycle: dcaOptions.maxAmountPerCycle,
+    })
+
+    if (!result) {
+      throw new Error()
+    }
+
+    const encodedTx = result.tx
+    const serializedTx = decodeBase58(encodedTx)
+    const tx = Transaction.from(serializedTx)
+
+    const signedTx = await signTransaction.value(tx)
+
+    const signedTxSerialized = signedTx.serialize()
+    const signedTxEncoded = encodeBase58(signedTxSerialized)
+
+    await fetchDcaTransactionExecute({
+      senderPublicKey: publicKey.value.toString(),
+      txHash: signedTxEncoded
+    })
+
+    swapConfirmDialogState.value = 'success'
+  } catch (e) {
+    swapConfirmDialogState.value = 'error'
+  }
+}
 </script>
 
 <template>
@@ -229,12 +322,14 @@ const onSwapConfirm = async () => {
       :current-token="tokenFrom"
       :out-token="tokenTo"
       :price="tokenPairInfo?.price ?? 0"
+      :current-process="selectorStore.active"
       :in-amount-raw="parseFloat(fromAmount)"
       :loading="(fromAmount.length > 0 && tokensRouteInfo && 'inAmount' in tokensRouteInfo && tokensRouteInfo?.inAmount !== parseFloat(fromAmount)) || tokensRouteInfoLoading"
       :in-amount="tokensRouteInfo && 'inAmount' in tokensRouteInfo && tokensRouteInfo?.inAmount ? tokensRouteInfo.inAmount : 0"
       :out-amount="tokensRouteInfo && 'outAmount' in tokensRouteInfo && tokensRouteInfo?.outAmount ? tokensRouteInfo.outAmount : 0"
       :zeroes="Number.isNaN(parseFloat(fromAmount))"
       :current-state="swapConfirmDialogState"
+      :dca-options="dcaOptions"
       class="mt-[18px]"
       @proceed="onSwapConfirm"
     />
@@ -388,10 +483,19 @@ const onSwapConfirm = async () => {
       />
       <SwapDcaSettings
         v-if="selectorStore.active === 'dca'"
+
+        v-model:rate="dcaOptions.rate"
+        v-model:rate-denominator="dcaOptions.rateDenominator"
+        v-model:orders-count="dcaOptions.ordersCount"
+
         class="mt-[18px]"
       />
       <SwapDcaPriceRange
         v-if="selectorStore.active === 'dca' && enablePricingStrategy"
+
+        v-model:price-min="dcaOptions.minAmountPerCycle"
+        v-model:price-max="dcaOptions.maxAmountPerCycle"
+
         class="mt-[18px]"
       />
       <SwapButton

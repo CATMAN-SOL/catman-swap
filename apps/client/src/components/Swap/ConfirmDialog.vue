@@ -1,8 +1,10 @@
 <script lang="ts" setup>
-import { SwapSummaryProps } from './types'
+import { DcaOptions, SwapSummaryProps } from './types'
 
 const props = defineProps<SwapSummaryProps & {
-  currentState: 'awaiting-confirmation' | 'processing' | 'success' | 'error'
+  currentState: 'awaiting-confirmation' | 'processing' | 'success' | 'error',
+  currentProcess: 'dca' | 'swap',
+  dcaOptions?: DcaOptions
 }>()
 const modelValue = defineModel<boolean>()
 
@@ -14,7 +16,7 @@ const dialogTitle = computed(() => {
   }
 
   if (props.currentState === 'success') {
-    return 'Successful swap'
+    return props.currentProcess === 'swap' ? 'Successful swap' : 'Successful DCA'
   }
 
   if (props.currentState === 'error') {
@@ -38,6 +40,11 @@ const dialogTitle = computed(() => {
           Are you sure you want to complete following transaction?
         </span>
         <SwapSummary
+          v-if="props.currentProcess === 'swap'"
+          v-bind="props"
+        />
+        <SwapDcaSummary
+          v-else-if="props.dcaOptions"
           v-bind="props"
         />
       </template>
@@ -60,7 +67,7 @@ const dialogTitle = computed(() => {
         class="bg-theme-dark-gray-3 flex w-full flex-row items-center justify-between rounded-[16px] px-3 py-2"
       >
         <div class="flex flex-row items-center gap-3 text-[16px] font-semibold">
-          <span>Performing swap</span>
+          <span>Performing {{ currentProcess === 'swap' ? 'swap' : 'DCA' }}</span>
           <LoadingIcon dot-class="bg-white" />
         </div>
         <AppBadge
@@ -79,7 +86,10 @@ const dialogTitle = computed(() => {
             <span class="text-[18px]">Paid</span>
             <span>{{ props.inAmount }} {{ props.currentToken.symbol }}</span>
           </div>
-          <div class="flex flex-row items-center justify-between text-white">
+          <div
+            v-if="props.currentProcess == 'swap'"
+            class="flex flex-row items-center justify-between text-white"
+          >
             <span class="text-[18px]">Received</span>
             <span>{{ props.outAmount }} {{ props.outToken.symbol }}</span>
           </div>
@@ -97,7 +107,7 @@ const dialogTitle = computed(() => {
         <div
           class="border-theme-red bg-theme-red/10 text-theme-red flex flex-col items-stretch gap-2 rounded-[24px] border p-6 font-semibold"
         >
-          <span>An error happened while trying to perform the swap. Please, try again</span>
+          <span>An error happened while trying to perform the {{ currentProcess === 'swap' ? 'swap' : 'DCA' }}. Please, try again</span>
         </div>
         <AppButton
           button-style="primary"

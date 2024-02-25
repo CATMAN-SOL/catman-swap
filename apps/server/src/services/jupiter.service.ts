@@ -1,6 +1,8 @@
+import { DCA, Network, type CreateDCAParamsV2 } from '@jup-ag/dca-sdk'
 import { SwapQuote, SwapQuoteError } from '~models/swap-quote.model'
 
 const JUPITER_QUOTE_API_BASE_URL = 'https://quote-api.jup.ag'
+const dca = new DCA(rpcConnection, Network.MAINNET)
 
 // https://station.jup.ag/docs/apis/swap-api#4-get-the-route-for-a-swap
 export type FetchSwapRouteOptions = {
@@ -61,6 +63,11 @@ export const fetchSwapRouteQuote = async (options: FetchSwapRouteOptions) => {
   const responseBody = await response.json()
 
   return responseBody as SwapQuote | SwapQuoteError
+}
+
+export const createDcaInitTransaction = async (params: CreateDCAParamsV2) => {
+  const { tx } = await dca.createDcaV2(params)
+  return tx
 }
 
 // Is required as URLSearchParams constructor can only accept Record<string,string>

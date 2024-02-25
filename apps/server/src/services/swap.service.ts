@@ -1,6 +1,5 @@
 import { config } from '~config'
 import { floatToStringInteger, stringIntegerToFloat } from '~utils/crypto'
-import { BadRequestException } from '../exceptions'
 import { ReferralProvider } from '@jup-ag/referral-sdk'
 import {
   createSerializedSwapTransaction,
@@ -17,6 +16,7 @@ import {
 import { swapRequests } from '~/db/schema'
 import { SwapQuote } from '~/models/swap-quote.model'
 import { createUserIfNotExists } from './users.service'
+import { executeSignedTransaction } from './transactions.service'
 
 export type CreateSwapTxOptions = {
   quote: SwapQuote
@@ -58,7 +58,7 @@ export const getSwapRoute = async (options: GetSwapRouteOptions) => {
     outputMint: options.outputMint,
     amount: amount.toString(),
     slippageBps: Math.round(options.slippage * 100),
-    platformFeeBps: config.FEE_ACCOUNT ? 100 : 0,
+    platformFeeBps: config.FEE_ACCOUNT ? 100 : undefined,
     onlyDirectRoutes: options.onlyDirectRoute,
   })
 
@@ -134,8 +134,6 @@ export const createSwapTx = async (options: CreateSwapTxOptions) => {
     }
   }
 
-  logger.info({ feeAccount })
-
   const base64SerializedTransaction = await createSerializedSwapTransaction({
     quoteResponse: options.quote,
     userPublicKey: options.publicKey,
@@ -162,35 +160,10 @@ export const executeSwapTx = async (options: ExecuteSwapTxOptions) => {
   const serializedTx = decodeBase58(options.txHash)
   const tx = VersionedTransaction.deserialize(serializedTx)
 
-  const simulationResult = await trySimulateTransaction(tx)
-
-  if (!simulationResult.success) {
-    throw new BadRequestException({
-      reason: 'simulation_failed',
-      simulationResult,
-    })
-  }
-
-  const txSignature = await rpcConnection.sendRawTransaction(tx.serialize())
-
-  const blockhashData = await rpcConnection.getLatestBlockhash()
-
-  const response = await rpcConnection.confirmTransaction({
-    blockhash: blockhashData.blockhash,
-    lastValidBlockHeight: blockhashData.lastValidBlockHeight,
-    signature: txSignature,
+  return await executeSignedTransaction({
+    transaction: tx,
+    senderPublicKey: new PublicKey(options.senderPublicKey),
   })
-
-  const responseError = response.value.err
-
-  if (responseError) {
-    throw new BadRequestException({
-      reason: 'transaction_failed',
-      responseError,
-    })
-  }
-
-  return txSignature
 }
 
 const saveCreateSwapTransactionRequest = async (
@@ -205,35 +178,4 @@ const saveCreateSwapTransactionRequest = async (
     amountFrom: options.quote.inAmount,
     amountTo: options.quote.outAmount,
   })
-}
-
-const trySimulateTransaction = async (
-  tx: VersionedTransaction
-): Promise<
-  | ({ success: false } & ({ simulationError: any } | { error: any }))
-  | { success: true }
-> => {
-  try {
-    const simulationResult = await rpcConnection.simulateTransaction(tx, {
-      sigVerify: true,
-    })
-
-    const simulationError = simulationResult.value.err
-
-    if (simulationError) {
-      return {
-        success: false,
-        simulationError,
-      }
-    }
-
-    return {
-      success: true,
-    }
-  } catch (e) {
-    return {
-      success: false,
-      error: (e as any).message,
-    }
-  }
 }

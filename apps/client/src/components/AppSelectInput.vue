@@ -1,22 +1,19 @@
 <script lang="ts" setup>
+import ArrowDown from '@/assets/icons/swap/arrow-down.svg'
 import type { ErrorObject } from '@vuelidate/core'
 
 const props = withDefaults(
   defineProps<{
-    button?: boolean
+    options: string[],
     placeholder: string,
-    buttonText?: string,
     label?: string
-    type?: string
     disabled?: boolean
     loading?: boolean
-    buttonDisabled?: boolean
-    errorPlacement?: 'right' | 'bottom'
     error?: ErrorObject[] | ErrorObject | string
+    errorPlacement?: 'right' | 'bottom'
   }>(),
   {
     buttonDisabled: false,
-    type: 'text',
     label: undefined,
     buttonText: undefined,
     error: undefined,
@@ -24,9 +21,9 @@ const props = withDefaults(
   }
 )
 
-const emit = defineEmits(['button-click'])
+// The model value is the index of the selected element
+const modelValue = defineModel<number>()
 
-const modelValue = defineModel<string>()
 const {
   displayedError,
   hasError
@@ -51,29 +48,33 @@ const {
         <span v-if="props.errorPlacement === 'right'">- </span>Error: {{ displayedError }}
       </span>
     </div>
-    <div class="grid grid-cols-[1fr_auto] grid-rows-1 items-center gap-0">
-      <input
+    <div class="relative grid grid-cols-[1fr_auto] grid-rows-1 items-center gap-0">
+      <select
         v-model="modelValue"
         :placeholder="props.placeholder"
         :class="
           {
-            'rounded-r-2xl': !props.button,
             'pointer-events-none hover:cursor-not-allowed': props.disabled,
             '!border-theme-red !bg-theme-red/10 hover:!bg-theme-red/20 focus:!bg-theme-red/20': hasError
           }
         "
-        :type="props.type"
-        class="box-border w-full rounded-l-2xl border border-transparent bg-[#21262C] p-5 text-base tracking-[1px] text-[#E2E4E9] outline-none transition-all placeholder:text-[A3A5B6] hover:bg-[#2D353F] focus:border-[#74D172] focus:placeholder:text-[#E2E4E9]"
+        class="box-border w-full rounded-2xl border border-transparent bg-[#21262C] p-5 text-base tracking-[1px] text-[#E2E4E9] outline-none transition-all placeholder:text-[A3A5B6] hover:bg-[#2D353F] focus:border-[#74D172] focus:placeholder:text-[#E2E4E9]"
         :disabled="props.disabled"
       >
-      <button
-        v-if="props.button"
-        :class="[props.buttonDisabled ? '' : 'hover:text-[#E1D33E] active:bg-[#E1D33E] active:text-[#090A0B]']"
-        class="h-full rounded-r-2xl bg-[#2D353F] p-5 transition-all"
-        @click="emit('button-click')"
+        <option
+          v-for="(option, index) of props.options"
+          :key="index"
+          :value="index"
+          :selected="modelValue === index"
+        >
+          {{ option }}
+        </option>
+      </select>
+      <img
+        class="absolute right-[15px] top-1/2 size-4 -translate-y-1/2"
+        :src="ArrowDown"
+        alt=""
       >
-        {{ props.buttonText }}
-      </button>
     </div>
     <span
       v-if="hasError && props.errorPlacement === 'bottom'"
@@ -98,5 +99,13 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+select {
+  appearance: none;
+}
+
+select::-ms-expand {
+  display: none;
 }
 </style>
