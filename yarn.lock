@@ -99,6 +99,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@coral-xyz/anchor@npm:^0.28.0":
+  version: 0.28.0
+  resolution: "@coral-xyz/anchor@npm:0.28.0"
+  dependencies:
+    "@coral-xyz/borsh": ^0.28.0
+    "@solana/web3.js": ^1.68.0
+    base64-js: ^1.5.1
+    bn.js: ^5.1.2
+    bs58: ^4.0.1
+    buffer-layout: ^1.2.2
+    camelcase: ^6.3.0
+    cross-fetch: ^3.1.5
+    crypto-hash: ^1.3.0
+    eventemitter3: ^4.0.7
+    js-sha256: ^0.9.0
+    pako: ^2.0.3
+    snake-case: ^3.0.4
+    superstruct: ^0.15.4
+    toml: ^3.0.0
+  checksum: 58b3677b5b2ce2c779045184ce4a0ef696966a6a58f41c1c56f6f178db0491acecb6ec677ce0502f0b382a2c724f9c2860d82cc88601784d556d95fbeda415e5
+  languageName: node
+  linkType: hard
+
 "@coral-xyz/borsh@npm:^0.28.0":
   version: 0.28.0
   resolution: "@coral-xyz/borsh@npm:0.28.0"
@@ -920,6 +943,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@jup-ag/dca-sdk@npm:^3.0.0-beta.0":
+  version: 3.0.0-beta.1
+  resolution: "@jup-ag/dca-sdk@npm:3.0.0-beta.1"
+  dependencies:
+    "@coral-xyz/anchor": ^0.28.0
+    "@solana/spl-token": 0.3.5
+    "@solana/web3.js": ^1.75.0
+  checksum: 7d16ef5d958ede83552c126e71993f5e60d964aca1baa499cb7c877e06b621801eac4eebd99aa4969e25ca359e15f149520d23b668346d1c55cf69d09b566ed1
+  languageName: node
+  linkType: hard
+
 "@jup-ag/referral-sdk@npm:^0.1.6":
   version: 0.1.6
   resolution: "@jup-ag/referral-sdk@npm:0.1.6"
@@ -1687,6 +1721,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@solana/spl-token@npm:0.3.5":
+  version: 0.3.5
+  resolution: "@solana/spl-token@npm:0.3.5"
+  dependencies:
+    "@solana/buffer-layout": ^4.0.0
+    "@solana/buffer-layout-utils": ^0.2.0
+    buffer: ^6.0.3
+  peerDependencies:
+    "@solana/web3.js": ^1.47.4
+  checksum: 230c153b886c7dedb09fdd65c4fd71259d37f3c951ab6ea9c099aff875cc595fc9d44c74b4d7ffef59475f7edd7a8a00931bfec8ab2bd3141512ca3f6f828139
+  languageName: node
+  linkType: hard
+
 "@solana/spl-token@npm:0.3.8":
   version: 0.3.8
   resolution: "@solana/spl-token@npm:0.3.8"
@@ -2229,7 +2276,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@solana/web3.js@npm:^1.32.0, @solana/web3.js@npm:^1.36.0, @solana/web3.js@npm:^1.63.1, @solana/web3.js@npm:^1.68.0, @solana/web3.js@npm:^1.77.3, @solana/web3.js@npm:^1.87.6, @solana/web3.js@npm:^1.90.0":
+"@solana/web3.js@npm:^1.32.0, @solana/web3.js@npm:^1.36.0, @solana/web3.js@npm:^1.63.1, @solana/web3.js@npm:^1.68.0, @solana/web3.js@npm:^1.75.0, @solana/web3.js@npm:^1.77.3, @solana/web3.js@npm:^1.87.6, @solana/web3.js@npm:^1.90.0":
   version: 1.90.0
   resolution: "@solana/web3.js@npm:1.90.0"
   dependencies:
@@ -7974,6 +8021,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"js-sha256@npm:^0.9.0":
+  version: 0.9.0
+  resolution: "js-sha256@npm:0.9.0"
+  checksum: ffad54b3373f81581e245866abfda50a62c483803a28176dd5c28fd2d313e0bdf830e77dac7ff8afd193c53031618920f3d98daf21cbbe80082753ab639c0365
+  languageName: node
+  linkType: hard
+
 "js-tokens@npm:^3.0.0 || ^4.0.0":
   version: 4.0.0
   resolution: "js-tokens@npm:4.0.0"
@@ -10677,6 +10731,7 @@ __metadata:
     "@fastify/swagger": ^8.14.0
     "@fastify/swagger-ui": ^2.1.0
     "@inc-dev/eslint-config": ^1.1.5
+    "@jup-ag/dca-sdk": ^3.0.0-beta.0
     "@jup-ag/referral-sdk": ^0.1.6
     "@solana/web3.js": ^1.90.0
     "@types/lodash": ^4.14.202
