@@ -58,7 +58,7 @@ export const getSwapRoute = async (options: GetSwapRouteOptions) => {
     outputMint: options.outputMint,
     amount: amount.toString(),
     slippageBps: Math.round(options.slippage * 100),
-    platformFeeBps: config.FEE_ACCOUNT ? 100 : 0,
+    platformFeeBps: config.FEE_ACCOUNT ? 100 : undefined,
     onlyDirectRoutes: options.onlyDirectRoute,
   })
 
@@ -133,8 +133,6 @@ export const createSwapTx = async (options: CreateSwapTxOptions) => {
       feeAccount = feeAccountPubKey.toString()
     }
   }
-
-  logger.info({ feeAccount })
 
   const base64SerializedTransaction = await createSerializedSwapTransaction({
     quoteResponse: options.quote,

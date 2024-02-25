@@ -61,7 +61,14 @@ export const createDcaInitTx = async (options: DcaInitOptions) => {
   }
 
   const tx = await createDcaInitTransaction(params)
-  const serializedTx = tx.serialize()
+  const blockhashData = await rpcConnection.getLatestBlockhash()
+  tx.recentBlockhash = blockhashData.blockhash
+  tx.feePayer = new PublicKey(options.publicKey)
+
+  const serializedTx = tx.serialize({
+    verifySignatures: false,
+    requireAllSignatures: false,
+  })
   const encodedTx = encodeBase58(serializedTx)
 
   return encodedTx

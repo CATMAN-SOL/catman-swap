@@ -1721,6 +1721,70 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@solana/codecs-core@npm:2.0.0-experimental.8618508":
+  version: 2.0.0-experimental.8618508
+  resolution: "@solana/codecs-core@npm:2.0.0-experimental.8618508"
+  checksum: 3f16d037b0cb7347e87b94558cf90cb10c8e50c08856d057b2844dc9ae19a5721e04f03058fa4ad45f7529531f6c2678c0cb088c6711169951a11c1ef508da57
+  languageName: node
+  linkType: hard
+
+"@solana/codecs-data-structures@npm:2.0.0-experimental.8618508":
+  version: 2.0.0-experimental.8618508
+  resolution: "@solana/codecs-data-structures@npm:2.0.0-experimental.8618508"
+  dependencies:
+    "@solana/codecs-core": 2.0.0-experimental.8618508
+    "@solana/codecs-numbers": 2.0.0-experimental.8618508
+  checksum: 1a72f82cad338bb6153eb7687fef860dffa2d1701961fc529f5051007a029f302621e92a05a51ad1d23a3bc4aa1d02d517cac0f4b28e9819d91686e18becd07c
+  languageName: node
+  linkType: hard
+
+"@solana/codecs-numbers@npm:2.0.0-experimental.8618508":
+  version: 2.0.0-experimental.8618508
+  resolution: "@solana/codecs-numbers@npm:2.0.0-experimental.8618508"
+  dependencies:
+    "@solana/codecs-core": 2.0.0-experimental.8618508
+  checksum: 7c80fc0a2deb654fb5e43b8cc267f6105eab6d9e18afcef43374768c82fa088d58b4872adc608c74b0f54a9e0822f4ae49772137d436d323b2b327770d867df7
+  languageName: node
+  linkType: hard
+
+"@solana/codecs-strings@npm:2.0.0-experimental.8618508":
+  version: 2.0.0-experimental.8618508
+  resolution: "@solana/codecs-strings@npm:2.0.0-experimental.8618508"
+  dependencies:
+    "@solana/codecs-core": 2.0.0-experimental.8618508
+    "@solana/codecs-numbers": 2.0.0-experimental.8618508
+  peerDependencies:
+    fastestsmallesttextencoderdecoder: ^1.0.22
+  checksum: 0186dbf1c6933ba451e0f5dc7be1092220d7a5551ee97ae09259d2b736d52273dbbda6dbf4bb847ed251fb1849399b4dc76889998d3bea1648c930b1c3ead895
+  languageName: node
+  linkType: hard
+
+"@solana/options@npm:2.0.0-experimental.8618508":
+  version: 2.0.0-experimental.8618508
+  resolution: "@solana/options@npm:2.0.0-experimental.8618508"
+  dependencies:
+    "@solana/codecs-core": 2.0.0-experimental.8618508
+    "@solana/codecs-numbers": 2.0.0-experimental.8618508
+  checksum: d260faec7a44d5c2e95edcea756fe5690bdc6685b2e4ee078226e74319eee6ab931aeedfb580b420e1c5987a1d28304898ed03cdcf6b19e253460a3101080c75
+  languageName: node
+  linkType: hard
+
+"@solana/spl-token-metadata@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "@solana/spl-token-metadata@npm:0.1.2"
+  dependencies:
+    "@solana/codecs-core": 2.0.0-experimental.8618508
+    "@solana/codecs-data-structures": 2.0.0-experimental.8618508
+    "@solana/codecs-numbers": 2.0.0-experimental.8618508
+    "@solana/codecs-strings": 2.0.0-experimental.8618508
+    "@solana/options": 2.0.0-experimental.8618508
+    "@solana/spl-type-length-value": 0.1.0
+  peerDependencies:
+    "@solana/web3.js": ^1.87.6
+  checksum: 9cd90aed86a2fcfa40cd209b61553641524c01d9888eb4a36f053315dfdc544aa66ad0e7a22d27a30d904648c0ec5c9db11791ac6fa87ec15a44322f7bf5077b
+  languageName: node
+  linkType: hard
+
 "@solana/spl-token@npm:0.3.5":
   version: 0.3.5
   resolution: "@solana/spl-token@npm:0.3.5"
@@ -1744,6 +1808,29 @@ __metadata:
   peerDependencies:
     "@solana/web3.js": ^1.47.4
   checksum: 01f4f87112b0ad277701a3bcb8e03069b69449b92724b17959107686731082bfd3475b5f105e1e8f04badd2e810a43d5ef811744ced5178eea1232de8fd75147
+  languageName: node
+  linkType: hard
+
+"@solana/spl-token@npm:^0.4.1":
+  version: 0.4.1
+  resolution: "@solana/spl-token@npm:0.4.1"
+  dependencies:
+    "@solana/buffer-layout": ^4.0.0
+    "@solana/buffer-layout-utils": ^0.2.0
+    "@solana/spl-token-metadata": ^0.1.2
+    buffer: ^6.0.3
+  peerDependencies:
+    "@solana/web3.js": ^1.90.0
+  checksum: c7a8161fe9c5fdd57591d8963792a2e459fdd48e05774ca6bcd7df9b7a742ab8bbef09a013719e0ab150858551f9aa8ee8ecad0fe0cf066b58e07e255195fef7
+  languageName: node
+  linkType: hard
+
+"@solana/spl-type-length-value@npm:0.1.0":
+  version: 0.1.0
+  resolution: "@solana/spl-type-length-value@npm:0.1.0"
+  dependencies:
+    buffer: ^6.0.3
+  checksum: 9bea6d9638fd2093db4542b12ac657407950737bd00ed919448308df59bfeb9d97a96e471d7824ba4077daeb01bbb0cf9e410d412767555e49a5bfc6bfb9bc91
   languageName: node
   linkType: hard
 
@@ -10733,6 +10820,7 @@ __metadata:
     "@inc-dev/eslint-config": ^1.1.5
     "@jup-ag/dca-sdk": ^3.0.0-beta.0
     "@jup-ag/referral-sdk": ^0.1.6
+    "@solana/spl-token": ^0.4.1
     "@solana/web3.js": ^1.90.0
     "@types/lodash": ^4.14.202
     "@types/node": ^20.11.16
