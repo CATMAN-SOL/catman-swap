@@ -33,6 +33,15 @@ const displaySwapConfirmDialog = ref(false)
 const swapConfirmDialogState = ref<'awaiting-confirmation' | 'processing' | 'success' | 'error'>('awaiting-confirmation')
 const currentSelectingToken = ref<'from' | 'to'>()
 
+const dcaOptions = reactive({
+  rate: 0,
+  rateDenominator: 1,
+  ordersCount: 0,
+
+  minAmountPerCycle: undefined as number | undefined,
+  maxAmountPerCycle: undefined as number | undefined,
+})
+
 const enablePricingStrategy = ref(false)
 
 const tokenFrom = ref<Token>({
@@ -123,6 +132,13 @@ throttledWatch([tokenFrom, tokenTo, fromAmount, publicKey, connected, refreshSwa
   trailing: true,
   deep: true,
   throttle: 500
+})
+
+watch(enablePricingStrategy, (newValue) => {
+  if (!newValue) {
+    dcaOptions.minAmountPerCycle = undefined
+    dcaOptions.maxAmountPerCycle = undefined
+  }
 })
 
 const onTokenSelect = (token: Token) => {
@@ -388,10 +404,19 @@ const onSwapConfirm = async () => {
       />
       <SwapDcaSettings
         v-if="selectorStore.active === 'dca'"
+
+        v-model:rate="dcaOptions.rate"
+        v-model:rate-denominator="dcaOptions.rateDenominator"
+        v-model:orders-count="dcaOptions.ordersCount"
+
         class="mt-[18px]"
       />
       <SwapDcaPriceRange
         v-if="selectorStore.active === 'dca' && enablePricingStrategy"
+
+        v-model:price-min="dcaOptions.minAmountPerCycle"
+        v-model:price-max="dcaOptions.maxAmountPerCycle"
+
         class="mt-[18px]"
       />
       <SwapButton

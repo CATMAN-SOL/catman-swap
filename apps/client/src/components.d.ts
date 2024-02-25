@@ -14,6 +14,7 @@ declare module 'vue' {
     AppIcon: typeof import('./components/AppIcon.vue')['default']
     AppInput: typeof import('./components/AppInput.vue')['default']
     AppLogo: typeof import('./components/AppLogo.vue')['default']
+    AppSelectInput: typeof import('./components/AppSelectInput.vue')['default']
     AppSettingsItem: typeof import('./components/AppSettingsItem.vue')['default']
     AppSwitch: typeof import('./components/AppSwitch.vue')['default']
     ChoiceDca: typeof import('./components/Choice/Dca.vue')['default']
