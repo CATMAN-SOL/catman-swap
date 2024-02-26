@@ -5,7 +5,9 @@ const props = defineProps<{
 </script>
 
 <template>
-  <LightningButton :loading="props.loading">
+  <LightningButton
+    :loading="props.loading"
+  >
     Connect Wallet
   </LightningButton>
 </template>

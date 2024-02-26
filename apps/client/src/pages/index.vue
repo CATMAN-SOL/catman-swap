@@ -15,15 +15,15 @@ const scrollTo = (view: HTMLElement | null) => {
 </script>
 
 <template>
-  <div class="container px-5 pb-28 lg:px-0">
+  <div class="container px-3 pb-28 lg:px-0">
     <WalletConnectDialog v-model="walletConnectStore.displayConnectDialog" />
     <WalletDisconnectDialog v-model="displayWalletDisconnectDialog" />
     <div class="grid grid-rows-1 gap-5 pt-16 lg:grid-cols-2 lg:grid-rows-1 lg:gap-20">
       <div class="flex flex-col gap-8">
-        <h1 class="text-theme-white-1 text-8xl font-semibold tracking-[-4px]">
+        <h1 class="text-theme-white-1 text-[56px] font-semibold tracking-[-4px] lg:text-8xl">
           Swap & DCA
         </h1>
-        <span class="text-theme-white-2 text-lg font-semibold tracking-[1.2px]">Catman : Swap & DCA – Connect your wallet
+        <span class="text-theme-white-2 text-sm font-semibold tracking-[1.2px] lg:text-lg">Catman : Swap & DCA – Connect your wallet
           for<br> seamless transactions!</span>
         <WalletConnectButton
           v-if="!connected"
