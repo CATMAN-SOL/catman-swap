@@ -37,7 +37,10 @@ const scrollTo = (view: HTMLElement | null) => {
           class="max-w-[450px]"
           @more-button-click="displayWalletDisconnectDialog = true"
         />
-        <SwapChoice @click="scrollTo(sectionRefEl)" />
+        <SwapChoice
+          class="lg:mt-[50px]"
+          @click="scrollTo(sectionRefEl)"
+        />
       </div>
       <section ref="sectionRefEl">
         <SwapContainer />
