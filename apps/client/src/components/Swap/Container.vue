@@ -258,6 +258,8 @@ const onSwapConfirm = async () => {
     swapConfirmDialogState.value = 'success'
   } catch (e) {
     swapConfirmDialogState.value = 'error'
+  } finally {
+    refreshSwapData()
   }
 }
 
