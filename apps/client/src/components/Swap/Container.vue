@@ -261,6 +261,7 @@ const onSwapConfirm = async () => {
       senderPublicKey: publicKey.value.toString()
     })
 
+    fromAmount.value = ''
     swapConfirmDialogState.value = 'success'
   } catch (e) {
     swapConfirmDialogState.value = 'error'
