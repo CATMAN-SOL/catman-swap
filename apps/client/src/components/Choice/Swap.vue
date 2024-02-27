@@ -13,7 +13,7 @@ const choose = () => {
 <template>
   <div
     :class="{'group': !props.active}"
-    class="relative flex cursor-pointer items-center gap-0 transition-all duration-300"
+    class="relative grid cursor-pointer grid-cols-[1fr_auto_1fr] items-center gap-0 transition-all duration-300"
     @click="choose"
   >
     <div
@@ -30,7 +30,7 @@ const choose = () => {
           'top-[60px]': !props.active,
         }"
       >
-        <span class="font-secondary translate-x-[4px] text-[16px] font-semibold text-black">Selected</span>
+        <span class="font-secondary text-[16px] font-semibold text-black">Selected</span>
       </div>
     </div>
     <div class="relative h-full min-w-[168px] overflow-y-hidden">
