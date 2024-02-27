@@ -262,6 +262,7 @@ const onSwapConfirm = async () => {
     })
 
     fromAmount.value = ''
+    amountVuelidate.value.$reset()
     swapConfirmDialogState.value = 'success'
   } catch (e) {
     swapConfirmDialogState.value = 'error'
