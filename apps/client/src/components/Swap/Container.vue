@@ -258,16 +258,18 @@ const onSwapConfirm = async () => {
 
     await fetchSwapTransactionExecute({
       txHash: signedTxEncoded,
-      senderPublicKey: publicKey.value.toString()
+      senderPublicKey: publicKey.value.toString(),
+      quote: tokensRouteInfo.value.quote
     })
 
     fromAmount.value = ''
     amountVuelidate.value.$reset()
+
+    refreshSwapData()
+
     swapConfirmDialogState.value = 'success'
   } catch (e) {
     swapConfirmDialogState.value = 'error'
-  } finally {
-    refreshSwapData()
   }
 }
 
