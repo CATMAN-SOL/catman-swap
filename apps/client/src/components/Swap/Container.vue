@@ -388,6 +388,7 @@ const onDcaConfirm = async () => {
         </div>
       </div>
     </div>
+
     <div class="w-full rounded-b-[72px] bg-[#090A0B] p-6">
       <div class="flex w-full flex-col gap-0">
         <div
