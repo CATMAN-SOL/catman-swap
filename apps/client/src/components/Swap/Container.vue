@@ -26,7 +26,7 @@ const swapSettingsStore = useSwapSettingsStore()
 const walletConnectStore = useWalletConnectStore()
 const selectorStore = useSwapSelectorStore()
 
-const { publicKey, connected, connecting, signTransaction } = useWallet()
+const { publicKey, connected, connecting, signTransaction, disconnect } = useWallet()
 const { inc: refreshSwapData, count: refreshSwapDataKey } = useCounter()
 const displayTokenSelectDialog = ref(false)
 const displayMarketSettingsDialog = ref(false)
@@ -152,6 +152,12 @@ watch(enablePricingStrategy, (newValue) => {
   if (!newValue) {
     dcaOptions.minAmountPerCycle = undefined
     dcaOptions.maxAmountPerCycle = undefined
+  }
+})
+
+watch(publicKey, (newValue, oldValue) => {
+  if (newValue && oldValue) {
+    disconnect()
   }
 })
 
