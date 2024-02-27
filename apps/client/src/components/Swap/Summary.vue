@@ -27,7 +27,7 @@ const props = defineProps<SwapSummaryProps>()
         Fee:
       </span>
       <span class="text-[#E1D33E]">
-        {{ props.zeroes ? 0 : (props.inAmount * 0.01) }} {{ props.currentToken.symbol }}
+        {{ props.zeroes ? 0 : (props.outAmount / 0.999) }} {{ props.outToken.symbol }}
       </span>
     </div>
   </SwapCard>

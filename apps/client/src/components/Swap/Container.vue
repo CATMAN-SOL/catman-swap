@@ -306,6 +306,7 @@ const onDcaConfirm = async () => {
       txHash: signedTxEncoded
     })
 
+    fromAmount.value = ''
     swapConfirmDialogState.value = 'success'
   } catch (e) {
     swapConfirmDialogState.value = 'error'
