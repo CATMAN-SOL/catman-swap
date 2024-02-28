@@ -18,6 +18,7 @@ export const swap = {
     {
       txHash: string
       senderPublicKey: string
+      quote: any
     },
     string
   >({

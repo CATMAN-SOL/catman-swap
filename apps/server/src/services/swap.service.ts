@@ -10,6 +10,7 @@ import { decode as decodeBase58, encode as encodeBase58 } from 'bs58'
 import {
   Keypair,
   PublicKey,
+  Transaction,
   VersionedTransaction,
   sendAndConfirmTransaction,
 } from '@solana/web3.js'
@@ -17,6 +18,11 @@ import { swapRequests } from '~/db/schema'
 import { SwapQuote } from '~/models/swap-quote.model'
 import { createUserIfNotExists } from './users.service'
 import { executeSignedTransaction } from './transactions.service'
+import {
+  createAssociatedTokenAccountInstruction,
+  createTransferInstruction,
+  getAssociatedTokenAddressSync,
+} from '@solana/spl-token'
 
 export type CreateSwapTxOptions = {
   quote: SwapQuote
@@ -34,6 +40,7 @@ export type GetSwapRouteOptions = {
 }
 
 export type ExecuteSwapTxOptions = {
+  quote: SwapQuote
   txHash: string
   senderPublicKey: string
 }
@@ -58,7 +65,7 @@ export const getSwapRoute = async (options: GetSwapRouteOptions) => {
     outputMint: options.outputMint,
     amount: amount.toString(),
     slippageBps: Math.round(options.slippage * 100),
-    platformFeeBps: config.FEE_ACCOUNT ? 100 : undefined,
+    platformFeeBps: config.FEE_ACCOUNT ? 10 : undefined,
     onlyDirectRoutes: options.onlyDirectRoute,
   })
 
@@ -159,11 +166,113 @@ export const createSwapTx = async (options: CreateSwapTxOptions) => {
 export const executeSwapTx = async (options: ExecuteSwapTxOptions) => {
   const serializedTx = decodeBase58(options.txHash)
   const tx = VersionedTransaction.deserialize(serializedTx)
+  const senderPublicKey = new PublicKey(options.senderPublicKey)
 
-  return await executeSignedTransaction({
+  const executeResult = await executeSignedTransaction({
     transaction: tx,
-    senderPublicKey: new PublicKey(options.senderPublicKey),
+    senderPublicKey,
   })
+
+  const outputToken = await findTokenByAddress(options.quote.outputMint)
+
+  if (outputToken?.symbol === 'CATMAN' && config.FEE_ACCOUNT) {
+    sendSwapRewards(
+      options.quote,
+      new PublicKey(options.senderPublicKey)
+    ).catch((err) => logger.error(err))
+  }
+
+  return executeResult
+}
+
+const sendSwapRewards = async (
+  quote: SwapQuote,
+  senderPublicKey: PublicKey
+) => {
+  logger.info(`Sending swap rewards for ${senderPublicKey.toString()}`)
+
+  const outputToken = await findTokenByAddress(quote.outputMint)
+
+  if (
+    !(
+      config.CATPOINT_TOKEN_ADDRESS &&
+      config.FEE_ACCOUNT_PRIVATE_KEY &&
+      config.FEE_ACCOUNT_PUBLIC_KEY &&
+      outputToken
+    )
+  ) {
+    logger.info('Invalid configuration. Could not send swap rewards')
+    return
+  }
+
+  const catpointTokenAddress = new PublicKey(config.CATPOINT_TOKEN_ADDRESS)
+  const feeAccountPublicKey = new PublicKey(config.FEE_ACCOUNT_PUBLIC_KEY)
+
+  const keypair = new Keypair({
+    publicKey: decodeBase58(config.FEE_ACCOUNT_PUBLIC_KEY),
+    secretKey: decodeBase58(config.FEE_ACCOUNT_PRIVATE_KEY),
+  })
+
+  const ownerAta = getAssociatedTokenAddressSync(
+    catpointTokenAddress,
+    feeAccountPublicKey
+  )
+
+  const ownerAtaAccountInfo = await rpcConnection.getAccountInfo(ownerAta)
+
+  if (!ownerAtaAccountInfo) {
+    logger.info(
+      'No CATPOINT owner associated account. Could not send swap rewards'
+    )
+    return
+  }
+
+  const transaction = new Transaction()
+
+  const senderAta = getAssociatedTokenAddressSync(
+    catpointTokenAddress,
+    senderPublicKey
+  )
+
+  const senderAtaInfo = await rpcConnection.getAccountInfo(senderAta)
+
+  if (!senderAtaInfo) {
+    logger.info('Sender ATA not found. Creating one')
+    transaction.add(
+      createAssociatedTokenAccountInstruction(
+        feeAccountPublicKey,
+        senderAta,
+        senderPublicKey,
+        catpointTokenAddress
+      )
+    )
+  }
+
+  const outAmount = stringIntegerToFloat(quote.outAmount, outputToken.decimals)
+  const feeAmount = (outAmount / 0.999) * 0.001
+  const catmanRewardAmount = feeAmount / 5
+  const rewardAmount = catmanRewardAmount * 100
+
+  transaction.add(
+    createTransferInstruction(
+      ownerAta,
+      senderAta,
+      feeAccountPublicKey,
+      BigInt(floatToStringInteger(rewardAmount, 8))
+    )
+  )
+
+  const blockhashData = await rpcConnection.getLatestBlockhash()
+  transaction.recentBlockhash = blockhashData.blockhash
+  transaction.feePayer = new PublicKey(feeAccountPublicKey)
+
+  logger.info(
+    `Sending swap reward transaction for ${senderPublicKey.toString()}`
+  )
+  await sendAndConfirmTransaction(rpcConnection, transaction, [keypair])
+  logger.info(
+    `Successfully sended swap reward for ${senderPublicKey.toString()}`
+  )
 }
 
 const saveCreateSwapTransactionRequest = async (

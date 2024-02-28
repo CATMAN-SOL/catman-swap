@@ -26,7 +26,7 @@ const swapSettingsStore = useSwapSettingsStore()
 const walletConnectStore = useWalletConnectStore()
 const selectorStore = useSwapSelectorStore()
 
-const { publicKey, connected, connecting, signTransaction } = useWallet()
+const { publicKey, connected, connecting, signTransaction, disconnect } = useWallet()
 const { inc: refreshSwapData, count: refreshSwapDataKey } = useCounter()
 const displayTokenSelectDialog = ref(false)
 const displayMarketSettingsDialog = ref(false)
@@ -155,6 +155,12 @@ watch(enablePricingStrategy, (newValue) => {
   }
 })
 
+watch(publicKey, (newValue, oldValue) => {
+  if (newValue && oldValue) {
+    disconnect()
+  }
+})
+
 watch(() => selectorStore.active, (newActive) => {
   if (newActive === 'swap') {
     swapSettingsStore.additionalOptions.useWrappedSol = false
@@ -252,14 +258,18 @@ const onSwapConfirm = async () => {
 
     await fetchSwapTransactionExecute({
       txHash: signedTxEncoded,
-      senderPublicKey: publicKey.value.toString()
+      senderPublicKey: publicKey.value.toString(),
+      quote: tokensRouteInfo.value.quote
     })
+
+    fromAmount.value = ''
+    amountVuelidate.value.$reset()
+
+    refreshSwapData()
 
     swapConfirmDialogState.value = 'success'
   } catch (e) {
     swapConfirmDialogState.value = 'error'
-  } finally {
-    refreshSwapData()
   }
 }
 
@@ -306,6 +316,7 @@ const onDcaConfirm = async () => {
       txHash: signedTxEncoded
     })
 
+    fromAmount.value = ''
     swapConfirmDialogState.value = 'success'
   } catch (e) {
     swapConfirmDialogState.value = 'error'
@@ -388,6 +399,7 @@ const onDcaConfirm = async () => {
         </div>
       </div>
     </div>
+
     <div class="w-full rounded-b-[72px] bg-[#090A0B] p-6">
       <div class="flex w-full flex-col gap-0">
         <div
