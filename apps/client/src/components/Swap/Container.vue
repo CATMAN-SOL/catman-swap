@@ -354,7 +354,7 @@ const onDcaConfirm = async () => {
       </div>
       <div class="relative ml-0 flex w-full items-end gap-0 xl:ml-[-8%]">
         <img
-          class="hidden h-[65px] xl:block"
+          class="hidden h-[65px] translate-y-[2px] xl:block"
           :src="leftShape"
           alt=""
         >
