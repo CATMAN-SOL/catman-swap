@@ -13,18 +13,18 @@ const choose = () => {
 <template>
   <div
     :class="{'group': !props.active}"
-    class="relative grid cursor-pointer grid-cols-[1fr_auto_1fr] items-center gap-0 transition-all duration-300"
+    class="relative grid cursor-pointer grid-cols-[1fr_auto_1fr] grid-rows-1 items-center gap-0 transition-all duration-300"
     @click="choose"
   >
     <div
       :class="[active ? 'bg-[#21262C]' : 'bg-[#090A0B] group-hover:bg-[#21262C]']"
-      class="relative flex size-full min-w-[115px] items-start rounded-l-3xl px-6 py-12 transition-all"
+      class="relative flex w-full min-w-[115px] items-start rounded-l-3xl px-6 py-12 transition-all"
     >
       <span class="absolute text-[32px] font-semibold text-[#E2E4E9] lg:text-[48px]">DCA</span>
     </div>
     <div class="absolute left-1/2 top-0 z-[-10] h-full w-[176px]  -translate-x-1/2 overflow-hidden">
       <div
-        class="bg-primary absolute left-0 flex size-full flex-col items-center justify-end py-1 transition-all"
+        class="absolute left-0 flex size-full flex-col items-center justify-end bg-primary py-1 transition-all"
         :class="{
           'bottom-[25px]': props.active,
           'bottom-[70px]': !props.active,
@@ -33,7 +33,7 @@ const choose = () => {
         <span class="font-secondary text-[16px] font-semibold text-black">Selected</span>
       </div>
     </div>
-    <div class="relative h-full min-w-[168px] overflow-hidden">
+    <div class="relative min-w-[168px] overflow-y-hidden">
       <svg
         class="absolute bottom-0 left-[-4px] rotate-180"
         width="176"
@@ -54,7 +54,7 @@ const choose = () => {
     </div>
     <div
       :class="[active ? 'bg-[#21262C]' : 'bg-[#090A0B] group-hover:bg-[#21262C]']"
-      class="flex size-full min-w-[115px] items-start rounded-r-3xl px-[18px] py-12 transition-all"
+      class="flex w-full min-w-[115px] items-start rounded-r-3xl px-[18px] py-12 transition-all"
     >
       <span
         :class="[props.active ? 'text-[#E2E4E9]' : 'text-[#A3A5B6]']"

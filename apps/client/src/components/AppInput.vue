@@ -34,7 +34,7 @@ const {
 </script>
 
 <template>
-  <div class="flex flex-col gap-1">
+  <div>
     <div
       class="flex flex-row items-center gap-1 text-base font-semibold text-[#A3A5B6]"
     >
@@ -51,7 +51,7 @@ const {
         <span v-if="props.errorPlacement === 'right'">- </span>Error: {{ displayedError }}
       </span>
     </div>
-    <div class="grid grid-cols-[1fr_auto] grid-rows-1 items-center gap-0">
+    <div class="mt-1 grid grid-cols-[1fr_auto] grid-rows-1 items-center gap-0">
       <input
         v-model="modelValue"
         :placeholder="props.placeholder"
