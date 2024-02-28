@@ -33,7 +33,7 @@ const choose = () => {
         <span class="font-secondary text-[16px] font-semibold text-black">Selected</span>
       </div>
     </div>
-    <div class="relative h-full min-w-[168px] overflow-y-hidden">
+    <div class="relative h-full min-w-[168px] overflow-hidden">
       <!-- <div> -->
       <svg
         class="absolute left-[-4px] top-0"
