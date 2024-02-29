@@ -13,7 +13,7 @@ const choose = () => {
 <template>
   <div
     :class="{'group': !props.active}"
-    class="relative grid cursor-pointer grid-cols-[1fr_auto_1fr] grid-rows-1 items-center gap-0 transition-all duration-300"
+    class="relative grid cursor-pointer grid-cols-[1fr_auto_1fr] grid-rows-1 gap-0 transition-all duration-300"
     @click="choose"
   >
     <div
@@ -24,7 +24,7 @@ const choose = () => {
     </div>
     <div class="absolute left-1/2 top-0 z-[-10] h-full w-[176px] -translate-x-1/2 overflow-hidden">
       <div
-        class="absolute left-0 flex size-full h-fit flex-col items-center justify-start bg-primary py-1 transition-all"
+        class="bg-primary absolute left-0 flex size-full h-fit flex-col items-center justify-start py-1 transition-all"
         :class="{
           'top-[25px]': props.active,
           'top-[60px]': !props.active,
