@@ -22,9 +22,9 @@ const choose = () => {
     >
       <span class="text-[32px] font-semibold text-[#E2E4E9] lg:text-[48px]">Swap</span>
     </div>
-    <div class="absolute left-1/2 top-0 z-[-10] h-full w-[176px] -translate-x-1/2 overflow-hidden">
+    <div class="absolute left-1/2 top-0 z-[-10] h-full w-[135px] -translate-x-1/2 overflow-hidden">
       <div
-        class="bg-primary absolute left-0 flex size-full h-fit flex-col items-center justify-start py-1 transition-all"
+        class="bg-primary absolute left-0 flex h-fit w-full flex-col items-center justify-end py-1 transition-all"
         :class="{
           'top-[25px]': props.active,
           'top-[60px]': !props.active,
@@ -33,7 +33,7 @@ const choose = () => {
         <span class="font-secondary text-[16px] font-semibold text-black">Selected</span>
       </div>
     </div>
-    <div class="relative min-w-[168px] overflow-y-hidden">
+    <div class="relative min-w-[168px] overflow-hidden">
       <!-- <div> -->
       <svg
         class="absolute left-[-4px] top-0"
