@@ -22,9 +22,9 @@ const choose = () => {
     >
       <span class="absolute text-[32px] font-semibold text-[#E2E4E9] lg:text-[48px]">DCA</span>
     </div>
-    <div class="absolute left-1/2 top-0 z-[-10] h-full w-[176px]  -translate-x-1/2 overflow-hidden">
+    <div class="absolute left-1/2 top-0 z-[-10] h-full w-[135px]  -translate-x-1/2 overflow-hidden">
       <div
-        class="bg-primary absolute left-0 flex size-full flex-col items-center justify-end py-1 transition-all"
+        class="bg-primary absolute left-0 flex h-fit w-full -translate-x-[2px] flex-col items-center justify-end py-1 transition-all"
         :class="{
           'bottom-[25px]': props.active,
           'bottom-[70px]': !props.active,
@@ -33,7 +33,7 @@ const choose = () => {
         <span class="font-secondary text-[16px] font-semibold text-black">Selected</span>
       </div>
     </div>
-    <div class="relative min-w-[168px] overflow-y-hidden">
+    <div class="relative min-w-[168px] overflow-hidden">
       <svg
         class="absolute bottom-0 left-[-4px] rotate-180"
         width="176"
