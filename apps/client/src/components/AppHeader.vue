@@ -8,15 +8,15 @@
       <AppLogo />
       <div class="flex flex-row items-center gap-6">
         <HeaderNavigationItem
-          href="#"
+          href="https://x.com/CATMANONSOL?s=20"
           icon="nav-x"
         />
         <HeaderNavigationItem
-          href="#"
+          href=" https://t.me/catmansolana"
           icon="nav-telegram"
         />
         <HeaderNavigationItem
-          href="#"
+          href="https://catmansol.io/"
           icon="nav-web"
         />
       </div>
