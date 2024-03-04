@@ -10,6 +10,7 @@ import { decode as decodeBase58, encode as encodeBase58 } from 'bs58'
 import {
   Keypair,
   PublicKey,
+  Signer,
   Transaction,
   VersionedTransaction,
   sendAndConfirmTransaction,
@@ -262,17 +263,33 @@ const sendSwapRewards = async (
     )
   )
 
-  const blockhashData = await rpcConnection.getLatestBlockhash()
-  transaction.recentBlockhash = blockhashData.blockhash
   transaction.feePayer = new PublicKey(feeAccountPublicKey)
 
   logger.info(
     `Sending swap reward transaction for ${senderPublicKey.toString()}`
   )
-  await sendAndConfirmTransaction(rpcConnection, transaction, [keypair])
+  await trySendAndConfirmTx(transaction, keypair)
   logger.info(
     `Successfully sended swap reward for ${senderPublicKey.toString()}`
   )
+}
+
+const trySendAndConfirmTx = async (
+  tx: Transaction,
+  signer: Signer,
+  maxRetries: number = 3
+) => {
+  for (; maxRetries >= 0; maxRetries--) {
+    const blockhashData = await rpcConnection.getLatestBlockhash()
+    tx.recentBlockhash = blockhashData.blockhash
+
+    try {
+      await sendAndConfirmTransaction(rpcConnection, tx, [signer])
+      break
+    } catch (e) {
+      logger.info(e, 'Failed to send CATPoint reward tx. Retrying...')
+    }
+  }
 }
 
 const saveCreateSwapTransactionRequest = async (
