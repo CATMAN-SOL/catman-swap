@@ -8,8 +8,6 @@ const { connected, connecting } = useWallet()
 const sectionRefEl = ref<HTMLElement | null>(null)
 
 const scrollTo = (view: HTMLElement | null) => {
-  console.log('test')
-  console.log(view)
   view?.scrollIntoView({ behavior: 'smooth' })
 }
 </script>

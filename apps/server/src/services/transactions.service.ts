@@ -10,17 +10,17 @@ export const executeSignedTransaction = async ({
   transaction,
   senderPublicKey,
 }: ExecuteSignedTransactionOptions) => {
-  const simulationResult = await trySimulateTransaction(
-    transaction,
-    senderPublicKey
-  )
+  // const simulationResult = await trySimulateTransaction(
+  //   transaction,
+  //   senderPublicKey
+  // )
 
-  if (!simulationResult.success) {
-    throw new BadRequestException({
-      reason: 'simulation_failed',
-      simulationResult,
-    })
-  }
+  // if (!simulationResult.success) {
+  //   throw new BadRequestException({
+  //     reason: 'simulation_failed',
+  //     simulationResult,
+  //   })
+  // }
 
   const txSignature = await rpcConnection.sendRawTransaction(
     transaction.serialize()
@@ -45,37 +45,37 @@ export const executeSignedTransaction = async ({
   return { txSignature }
 }
 
-const trySimulateTransaction = async (
-  tx: Transaction | VersionedTransaction,
-  senderPublicKey: PublicKey
-): Promise<
-  | ({ success: false } & ({ simulationError: any } | { error: any }))
-  | { success: true }
-> => {
-  try {
-    const simulationResult =
-      tx instanceof VersionedTransaction
-        ? await rpcConnection.simulateTransaction(tx, {
-            sigVerify: true,
-          })
-        : await rpcConnection.simulateTransaction(tx)
+// const trySimulateTransaction = async (
+//   tx: Transaction | VersionedTransaction,
+//   senderPublicKey: PublicKey
+// ): Promise<
+//   | ({ success: false } & ({ simulationError: any } | { error: any }))
+//   | { success: true }
+// > => {
+//   try {
+//     const simulationResult =
+//       tx instanceof VersionedTransaction
+//         ? await rpcConnection.simulateTransaction(tx, {
+//             sigVerify: true,
+//           })
+//         : await rpcConnection.simulateTransaction(tx)
 
-    const simulationError = simulationResult.value.err
+//     const simulationError = simulationResult.value.err
 
-    if (simulationError) {
-      return {
-        success: false,
-        simulationError,
-      }
-    }
+//     if (simulationError) {
+//       return {
+//         success: false,
+//         simulationError,
+//       }
+//     }
 
-    return {
-      success: true,
-    }
-  } catch (e) {
-    return {
-      success: false,
-      error: (e as any).message,
-    }
-  }
-}
+//     return {
+//       success: true,
+//     }
+//   } catch (e) {
+//     return {
+//       success: false,
+//       error: (e as any).message,
+//     }
+//   }
+// }
