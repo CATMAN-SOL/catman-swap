@@ -24,7 +24,6 @@ watch(modelValue, (newValue) => {
 })
 
 watch([wallets, windowFocus], ([newWallets]) => {
-  alert('Wallet list update')
   for (let i = 0; i < newWallets.length; i++) {
     if (newWallets[i].adapter.publicKey !== null) {
       select(newWallets[i].adapter.name)
