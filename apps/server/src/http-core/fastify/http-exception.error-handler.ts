@@ -6,6 +6,8 @@ export const httpExceptionErrorHandler = async (
   request: FastifyRequest,
   reply: FastifyReply
 ) => {
+  logger.error(error, 'Error happened while trying to perform the request')
+
   if ('status' in error) {
     return await reply.status(error.status).send({
       status: error.status,

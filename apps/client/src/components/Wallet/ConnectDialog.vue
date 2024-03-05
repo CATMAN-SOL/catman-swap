@@ -2,6 +2,7 @@
 import { useWalletConnectStore } from '../../store/wallet-connect.store'
 
 const modelValue = defineModel<boolean>()
+const windowFocus = useWindowFocus()
 
 const { wallets, connected, connecting, connect, select } = useWallet()
 
@@ -22,6 +23,18 @@ watch(modelValue, (newValue) => {
   }
 })
 
+watch([wallets, windowFocus], ([newWallets]) => {
+  alert('Wallet list update')
+  for (let i = 0; i < newWallets.length; i++) {
+    if (newWallets[i].adapter.publicKey !== null) {
+      select(newWallets[i].adapter.name)
+      walletConnectStore.currentConnectingWalletAdapterIndex = i
+
+      connect()
+    }
+  }
+}, { deep: true, immediate: true })
+
 const onWalletClick = async (index: number) => {
   selectedWalletIndex.value = index
 
@@ -30,7 +43,7 @@ const onWalletClick = async (index: number) => {
     walletConnectStore.currentConnectingWalletAdapterIndex = index
 
     await nextTick()
-    connect()
+    await connect()
   }
 }
 
