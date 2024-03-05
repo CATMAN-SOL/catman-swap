@@ -44,7 +44,7 @@ export const useSwapSettingsStore = defineStore('swap-settings', () => {
   })
 
   const priorityFee = ref(0.0001)
-  const slippage = ref(0.5)
+  const slippage = ref(1)
 
   const displayedSelectedPriorityFeeName = computed(() => {
     const priorityFeeString = priorityFee.value.toString()
