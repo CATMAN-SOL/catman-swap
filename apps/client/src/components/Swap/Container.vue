@@ -128,7 +128,7 @@ throttledWatch([tokenFrom, tokenTo, fromAmount, publicKey, connected, refreshSwa
     from: from.address,
     to: to.address,
     amount: parseFloat(amount),
-    slippage: 0.05,
+    slippage: swapSettingsStore.slippage,
     onlyDirectRoute: swapSettingsStore.additionalOptions.directRouteOnly
   })
 
