@@ -10,18 +10,6 @@ export const executeSignedTransaction = async ({
   transaction,
   senderPublicKey,
 }: ExecuteSignedTransactionOptions) => {
-  // const simulationResult = await trySimulateTransaction(
-  //   transaction,
-  //   senderPublicKey
-  // )
-
-  // if (!simulationResult.success) {
-  //   throw new BadRequestException({
-  //     reason: 'simulation_failed',
-  //     simulationResult,
-  //   })
-  // }
-
   const txSignature = await rpcConnection.sendRawTransaction(
     transaction.serialize()
   )
