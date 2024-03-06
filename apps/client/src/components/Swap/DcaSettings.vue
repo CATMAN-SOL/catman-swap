@@ -112,7 +112,7 @@ const dcaSelectOptions = computed(() => {
 
 <template>
   <SwapCard>
-    <div class="grid w-full grid-rows-3 items-start gap-2.5 md:grid-cols-3 md:grid-rows-1">
+    <div class="grid w-full grid-rows-3 items-start gap-2.5 xl:grid-cols-3 xl:grid-rows-1">
       <AppInput
         v-model="rateRaw"
         placeholder="1"

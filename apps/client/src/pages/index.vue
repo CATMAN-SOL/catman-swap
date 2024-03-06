@@ -13,11 +13,11 @@ const scrollTo = (view: HTMLElement | null) => {
 </script>
 
 <template>
-  <div class="container px-3 pb-28 lg:px-0">
+  <div class="container pb-28">
     <WalletConnectDialog v-model="walletConnectStore.displayConnectDialog" />
     <WalletDisconnectDialog v-model="displayWalletDisconnectDialog" />
-    <div class="grid grid-rows-1 gap-5 pt-16 lg:grid-cols-2 lg:grid-rows-1 lg:gap-20">
-      <div class="flex flex-col gap-8">
+    <div class="grid w-full grid-rows-1 gap-5 pt-16 lg:grid-cols-2 lg:grid-rows-1 lg:gap-20">
+      <div class="flex flex-col gap-8 px-3">
         <h1 class="text-theme-white-1 text-[56px] font-semibold tracking-[-4px] lg:text-8xl">
           Swap & DCA
         </h1>
@@ -36,7 +36,7 @@ const scrollTo = (view: HTMLElement | null) => {
           @more-button-click="displayWalletDisconnectDialog = true"
         />
         <SwapChoice
-          class="lg:mt-[50px]"
+          class="px-3 lg:mt-[50px]"
           @click="scrollTo(sectionRefEl)"
         />
       </div>
