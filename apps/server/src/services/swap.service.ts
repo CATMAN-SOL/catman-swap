@@ -15,7 +15,11 @@ import {
   VersionedTransaction,
   sendAndConfirmTransaction,
 } from '@solana/web3.js'
-import { swapRequests } from '~/db/schema'
+import {
+  CatpointRewardErrorReason,
+  catpointRewards,
+  swapRequests,
+} from '~/db/schema'
 import { SwapQuote } from '~/models/swap-quote.model'
 import { createUserIfNotExists } from './users.service'
 import { executeSignedTransaction } from './transactions.service'
@@ -24,6 +28,7 @@ import {
   createTransferInstruction,
   getAssociatedTokenAddressSync,
 } from '@solana/spl-token'
+import { eq } from 'drizzle-orm'
 
 export type CreateSwapTxOptions = {
   quote: SwapQuote
@@ -152,8 +157,6 @@ export const createSwapTx = async (options: CreateSwapTxOptions) => {
       : 'auto',
   })
 
-  await saveCreateSwapTransactionRequest(options)
-
   // Re-serializing base64 -> base58 due to issues with decoding base64 on front-end side and bs58 package
   // already being a dependency of @solana/web3.js
   const serializedTransaction = Buffer.from(
@@ -174,12 +177,15 @@ export const executeSwapTx = async (options: ExecuteSwapTxOptions) => {
     senderPublicKey,
   })
 
+  await saveSwap(options, executeResult.txSignature)
+
   const outputToken = await findTokenByAddress(options.quote.outputMint)
 
   if (outputToken?.symbol === 'CATMAN' && config.FEE_ACCOUNT) {
     sendSwapRewards(
       options.quote,
-      new PublicKey(options.senderPublicKey)
+      new PublicKey(options.senderPublicKey),
+      executeResult.txSignature
     ).catch((err) => logger.error(err))
   }
 
@@ -188,7 +194,8 @@ export const executeSwapTx = async (options: ExecuteSwapTxOptions) => {
 
 const sendSwapRewards = async (
   quote: SwapQuote,
-  senderPublicKey: PublicKey
+  senderPublicKey: PublicKey,
+  swapTxSignature: string
 ) => {
   logger.info(`Sending swap rewards for ${senderPublicKey.toString()}`)
 
@@ -253,55 +260,108 @@ const sendSwapRewards = async (
   const feeAmount = (outAmount / 0.999) * 0.001
   const catmanRewardAmount = feeAmount / 5
   const rewardAmount = catmanRewardAmount * 100
+  const rewardAmountBigInt = BigInt(floatToStringInteger(rewardAmount, 8))
+
+  await createSwapReward(rewardAmountBigInt.toString(), swapTxSignature)
 
   transaction.add(
     createTransferInstruction(
       ownerAta,
       senderAta,
       feeAccountPublicKey,
-      BigInt(floatToStringInteger(rewardAmount, 8))
+      rewardAmountBigInt
     )
   )
 
   transaction.feePayer = new PublicKey(feeAccountPublicKey)
 
-  logger.info(
-    `Sending swap reward transaction for ${senderPublicKey.toString()}`
-  )
-  await trySendAndConfirmTx(transaction, keypair)
-  logger.info(
-    `Successfully sended swap reward for ${senderPublicKey.toString()}`
-  )
+  await trySendAndConfirmRewardTx(transaction, keypair, swapTxSignature)
 }
 
-const trySendAndConfirmTx = async (
+const trySendAndConfirmRewardTx = async (
   tx: Transaction,
   signer: Signer,
-  maxRetries: number = 3
+  swapTxSignature: string,
+  maxRetries: number = 30
 ) => {
+  logger.info(
+    `Sending swap reward transaction for ${signer.publicKey.toString()}`
+  )
+
   for (; maxRetries >= 0; maxRetries--) {
     const blockhashData = await rpcConnection.getLatestBlockhash()
+
     tx.recentBlockhash = blockhashData.blockhash
+    tx.lastValidBlockHeight = blockhashData.lastValidBlockHeight
 
     try {
-      await sendAndConfirmTransaction(rpcConnection, tx, [signer])
-      break
+      const txSignature = await sendAndConfirmTransaction(rpcConnection, tx, [
+        signer,
+      ])
+
+      logger.info(
+        `Successfully sended swap reward for ${signer.publicKey.toString()}`
+      )
+
+      await saveSwapRewardSuccessful(swapTxSignature, txSignature)
+
+      return
     } catch (e) {
-      logger.info(e, 'Failed to send CATPoint reward tx. Retrying...')
+      logger.info(
+        e,
+        `Failed to send CATPoint reward tx. Retrying... ${maxRetries} retries left`
+      )
     }
   }
+
+  logger.error('Failed to send CATPoint reward tx after retrying')
+  await saveSwapRewardError(swapTxSignature, 'MAX_RETRIES_EXCEEDED')
+
+  return false
 }
 
-const saveCreateSwapTransactionRequest = async (
-  options: CreateSwapTxOptions
-) => {
-  await createUserIfNotExists(options.publicKey)
+const saveSwap = async (options: ExecuteSwapTxOptions, txSignature: string) => {
+  await createUserIfNotExists(options.senderPublicKey)
 
   await dbClient.insert(swapRequests).values({
-    userAddress: options.publicKey,
+    userAddress: options.senderPublicKey,
     tokenFromAddress: options.quote.inputMint,
     tokenToAddress: options.quote.outputMint,
     amountFrom: options.quote.inAmount,
     amountTo: options.quote.outAmount,
+    txSignature,
   })
+}
+
+const createSwapReward = async (amount: string, swapTxSignature: string) => {
+  await dbClient.insert(catpointRewards).values({
+    amount,
+    swapTxSignature,
+  })
+}
+
+const saveSwapRewardSuccessful = async (
+  swapTxSignature: string,
+  rewardTxSignature: string
+) => {
+  await dbClient
+    .update(catpointRewards)
+    .set({
+      txSignature: rewardTxSignature,
+      status: 'SUCCESSFUL',
+    })
+    .where(eq(catpointRewards.swapTxSignature, swapTxSignature))
+}
+
+const saveSwapRewardError = async (
+  swapTxSignature: string,
+  errorReason: CatpointRewardErrorReason
+) => {
+  await dbClient
+    .update(catpointRewards)
+    .set({
+      status: 'ERROR',
+      errorReason,
+    })
+    .where(eq(catpointRewards.swapTxSignature, swapTxSignature))
 }

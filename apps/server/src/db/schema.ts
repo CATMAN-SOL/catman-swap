@@ -9,10 +9,12 @@ import {
   decimal,
   uuid,
   boolean,
+  pgEnum,
 } from 'drizzle-orm/pg-core'
 import { relations } from 'drizzle-orm'
 
 const solanaAddress = (name: string) => varchar(name, { length: 44 })
+const solanaTxSignature = (name: string) => varchar(name, { length: 90 })
 
 export const users = pgTable('users', {
   address: solanaAddress('address').primaryKey(),
@@ -43,6 +45,7 @@ export const tokensRelations = relations(tokens, ({ many }) => ({
 
 export const swapRequests = pgTable('swap_requests', {
   id: uuid('id').primaryKey().defaultRandom(),
+  txSignature: solanaTxSignature('tx_signature').unique(),
   userAddress: solanaAddress('address').references(() => users.address),
   tokenFromAddress: solanaAddress('token_from_address')
     .notNull()
@@ -74,8 +77,34 @@ export const swapRequestsRelations = relations(swapRequests, ({ one }) => ({
 
 export const tokenListRevalidations = pgTable('token_list_revalidations', {
   id: uuid('id').defaultRandom().primaryKey(),
+  swapRequestTxSignature: solanaTxSignature('swap_request_tx_signature')
+    .unique()
+    .references(() => swapRequests.txSignature),
   fetchedTokensCount: integer('fetched_tokens_count').notNull(),
   addedTokensCount: integer('added_tokens_count').notNull(),
   removedTokensCount: integer('removed_tokens_count').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 })
+
+export const catpointRewardStatus = pgEnum('catpoint_reward_status', [
+  'PENDING',
+  'SUCCESSFUL',
+  'ERROR',
+])
+
+export const catpointRewardErrorReason = pgEnum(
+  'catpoint_reward_error_reason',
+  ['MAX_RETRIES_EXCEEDED']
+)
+
+export const catpointRewards = pgTable('catpoints_rewards', {
+  swapTxSignature: solanaTxSignature('swap_tx_signature').primaryKey(),
+  txSignature: solanaTxSignature('tx_signature'),
+  errorReason: catpointRewardErrorReason('error_reason'),
+  status: catpointRewardStatus('status').notNull().default('PENDING'),
+  amount: decimal('amount').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+})
+
+export type CatpointRewardErrorReason =
+  (typeof catpointRewardErrorReason.enumValues)[number]
