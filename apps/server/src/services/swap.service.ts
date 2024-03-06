@@ -281,7 +281,9 @@ const trySendAndConfirmTx = async (
 ) => {
   for (; maxRetries >= 0; maxRetries--) {
     const blockhashData = await rpcConnection.getLatestBlockhash()
+
     tx.recentBlockhash = blockhashData.blockhash
+    tx.lastValidBlockHeight = blockhashData.lastValidBlockHeight
 
     try {
       await sendAndConfirmTransaction(rpcConnection, tx, [signer])

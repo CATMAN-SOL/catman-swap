@@ -11,7 +11,10 @@ export const executeSignedTransaction = async ({
   senderPublicKey,
 }: ExecuteSignedTransactionOptions) => {
   const txSignature = await rpcConnection.sendRawTransaction(
-    transaction.serialize()
+    transaction.serialize(),
+    {
+      skipPreflight: true,
+    }
   )
 
   const blockhashData = await rpcConnection.getLatestBlockhash()
