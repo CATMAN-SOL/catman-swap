@@ -28,8 +28,7 @@ jobs:
       - name: Build application
         run: |
           cd apps/client
-          echo VITE_API_BASE_URL=https://catman-swap-api.fly.dev >> .env
-          yarn build
+          yarn build --mode production
       - name: Publish
         run: |
           cd apps/client
