@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <header class="h-header bg-header-gradient w-screen min-w-[450px] border-y border-y-white/10">
+  <header class="h-header bg-header-gradient w-screen border-y border-y-white/10">
     <div class="container flex h-full w-screen items-center justify-between">
       <AppLogo />
       <div class="flex flex-row items-center gap-6">

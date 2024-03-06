@@ -20,7 +20,7 @@ const choose = () => {
       :class="[active ? 'bg-[#21262C]' : 'bg-[#090A0B] group-hover:bg-[#21262C]']"
       class="relative flex w-full min-w-[115px] items-end rounded-l-3xl px-6 py-12 transition-all"
     >
-      <span class="text-[32px] font-semibold text-[#E2E4E9] lg:text-[48px]">Swap</span>
+      <span class="absolute z-[100] text-[32px] font-semibold text-[#E2E4E9] lg:text-[48px]">Swap</span>
     </div>
     <div class="absolute left-1/2 top-0 z-[-10] h-full w-[135px] -translate-x-1/2 overflow-hidden">
       <div
@@ -33,7 +33,7 @@ const choose = () => {
         <span class="font-secondary text-[16px] font-semibold text-black">Selected</span>
       </div>
     </div>
-    <div class="relative min-w-[168px] overflow-hidden">
+    <div class="relative h-full min-w-[168px] overflow-hidden">
       <!-- <div> -->
       <svg
         class="absolute left-[-4px] top-0"
@@ -60,7 +60,7 @@ const choose = () => {
       <span
         :class="[props.active ? 'text-[#E2E4E9]' : 'text-[#A3A5B6]']"
         class="text-start text-xs font-semibold lg:text-lg"
-      >Instant Token Exchanges Made Simple</span>
+      >Token Exchanges Made Simple</span>
     </div>
   </div>
 </template>
