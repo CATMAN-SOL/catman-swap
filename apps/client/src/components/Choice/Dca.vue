@@ -13,12 +13,12 @@ const choose = () => {
 <template>
   <div
     :class="{'group': !props.active}"
-    class="relative grid cursor-pointer grid-cols-[1fr_auto_1fr] grid-rows-1 gap-0 transition-all duration-300"
+    class="relative grid min-h-[150px] cursor-pointer grid-cols-[1fr_auto_1fr] grid-rows-1 gap-0 transition-all duration-300 lg:min-h-[180px]"
     @click="choose"
   >
     <div
       :class="[active ? 'bg-[#21262C]' : 'bg-[#090A0B] group-hover:bg-[#21262C]']"
-      class="relative flex w-full min-w-[115px] items-start rounded-l-3xl px-6 py-12 transition-all"
+      class="relative flex w-full items-start rounded-l-3xl px-6 py-12 transition-all"
     >
       <span class="absolute text-[32px] font-semibold text-[#E2E4E9] lg:text-[48px]">DCA</span>
     </div>
@@ -35,7 +35,7 @@ const choose = () => {
     </div>
     <div class="relative min-w-[168px] overflow-hidden">
       <svg
-        class="absolute bottom-0 left-[-4px] rotate-180"
+        class="absolute bottom-0 left-[-7px] rotate-180"
         width="176"
         height="214"
         viewBox="0 0 168 214"
@@ -54,11 +54,11 @@ const choose = () => {
     </div>
     <div
       :class="[active ? 'bg-[#21262C]' : 'bg-[#090A0B] group-hover:bg-[#21262C]']"
-      class="flex w-full min-w-[115px] items-start rounded-r-3xl px-[18px] py-12 transition-all"
+      class="relative flex w-full items-start rounded-r-3xl transition-all"
     >
       <span
         :class="[props.active ? 'text-[#E2E4E9]' : 'text-[#A3A5B6]']"
-        class="text-start text-xs font-semibold lg:text-lg"
+        class="absolute h-full py-12 pr-[18px] text-start text-xs font-semibold lg:text-lg"
       >Effortless Crypto Accumulation Strategy</span>
     </div>
   </div>

@@ -24,7 +24,7 @@ const modelValue = defineModel<boolean>()
   >
     <Dialog
       as="div"
-      class="relative z-10"
+      class="relative z-[100]"
       @close="modelValue = false"
     >
       <TransitionChild
