@@ -35,7 +35,7 @@ export const useTokenListStore = defineStore('token-list', () => {
     const skip = currentOffset
 
     const response = await fetchTokensList({
-      searchQuery: filter.value.searchQuery,
+      searchQuery: filter.value.searchQuery.toUpperCase(),
       verifiedOnly: filter.value.verifiedOnly,
       limit: BATCH_SIZE,
       skip,
