@@ -20,7 +20,7 @@ const choose = () => {
       :class="[active ? 'bg-[#21262C]' : 'bg-[#090A0B] group-hover:bg-[#21262C]']"
       class="relative flex w-full min-w-[115px] items-end rounded-l-3xl px-6 py-12 transition-all"
     >
-      <span class="absolute z-[100] text-[32px] font-semibold text-[#E2E4E9] lg:text-[48px]">Swap</span>
+      <span class="absolute z-[15] text-[32px] font-semibold text-[#E2E4E9] lg:text-[48px]">Swap</span>
     </div>
     <div class="absolute left-1/2 top-0 z-[-10] h-full w-[135px] -translate-x-1/2 overflow-hidden">
       <div
