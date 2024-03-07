@@ -13,12 +13,12 @@ const choose = () => {
 <template>
   <div
     :class="{'group': !props.active}"
-    class="relative grid cursor-pointer grid-cols-[1fr_auto_1fr] grid-rows-1 gap-0 transition-all duration-300"
+    class="relative grid min-h-[150px] cursor-pointer grid-cols-[1fr_auto_1fr] grid-rows-1 gap-0 transition-all duration-300 lg:min-h-[200px]"
     @click="choose"
   >
     <div
       :class="[active ? 'bg-[#21262C]' : 'bg-[#090A0B] group-hover:bg-[#21262C]']"
-      class="relative flex w-full min-w-[115px] items-end rounded-l-3xl px-6 py-12 transition-all"
+      class="relative flex w-full items-end rounded-l-3xl px-6 py-12 transition-all"
     >
       <span class="absolute z-[15] text-[32px] font-semibold text-[#E2E4E9] lg:text-[48px]">Swap</span>
     </div>
@@ -55,11 +55,11 @@ const choose = () => {
     </div>
     <div
       :class="[active ? 'bg-[#21262C]' : 'bg-[#090A0B] group-hover:bg-[#21262C]']"
-      class="flex w-full min-w-[115px] items-end rounded-r-3xl px-[18px] py-12 transition-all"
+      class="relative flex w-full items-end rounded-r-3xl  transition-all"
     >
       <span
         :class="[props.active ? 'text-[#E2E4E9]' : 'text-[#A3A5B6]']"
-        class="text-start text-xs font-semibold lg:text-lg"
+        class="absolute left-0 top-0 h-full py-12 pr-[18px] text-start text-xs font-semibold lg:text-lg"
       >Token Exchanges Made Simple</span>
     </div>
   </div>

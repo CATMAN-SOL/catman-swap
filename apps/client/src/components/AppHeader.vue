@@ -3,8 +3,8 @@
 </script>
 
 <template>
-  <header class="h-header bg-header-gradient w-full min-w-[430px] border-y border-y-white/10">
-    <div class="container flex h-full w-screen items-center justify-between">
+  <header class="h-header bg-header-gradient box-border w-full border-y border-y-white/10">
+    <div class="container flex h-full w-screen items-center justify-between px-4">
       <AppLogo />
       <div class="flex flex-row items-center gap-6">
         <HeaderNavigationItem
