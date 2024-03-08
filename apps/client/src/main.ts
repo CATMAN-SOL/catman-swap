@@ -15,6 +15,7 @@ import {
   SolflareWalletAdapter,
   LedgerWalletAdapter,
   CoinbaseWalletAdapter,
+  TrustWalletAdapter,
 } from '@solana/wallet-adapter-wallets'
 
 import PrimeVue from 'primevue/config'
@@ -44,6 +45,7 @@ const walletOptions = {
     new LedgerWalletAdapter(),
     new SolflareWalletAdapter(),
     new CoinbaseWalletAdapter(),
+    new TrustWalletAdapter(),
   ],
   autoConnect: true,
 }
