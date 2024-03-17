@@ -7,23 +7,48 @@ export type AdditionalOptions = {
 }
 
 export const useSwapSettingsStore = defineStore('swap-settings', () => {
-  const defaultPriorityFeeOptions = ref([
-    {
-      maxFee: '0.0001',
-      name: 'Market',
-      description: '85% percentile fees from last 20 blocks',
-    },
-    {
-      maxFee: '0.0005',
-      name: 'High',
-      description: '5x Market fee',
-    },
-    {
-      maxFee: '0.001',
-      name: 'Turbo',
-      description: '10x Market fee',
-    },
-  ])
+  const { fetch: fetchBaseFee, result: baseFeeResult } = fee.useBaseFee()
+
+  const baseMarketFee = computed<number>(
+    () => baseFeeResult.value?.base ?? 0.0001
+  )
+  const customPriorityFee = ref<number>(0.0001)
+
+  const defaultPriorityFeeOptions = computed(
+    () =>
+      ({
+        market: {
+          maxFee: baseMarketFee.value,
+          name: 'Market',
+          description: '85% percentile fees from last 20 blocks',
+        },
+        high: {
+          maxFee: baseMarketFee.value * 5,
+          name: 'High',
+          description: '5x Market fee',
+        },
+        turbo: {
+          maxFee: baseMarketFee.value * 10,
+          name: 'Turbo',
+          description: '10x Market fee',
+        },
+      }) as const
+  )
+
+  const customPriorityFeeOption = computed(() => ({
+    maxFee: customPriorityFee.value ?? baseMarketFee.value,
+    name: 'Custom',
+    description: 'Custom value',
+  }))
+
+  const priorityFeeOptions = computed(() => ({
+    ...defaultPriorityFeeOptions.value,
+    custom: customPriorityFeeOption.value,
+  }))
+
+  const priorityFee = computed<number>(() => {
+    return priorityFeeOptions.value[priorityFeeType.value].maxFee
+  })
 
   const defaultSlippageOptions = ref([
     {
@@ -43,22 +68,17 @@ export const useSwapSettingsStore = defineStore('swap-settings', () => {
     versionedTransaction: true,
   })
 
-  const priorityFee = ref(0.0001)
+  const priorityFeeType = ref<keyof typeof priorityFeeOptions.value>('market')
   const slippage = ref(0.3)
 
   const displayedSelectedPriorityFeeName = computed(() => {
-    const priorityFeeString = priorityFee.value.toString()
-    return (
-      defaultPriorityFeeOptions.value.find(
-        (val) => val.maxFee === priorityFeeString
-      )?.name ?? 'Custom'
-    )
+    return priorityFeeOptions.value[priorityFeeType.value].name
   })
 
-  const updatePriorityFee = (value: string | number) => {
-    const parsedValue = typeof value === 'string' ? parseFloat(value) : value
-    if (Number.isNaN(parsedValue)) return
-    priorityFee.value = parsedValue
+  const updatePriorityFeeType = (
+    value: keyof typeof priorityFeeOptions.value
+  ) => {
+    priorityFeeType.value = value
   }
 
   const updateSlippage = (value: string | number) => {
@@ -73,8 +93,12 @@ export const useSwapSettingsStore = defineStore('swap-settings', () => {
 
   return {
     priorityFee,
-    updatePriorityFee,
+    priorityFeeType,
+    customPriorityFee,
+
+    updatePriorityFeeType,
     defaultPriorityFeeOptions,
+    priorityFeeOptions,
     displayedSelectedPriorityFeeName,
 
     slippage,
@@ -83,5 +107,7 @@ export const useSwapSettingsStore = defineStore('swap-settings', () => {
 
     additionalOptions,
     updateAdditionalOptions,
+
+    fetchBaseFee,
   }
 })

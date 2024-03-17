@@ -16,21 +16,40 @@ const rules = {
 
 const vuelidate = useVuelidate(rules, computed(() => ({ priorityFee: priorityFee.value })))
 
+const priorityFeeType = ref<keyof typeof swapSettingsStore.priorityFeeOptions>(swapSettingsStore.priorityFeeType)
+
 // Store value changes -> update local value
-watch(() => swapSettingsStore.priorityFee, (newPriorityFee) => {
+watch([() => swapSettingsStore.customPriorityFee, () => swapSettingsStore.priorityFeeType, modelValue], ([newPriorityFee, newPriorityFeeType]) => {
+  if (!newPriorityFee) {
+    return
+  }
+
   priorityFee.value = newPriorityFee.toString()
+  priorityFeeType.value = newPriorityFeeType
 }, {
   immediate: true
 })
 
-const onSaveButtonClick = () => {
-  vuelidate.value.$touch()
+watch(priorityFeeType, (newPriorityFeeType) => {
+  if (newPriorityFeeType !== 'custom') {
+    vuelidate.value.$reset()
+  }
+})
 
-  if (vuelidate.value.$error) {
-    return
+const onSaveButtonClick = () => {
+  if (priorityFeeType.value === 'custom') {
+    vuelidate.value.$touch()
+
+    if (vuelidate.value.$error) {
+      return
+    }
   }
 
-  swapSettingsStore.updatePriorityFee(priorityFee.value)
+  swapSettingsStore.priorityFeeType = priorityFeeType.value
+  if (priorityFeeType.value === 'custom') {
+    swapSettingsStore.customPriorityFee = parseFloat(priorityFee.value)
+  }
+
   modelValue.value = false
 }
 </script>
@@ -47,13 +66,13 @@ const onSaveButtonClick = () => {
       </p>
       <div class="flex w-full flex-col gap-6">
         <SwapMarketItem
-          v-for="item in swapSettingsStore.defaultPriorityFeeOptions"
+          v-for="(item, key) in swapSettingsStore.defaultPriorityFeeOptions"
           :key="item.name"
           :name="item.name"
-          :max-fee="item.maxFee"
+          :max-fee="item.maxFee.toString()"
           :description="item.description"
-          :selected="item.maxFee === priorityFee"
-          @click="swapSettingsStore.updatePriorityFee(item.maxFee)"
+          :selected="key === priorityFeeType"
+          @click="swapSettingsStore.updatePriorityFeeType(key)"
         />
       </div>
     </div>
@@ -64,6 +83,7 @@ const onSaveButtonClick = () => {
       placeholder="Max 2 SOL"
       type="number"
       :error="vuelidate.priorityFee.$errors"
+      @click="priorityFeeType = 'custom'"
     />
     <AppButton
       class="mt-8 w-full"
