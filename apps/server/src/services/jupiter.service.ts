@@ -29,6 +29,23 @@ type CreateSerializedTransactionResponse = {
   swapTransaction: string
 }
 
+type ReferenceFees = {
+  claim: number
+  swapFee: number
+  loAndDCA: number
+  jup: {
+    m: number
+    h: number
+    vh: number
+  }
+  perps: {
+    m: number
+    h: number
+    vh: number
+  }
+  lastUpdatedAt: number
+}
+
 type PlainObject = {
   [key: string]: string | number | boolean | undefined
 }
@@ -68,6 +85,24 @@ export const fetchSwapRouteQuote = async (options: FetchSwapRouteOptions) => {
 export const createDcaInitTransaction = async (params: CreateDCAParamsV2) => {
   const { tx } = await dca.createDcaV2(params)
   return tx
+}
+
+export const fetchReferenceFees = async (): Promise<ReferenceFees | null> => {
+  const referenceFeesResponse = await fetch(
+    'https://cache.jup.ag/jup-claim-reference-fees'
+  )
+
+  const referenceFeesResponseBody = await referenceFeesResponse.json()
+
+  if (!referenceFeesResponse.status.toString().startsWith('2')) {
+    logger.error(
+      referenceFeesResponseBody,
+      'Error while trying to claim jupiter reference fees'
+    )
+    return null
+  }
+
+  return referenceFeesResponseBody
 }
 
 // Is required as URLSearchParams constructor can only accept Record<string,string>
