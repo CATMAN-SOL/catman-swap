@@ -321,6 +321,7 @@
     "useErrorDestruct": true,
     "useSwapSelectorStore": true,
     "swap": true,
-    "dca": true
+    "dca": true,
+    "fee": true
   }
 }

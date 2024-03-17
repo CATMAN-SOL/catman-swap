@@ -153,7 +153,7 @@ export const createSwapTx = async (options: CreateSwapTxOptions) => {
     wrapAndUnwrapSol: !options.wrapAndUnwrapSol,
     feeAccount: feeAccount || undefined,
     prioritizationFeeLamports: options.prioritizationFee
-      ? options.prioritizationFee * 10 ** 9
+      ? Math.floor(options.prioritizationFee * 10 ** 9)
       : 'auto',
   })
 

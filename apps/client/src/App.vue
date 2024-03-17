@@ -1,4 +1,9 @@
 <script setup lang="ts">
+const swapSettingsStore = useSwapSettingsStore()
+
+onMounted(() => {
+  swapSettingsStore.fetchBaseFee()
+})
 </script>
 
 <template>
